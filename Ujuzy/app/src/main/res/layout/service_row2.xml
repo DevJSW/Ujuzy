@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#fff"
+    app:cardElevation="4dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="5dp"
+        android:orientation="horizontal">
+
+       <ImageView
+           android:layout_width="110dp"
+           android:layout_height="90dp"
+           android:scaleType="fitXY"
+           android:id="@+id/iv_avatar"
+           android:src="@drawable/placeholder_image"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:orientation="vertical">
+
+            <com.ujuzy.ujuzy.CustomData.AllerBoldFont
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14dp"
+                android:ellipsize="end"
+                android:maxLines="3"
+                android:text="service name"
+                android:textColor="@color/font_black"
+                android:layout_marginBottom="5dp"
+                android:id="@+id/tv_service_name"
+                android:layout_marginRight="10dp" />
+
+            <RatingBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:isIndicator="true"
+                android:stepSize="0.1"
+                style="@android:style/Widget.DeviceDefault.Light.RatingBar.Small"
+                />
+
+            <com.ujuzy.ujuzy.CustomData.AllerFont
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:lineSpacingExtra="1dp"
+                android:textSize="13dp"
+                android:textColor="@color/font_black_light"
+                android:text="@string/lorem_ipsum"
+                android:id="@+id/tv_service_details"
+                android:layout_marginRight="10dp"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#e2e1e1"/>
+</LinearLayout>
+

@@ -1,0 +1,376 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.ujuzy.ujuzy.Tabs.AboutUserFragment">
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:layout_above="@+id/bookBtn">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!--<LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="3"
+                android:background="#e9e7e7"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/rl_open_profile"
+                    android:layout_weight="1">
+                    
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_centerHorizontal="true"
+                        android:id="@+id/callIcon"
+                        android:padding="9dp"
+                        android:src="@drawable/if_phone"/>
+
+                    <com.ujuzy.ujuzy.CustomData.AllerFont
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Call"
+                        android:layout_marginBottom="10dp"
+                        android:textColor="@color/font_black_light"
+                        android:layout_below="@+id/callIcon"
+                        android:textSize="15dp"
+                        android:gravity="center_horizontal"/>
+                    
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/rl_location"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_centerHorizontal="true"
+                        android:id="@+id/locationIcon"
+                        android:padding="9dp"
+                        android:src="@drawable/if_location"/>
+
+                    <com.ujuzy.ujuzy.CustomData.AllerFont
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Directions"
+                        android:layout_marginBottom="10dp"
+                        android:textColor="@color/font_black_light"
+                        android:layout_below="@+id/locationIcon"
+                        android:textSize="15dp"
+                        android:gravity="center_horizontal"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/rl_share"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_centerHorizontal="true"
+                        android:id="@+id/bookIcon"
+                        android:padding="10dp"
+                        android:src="@drawable/if_share"/>
+
+                    <com.ujuzy.ujuzy.CustomData.AllerFont
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Share"
+                        android:layout_marginBottom="10dp"
+                        android:textColor="@color/font_black_light"
+                        android:layout_below="@+id/bookIcon"
+                        android:textSize="15dp"
+                        android:gravity="center_horizontal"/>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#f2f2f2"/>-->
+
+            <com.ujuzy.ujuzy.CustomData.AllerBoldFont
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Details:"
+                android:textColor="@color/font_black"
+                android:textSize="16dp"
+                android:layout_margin="15dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                android:background="#f2f2f2"/>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#e9e7e7"
+                app:cardElevation="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#e9e7e7"
+                    android:orientation="vertical">
+
+                    <com.ujuzy.ujuzy.CustomData.AllerFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tv_service_details"
+                        android:text="@string/lorem_ipsum"
+                        android:textColor="@color/font_black"
+                        android:layout_margin="15dp"
+                        android:textSize="17dp"/>
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+            <com.ujuzy.ujuzy.CustomData.AllerBoldFont
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Info:"
+                android:textColor="@color/font_black"
+                android:textSize="16dp"
+                android:layout_margin="15dp"/>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:background="#e9e7e7"
+                app:cardElevation="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#e9e7e7"
+                    android:orientation="vertical">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_margin="15dp"
+                        android:layout_marginTop="15dp">
+
+                        <com.ujuzy.ujuzy.CustomData.AllerFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/font_black"
+                            android:textSize="16dp"
+                            android:text="Created by:"
+                            />
+
+                        <com.ujuzy.ujuzy.CustomData.AllerFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorAccent"
+                            android:id="@+id/tv_created_by"
+                            android:layout_alignParentRight="true"
+                            android:textSize="16dp"
+                            android:text="..."
+                            />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:layout_marginBottom="20dp">
+
+                        <com.ujuzy.ujuzy.CustomData.AllerFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/font_black"
+                            android:textSize="16dp"
+                            android:text="Duration:"
+                            />
+
+                        <com.ujuzy.ujuzy.CustomData.AllerFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorAccent"
+                            android:id="@+id/tv_duration"
+                            android:textSize="16dp"
+                            android:layout_alignParentRight="true"
+                            android:text="..."
+                            />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:layout_marginBottom="20dp">
+
+                        <com.ujuzy.ujuzy.CustomData.AllerFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/font_black"
+                            android:textSize="16dp"
+                            android:text="Category:"
+                            />
+
+                        <com.ujuzy.ujuzy.CustomData.AllerFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorAccent"
+                            android:id="@+id/tv_category"
+                            android:textSize="16dp"
+                            android:layout_alignParentRight="true"
+                            android:text="..."
+                            />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:layout_marginBottom="20dp">
+
+                        <com.ujuzy.ujuzy.CustomData.AllerFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/font_black"
+                            android:textSize="16dp"
+                            android:text="Travel:"
+                            />
+
+                        <com.ujuzy.ujuzy.CustomData.AllerFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorAccent"
+                            android:id="@+id/tv_travel"
+                            android:textSize="16dp"
+                            android:layout_alignParentRight="true"
+                            android:text="..."
+                            />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:layout_marginBottom="20dp">
+
+                        <com.ujuzy.ujuzy.CustomData.AllerFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/font_black"
+                            android:textSize="16dp"
+                            android:text="More Info:"
+                            />
+
+                        <com.ujuzy.ujuzy.CustomData.AllerFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorAccent"
+                            android:id="@+id/tv_add_info"
+                            android:textSize="16dp"
+                            android:layout_alignParentRight="true"
+                            android:text="..."
+                            />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:layout_marginBottom="20dp">
+
+                        <com.ujuzy.ujuzy.CustomData.AllerFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/font_black"
+                            android:textSize="16dp"
+                            android:text="Created at:"
+                            />
+
+                        <com.ujuzy.ujuzy.CustomData.AllerFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorAccent"
+                            android:id="@+id/tv_created_at"
+                            android:layout_alignParentRight="true"
+                            android:textSize="16dp"
+                            android:text="..."
+                            />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="15dp"
+                        android:layout_marginBottom="20dp">
+
+                        <com.ujuzy.ujuzy.CustomData.AllerBoldFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/font_black"
+                            android:textSize="17dp"
+                            android:text="Offer Cost:"
+                            />
+
+                        <com.ujuzy.ujuzy.CustomData.AllerBoldFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/colorAccent"
+                            android:id="@+id/tv_cost"
+                            android:layout_alignParentRight="true"
+                            android:textSize="17dp"
+                            android:text="..."
+                            />
+
+                    </RelativeLayout>
+
+
+
+                </LinearLayout>
+            </android.support.v7.widget.CardView>
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+    <com.ujuzy.ujuzy.CustomData.MyButton
+        android:layout_width="match_parent"
+        android:layout_margin="10dp"
+        android:id="@+id/bookBtn"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:textColor="#fff"
+        android:background="@drawable/button_bg"
+        android:visibility="gone"
+        android:text="Book now"
+        android:textSize="15dp"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>

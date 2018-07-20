@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="match_parent"
+    android:layout_height="165dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        android:background="@color/colorPrimary">
+
+        <com.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:layout_margin="30dp"
+            android:lineSpacingExtra="7dp"
+            android:textSize="20dp"
+            android:text="Which type of service would you like to offer?"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:elevation="1dp"
+        android:background="@drawable/search_layout"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginLeft="33dp">
+        <com.ujuzy.ujuzy.CustomData.AllerEditText
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:id="@+id/searchInput"
+            android:layout_marginLeft="10dp"
+            android:hint="Search for service..."
+            android:layout_toLeftOf="@+id/searchIcon"
+            android:background="@drawable/search_layout"/>
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:scaleType="fitXY"
+            android:layout_margin="10dp"
+            android:id="@+id/searchIcon"
+            android:src="@drawable/search_icon_grey"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"/>
+    </RelativeLayout>
+
+</RelativeLayout>

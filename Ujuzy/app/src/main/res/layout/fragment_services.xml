@@ -1,0 +1,32 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ujuzy.ujuzy.Tabs.ReviewsFragment">
+
+    <ProgressBar
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:visibility="gone"
+        android:layout_centerInParent="true"
+        android:id="@+id/progressBar"/>
+
+    <com.ujuzy.ujuzy.CustomData.AllerFont
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:textSize="15dp"
+        android:text="No Services"
+        android:id="@+id/noService"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"
+        android:background="#f1efef"
+        android:id="@+id/service_list">
+
+    </android.support.v7.widget.RecyclerView>
+
+</RelativeLayout>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="163dp"
+    android:layout_margin="0dp"
+    android:layout_height="wrap_content">
+
+
+        <ImageView
+            android:layout_width="150dp"
+            android:layout_height="100dp"
+            android:layout_margin="4dp"
+            android:id="@+id/iv_avatar"
+            android:scaleType="fitXY"
+            android:src="@drawable/placeholder_image"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="28dp"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:layout_marginRight="12dp"
+        android:layout_marginLeft="5dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_height="22dp"
+            android:layout_width="22dp"
+            android:id="@+id/iv_user_avatar"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/placeholder_image"
+            app:civ_border_color="@color/grey"
+            app:civ_border_width="1dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="12dp"
+            android:layout_marginLeft="5dp">
+
+            <com.ujuzy.ujuzy.CustomData.AllerFont
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/font_black_light"
+                android:text="Service name"
+                android:textSize="9dp"
+                android:id="@+id/tv_user_name"
+                />
+
+            <com.ujuzy.ujuzy.CustomData.AllerFont
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/font_black_light"
+                android:text="Service name"
+                android:textSize="9dp"
+                android:id="@+id/tv_user_role"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+        <com.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/font_black"
+            android:text="Service name"
+            android:textSize="13dp"
+            android:id="@+id/tv_service_name"
+           />
+        <com.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginBottom="2dp"
+            android:textSize="12dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:lineSpacingExtra="1dp"
+            android:text="Username"
+            android:id="@+id/tv_service_details"
+            />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="2dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="horizontal">
+
+        <RatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:isIndicator="true"
+            android:stepSize="0.1"
+            style="@android:style/Widget.DeviceDefault.Light.RatingBar.Small"
+            />
+
+        <com.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/font_black_light"
+            android:layout_marginRight="5dp"
+            android:textSize="11dp"
+            android:layout_marginLeft="5dp"
+            android:text="(0)"/>
+
+    </LinearLayout>
+
+</GridLayout>

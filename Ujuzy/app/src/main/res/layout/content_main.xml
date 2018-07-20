@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    android:layout_marginTop="15dp"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.ujuzy.ujuzy.activities.MainActivity"
+    tools:showIn="@layout/app_bar_main">
+
+   <!-- <com.ujuzy.ujuzy.CustomData.AllerFont
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/font_black_light"
+        android:layout_margin="15dp"
+        android:textSize="14dp"
+        android:layout_marginBottom="15dp"
+        android:text="Select category"/>-->
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <HorizontalScrollView
+                android:id="@+id/hsv"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/searchInput"
+                android:layout_marginBottom="30dp"
+                android:layout_marginTop="15dp"
+                android:fillViewport="true"
+                android:measureAllChildren="false"
+                android:scrollbars="none" >
+                <LinearLayout
+                    android:id="@+id/innerLay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="30dp"
+                    android:orientation="horizontal" >
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/lin_lay_tasks"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:background="@drawable/custom_button2">
+
+                            <com.ujuzy.ujuzy.CustomData.AllerFont
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="15dp"
+                                android:layout_margin="10dp"
+                                android:text="Plumbers"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:background="@drawable/custom_button2">
+
+                            <com.ujuzy.ujuzy.CustomData.AllerFont
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="15dp"
+                                android:layout_margin="10dp"
+                                android:text="Electricians"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:background="@drawable/custom_button2">
+
+                            <com.ujuzy.ujuzy.CustomData.AllerFont
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="15dp"
+                                android:layout_margin="10dp"
+                                android:text="Masons"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:background="@drawable/custom_button2">
+
+                            <com.ujuzy.ujuzy.CustomData.AllerFont
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="10dp"
+                                android:textSize="15dp"
+                                android:text="Welders"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:background="@drawable/custom_button2">
+
+                            <com.ujuzy.ujuzy.CustomData.AllerFont
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="15dp"
+                                android:layout_margin="10dp"
+                                android:text="Carpenters"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </HorizontalScrollView>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:id="@+id/bottomRely"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:background="#eaeaea"
+                android:orientation="vertical">
+
+                <ProgressBar
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:visibility="gone"
+                    android:id="@+id/progressBar1"
+                    android:layout_centerInParent="true"/>
+
+                <com.ujuzy.ujuzy.CustomData.AllerFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:id="@+id/noService"
+                    android:textSize="15dp"
+                    android:visibility="gone"
+                    android:text="No services"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rely">
+
+                    <com.ujuzy.ujuzy.CustomData.AllerBoldFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/font_black_light"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="12dp"
+                        android:textSize="14dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="Profession services"/>
+
+                    <com.ujuzy.ujuzy.CustomData.AllerFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/font_black_light"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginTop="12dp"
+                        android:textSize="14dp"
+                        android:id="@+id/seeAllProf"
+                        android:layout_marginBottom="8dp"
+                        android:text="See all >>"/>
+
+                </RelativeLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/service_list"
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="5dp"
+                    android:layout_below="@+id/rely"
+                    android:layout_height="wrap_content"
+                    >
+
+                </android.support.v7.widget.RecyclerView>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="0dp"
+                android:background="#eaeaea"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rely2">
+
+                    <com.ujuzy.ujuzy.CustomData.AllerBoldFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/font_black_light"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="12dp"
+                        android:textSize="14dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="Company services"/>
+
+                    <com.ujuzy.ujuzy.CustomData.AllerFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/font_black_light"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginTop="12dp"
+                        android:textSize="14dp"
+                        android:id="@+id/seeAllComp"
+                        android:layout_marginBottom="8dp"
+                        android:text="See all >>"/>
+
+                </RelativeLayout>
+
+                <ProgressBar
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:id="@+id/progressBar2"
+                    android:visibility="gone"
+                    android:layout_centerInParent="true"/>
+
+                <com.ujuzy.ujuzy.CustomData.AllerFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:id="@+id/noService2"
+                    android:textSize="15dp"
+                    android:visibility="gone"
+                    android:text="No services"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/company_service_list"
+                    android:layout_width="match_parent"
+                    android:layout_below="@+id/rely2"
+                    android:layout_marginLeft="5dp"
+                    android:layout_height="wrap_content"
+                    >
+
+                </android.support.v7.widget.RecyclerView>
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+    <!--<android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"
+        android:id="@+id/service_list">
+
+    </android.support.v7.widget.RecyclerView>-->
+
+
+</LinearLayout>

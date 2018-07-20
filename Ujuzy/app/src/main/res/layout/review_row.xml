@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#fff"
+    android:layout_marginBottom="10dp"
+    app:cardElevation="4dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/liny"
+            android:layout_marginTop="3dp"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/photoRely"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical">
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:id="@+id/user_avator"
+                    android:layout_margin="5dp"
+                    app:civ_border_width="1dp"
+                    app:civ_border_color="@color/grey"
+                    android:src="@drawable/if_profile"/>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/openProfile"
+                android:layout_toRightOf="@+id/photoRely"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="5dp"
+                android:layout_centerVertical="true"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.ujuzy.ujuzy.CustomData.AllerBoldFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tv_sender_name"
+                        android:text="name"
+                        android:textColor="@color/black"
+                        android:textSize="15dp"
+                        android:layout_marginLeft="1dp"
+                        android:scaleType="fitXY"
+                        android:textStyle="bold"
+                        />
+
+                    <com.ujuzy.ujuzy.CustomData.AllerBoldFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tv_sender_last_name"
+                        android:text="name"
+                        android:layout_toRightOf="@+id/tv_sender_name"
+                        android:textColor="@color/black"
+                        android:textSize="15dp"
+                        android:layout_marginLeft="5dp"
+                        android:scaleType="fitXY"
+                        android:textStyle="bold"
+                        />
+
+                    <com.github.curioustechizen.ago.RelativeTimeTextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:textColor="@color/font_black"
+                        android:layout_alignParentRight="true"
+                        android:textSize="12dp"
+                        android:text="time"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginLeft="3dp"
+                        android:singleLine="true"
+                        android:id="@+id/post_date" />
+
+                </RelativeLayout>
+
+                <RatingBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:isIndicator="true"
+                    android:stepSize="0.1"
+                    style="@android:style/Widget.DeviceDefault.Light.RatingBar.Small"
+                    />
+
+
+                <com.ujuzy.ujuzy.CustomData.AllerFont
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:ellipsize="end"
+                    android:textSize="13dp"
+                    android:text="@string/lorem_ipsum"
+                    android:textColor="@color/font_black_light"
+                    android:id="@+id/tv_review_details"
+                    android:layout_marginRight="10dp"
+                    />
+
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <!-- </RelativeLayout>-->
+
+    </LinearLayout>
+    <!--<View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#ccc9c9"/>-->
+</LinearLayout>
+
