@@ -46,7 +46,6 @@
             android:name=".activities.ProfileActivity"
             android:label=""
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" />
@@ -75,7 +74,8 @@
         <activity android:name=".activities.PostReviewsActivity" />
         <activity android:name=".activities.StartServiceWebActivity" />
         <activity android:name=".activities.SettingsActivity" />
-        <activity android:name=".activities.EditProfileActivity"></activity>
+        <activity android:name=".activities.EditProfileActivity" />
+        <activity android:name=".activities.SignUpActivity"></activity>
     </application>
 
 </manifest>

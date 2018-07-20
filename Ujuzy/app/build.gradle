@@ -61,7 +61,7 @@ dependencies {
     compile 'com.theartofdev.edmodo:android-image-cropper:2.5.1'
 
     //compile 'io.realm:realm-android:0.71.0'
-   /* compile 'io.realm:realm-android:5.0.1'
+    /* compile 'io.realm:realm-android:5.0.1'
     annotationProcessor 'io.realm:realm-android:5.3.1'*/
 
 }

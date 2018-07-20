@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.SignUpActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lin_lay"
+        android:layout_centerVertical="true"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.ujuzy.ujuzy.CustomData.AllerEditText
+                android:id="@+id/inputFirstNameEt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="First Name"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColorHint="#121111"
+                android:textColor="#121111" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.ujuzy.ujuzy.CustomData.AllerEditText
+                android:id="@+id/inputLastNameEt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Last Name"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColorHint="#121111"
+                android:textColor="#121111" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.ujuzy.ujuzy.CustomData.AllerEditText
+                android:id="@+id/inputEmailEt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColorHint="#121111"
+                android:textColor="#121111" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp">
+
+            <com.ujuzy.ujuzy.CustomData.AllerEditText
+                android:id="@+id/inputPassEt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusableInTouchMode="true"
+                android:hint="Password"
+                android:imeOptions="actionUnspecified"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColorHint="#121111"
+                android:textColor="#121111" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp">
+
+            <com.ujuzy.ujuzy.CustomData.AllerEditText
+                android:id="@+id/inputConfirmPassEt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusableInTouchMode="true"
+                android:hint="Confirm Password"
+                android:imeOptions="actionUnspecified"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColorHint="#121111"
+                android:textColor="#121111" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <com.ujuzy.ujuzy.CustomData.MyButton
+            android:id="@+id/btn_signup"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:textAllCaps="true"
+            android:textSize="16dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/custom_button"
+            android:text="Sign up"
+            android:textColor="#ffff"
+            android:textStyle="bold" />
+        <com.ujuzy.ujuzy.CustomData.MyButton
+            android:id="@+id/btn_back"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:textAllCaps="true"
+            android:textSize="16dp"
+            android:layout_margin="5dp"
+            android:background="@null"
+            android:text="<< Back"
+            android:textColor="@color/colorPrimaryDark"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+</RelativeLayout>

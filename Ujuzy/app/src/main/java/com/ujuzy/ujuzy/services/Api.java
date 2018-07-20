@@ -32,4 +32,6 @@ public interface Api
 
     @POST("login")
     Call<Token> login(@Body Login login);
+
+    @POST("signup")
 }
