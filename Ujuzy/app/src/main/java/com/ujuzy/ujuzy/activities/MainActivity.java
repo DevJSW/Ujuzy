@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,22 +20,30 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ujuzy.ujuzy.R;
 import com.ujuzy.ujuzy.adapters.CountryAdapter;
 import com.ujuzy.ujuzy.adapters.ServiceAdapter;
 import com.ujuzy.ujuzy.model.Datum;
 import com.ujuzy.ujuzy.model.RetrofitInstance;
+import com.ujuzy.ujuzy.model.Search;
 import com.ujuzy.ujuzy.model.Service;
 import com.ujuzy.ujuzy.services.Api;
 
 import java.util.ArrayList;
 
+import ir.mirrajabi.searchdialog.SimpleSearchDialogCompat;
+import ir.mirrajabi.searchdialog.core.BaseSearchDialogCompat;
+import ir.mirrajabi.searchdialog.core.SearchResultListener;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
@@ -63,8 +72,43 @@ public class MainActivity extends AppCompatActivity
         getServices();
         initSeeAll();
         initProgessBar();
+        initHorizScrollMenu();
+        initSearch();
 
     }
+
+    private void initSearch()
+    {
+        new SimpleSearchDialogCompat(MainActivity.this, "Search...",
+                "What are you looking for...?", null, createSearchSuggestions(),
+                new SearchResultListener<Search>() {
+                    @Override
+                    public void onSelected(BaseSearchDialogCompat dialog,
+                                           Search item, int position) {
+                        Toast.makeText(MainActivity.this, item.getTitle(),
+                                Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                    }
+                }).show();
+
+
+    }
+
+
+    private ArrayList<Search> createSearchSuggestions()
+    {
+        ArrayList<Search> searchItems = new ArrayList<>();
+        searchItems.add(new Search("Plumbers"));
+        searchItems.add(new Search("Electricians"));
+        searchItems.add(new Search("Carpenter"));
+        searchItems.add(new Search("Masons"));
+        searchItems.add(new Search("Tailors"));
+        searchItems.add(new Search("Welders"));
+        searchItems.add(new Search("Professions"));
+        searchItems.add(new Search("Companies"));
+        return searchItems;
+    }
+
 
     private void initProgessBar()
     {
@@ -80,6 +124,119 @@ public class MainActivity extends AppCompatActivity
         noService.setVisibility(View.GONE);
         noServiceCo.setVisibility(View.GONE);
     }
+
+    private void initHorizScrollMenu()
+    {
+        LinearLayout plumberScrollLl = (LinearLayout) findViewById(R.id.plumberScrollLl);
+        plumberScrollLl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String category_type = "";
+                String category_title = "Plumbers";
+
+                Intent filterPlumbers = new Intent(MainActivity.this, FilterServicesActivity.class);
+                filterPlumbers.putExtra("category_title", category_title);
+                filterPlumbers.putExtra("category_type", category_type);
+                startActivity(filterPlumbers);
+
+            }
+        });
+
+        LinearLayout elecScrollLl = (LinearLayout) findViewById(R.id.elecScrollLl);
+        elecScrollLl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String category_type = "";
+                String category_title = "Electricians";
+
+                Intent filterPlumbers = new Intent(MainActivity.this, FilterServicesActivity.class);
+                filterPlumbers.putExtra("category_type", category_type);
+                filterPlumbers.putExtra("category_title", category_title);
+                startActivity(filterPlumbers);
+
+            }
+        });
+
+        LinearLayout masonScrollLl = (LinearLayout) findViewById(R.id.masonScrollLl);
+        masonScrollLl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String category_type = "";
+                String category_title = "Masons";
+
+                Intent filterPlumbers = new Intent(MainActivity.this, FilterServicesActivity.class);
+                filterPlumbers.putExtra("category_type", category_type);
+                filterPlumbers.putExtra("category_title", category_title);
+                startActivity(filterPlumbers);
+
+            }
+        });
+
+        LinearLayout weldersScrollLl = (LinearLayout) findViewById(R.id.weldersScrollLl);
+        weldersScrollLl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String category_type = "";
+                String category_title = "Welders";
+
+                Intent filterPlumbers = new Intent(MainActivity.this, FilterServicesActivity.class);
+                filterPlumbers.putExtra("category_type", category_type);
+                filterPlumbers.putExtra("category_title", category_title);
+                startActivity(filterPlumbers);
+
+            }
+        });
+
+        LinearLayout capentrScrollLl = (LinearLayout) findViewById(R.id.capentrScrollLl);
+        capentrScrollLl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String category_type = "";
+                String category_title = "Carpenters";
+
+                Intent filterPlumbers = new Intent(MainActivity.this, FilterServicesActivity.class);
+                filterPlumbers.putExtra("category_type", category_type);
+                filterPlumbers.putExtra("category_title", category_title);
+                startActivity(filterPlumbers);
+
+            }
+        });
+
+        LinearLayout tailorScrollLl = (LinearLayout) findViewById(R.id.tailorScrollLl);
+        tailorScrollLl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String category_type = "";
+                String category_title = "Tailors";
+
+                Intent filterPlumbers = new Intent(MainActivity.this, FilterServicesActivity.class);
+                filterPlumbers.putExtra("category_type", category_type);
+                filterPlumbers.putExtra("category_title", category_title);
+                startActivity(filterPlumbers);
+
+            }
+        });
+
+        LinearLayout seeallScrollLl = (LinearLayout) findViewById(R.id.seeallScrollLl);
+        seeallScrollLl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String electricitan_type = "";
+
+                Intent filterPlumbers = new Intent(MainActivity.this, SeeAllActivity.class);
+                filterPlumbers.putExtra("category_type", electricitan_type);
+                startActivity(filterPlumbers);
+
+            }
+        });
+    }
+
 
     private void initSeeAll()
     {

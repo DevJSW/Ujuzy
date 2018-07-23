@@ -75,7 +75,8 @@
         <activity android:name=".activities.StartServiceWebActivity" />
         <activity android:name=".activities.SettingsActivity" />
         <activity android:name=".activities.EditProfileActivity" />
-        <activity android:name=".activities.SignUpActivity"></activity>
+        <activity android:name=".activities.SignUpActivity" />
+        <activity android:name=".activities.FilterServicesActivity"></activity>
     </application>
 
 </manifest>

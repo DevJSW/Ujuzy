@@ -126,7 +126,7 @@
             android:textSize="16dp"
             android:layout_margin="5dp"
             android:background="@null"
-            android:text="<< Back"
+            android:text="@string/back"
             android:textColor="@color/colorPrimaryDark"
             android:textStyle="bold" />
     </LinearLayout>

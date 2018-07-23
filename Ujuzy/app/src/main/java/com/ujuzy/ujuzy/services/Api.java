@@ -31,7 +31,8 @@ public interface Api
     Call<Service> getServicesById(@Query("id") String id);
 
     @POST("login")
-    Call<Token> login(@Body Login login);
+    Call<Login> login(@Body Login login);
 
-    @POST("signup")
+    //@POST("signup")
+   // Call<> signUp(@Body SignUp signup);
 }
