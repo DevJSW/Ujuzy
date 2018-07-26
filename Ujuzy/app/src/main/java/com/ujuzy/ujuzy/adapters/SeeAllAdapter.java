@@ -52,10 +52,7 @@ public class SeeAllAdapter extends RecyclerView.Adapter<SeeAllAdapter.ServicesVi
     public void onBindViewHolder(final ServicesViewHolder holder, final int position)
     {
 
-        String photo = "";
-
-        if (servicesList.get(position).getImages() != null)
-            photo = servicesList.get(position).getImages().get(0).toString();
+        final String photo = servicesList.get(position).getImages().get(0).toString();
 
         holder.serviceName.setText(servicesList.get(position).getServiceName());
         holder.serviceDetails.setText(servicesList.get(position).getServiceDetails());
@@ -66,7 +63,7 @@ public class SeeAllAdapter extends RecyclerView.Adapter<SeeAllAdapter.ServicesVi
                 .load(photo).asBitmap()
                 .placeholder(R.drawable.placeholder_image)
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                .centerCrop()
+                .fitCenter()
                 .into(new BitmapImageViewTarget(holder.avatar) {
                     @Override
                     protected void setResource(Bitmap resource) {
@@ -77,7 +74,6 @@ public class SeeAllAdapter extends RecyclerView.Adapter<SeeAllAdapter.ServicesVi
                     }
                 });
 
-        final String finalPhoto = photo;
         holder.itemView.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -86,7 +82,7 @@ public class SeeAllAdapter extends RecyclerView.Adapter<SeeAllAdapter.ServicesVi
                 Intent openRead = new Intent(view.getContext(), ServiceActivity.class);
                 openRead.putExtra("user_id", servicesList.get(position).getCreatedBy());
                 openRead.putExtra("service_id", servicesList.get(position).getId());
-                openRead.putExtra("service_url", finalPhoto);
+                openRead.putExtra("service_url", photo);
                 openRead.putExtra("service_name", servicesList.get(position).getServiceName());
                 openRead.putExtra("service_details", servicesList.get(position).getServiceDetails());
                 openRead.putExtra("service_location", servicesList.get(position).getLocation());

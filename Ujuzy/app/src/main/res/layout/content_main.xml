@@ -10,14 +10,14 @@
     tools:context="com.ujuzy.ujuzy.activities.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-   <!-- <com.ujuzy.ujuzy.CustomData.AllerFont
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/font_black_light"
-        android:layout_margin="15dp"
-        android:textSize="14dp"
-        android:layout_marginBottom="15dp"
-        android:text="Select category"/>-->
+    <!-- <com.ujuzy.ujuzy.CustomData.AllerFont
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:textColor="@color/font_black_light"
+         android:layout_margin="15dp"
+         android:textSize="14dp"
+         android:layout_marginBottom="15dp"
+         android:text="Select category"/>-->
 
     <ScrollView
         android:layout_width="match_parent"

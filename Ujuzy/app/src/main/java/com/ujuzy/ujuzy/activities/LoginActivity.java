@@ -29,8 +29,6 @@ public class LoginActivity extends AppCompatActivity
 {
 
     private static String Token;
-    private String client_type = "";
-    private String grant_type = "";
     private Button btnLogin;
     private EditText inputEmail, inputPassword;
     private ProgressBar progressBar;
@@ -48,7 +46,6 @@ public class LoginActivity extends AppCompatActivity
 
         initWindows();
         iniLogin();
-
     }
 
     private void initWindows()
@@ -92,21 +89,21 @@ public class LoginActivity extends AppCompatActivity
         progressBar.setVisibility(View.VISIBLE);
 
         String email = inputEmail.getText().toString();
-        String password = inputPassword.getText().toString();
+        String password = inputEmail.getText().toString();
 
-        Login login = new Login(email, password, client_type, grant_type);
-        Call<Login> call = api.login(login);
+        Login login = new Login(email, password);
+        Call<Token> call = api.login(login);
 
-        call.enqueue(new Callback<Login>()
+        call.enqueue(new Callback<Token>()
         {
             @Override
-            public void onResponse(Call<Login> call, Response<Login> response)
+            public void onResponse(Call<Token> call, Response<Token> response)
             {
                 if (response.isSuccessful())
                 {
-                    Token = response.body().toString();
+                    Token = response.body().getToken();
                     progressBar.setVisibility(View.GONE);
-                    Toast.makeText(LoginActivity.this, response.body().toString(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(LoginActivity.this, response.body().getToken(), Toast.LENGTH_LONG).show();
                 } else {
                     progressBar.setVisibility(View.GONE);
                     Toast.makeText(LoginActivity.this, "Login Incorrect", Toast.LENGTH_SHORT).show();
@@ -114,7 +111,7 @@ public class LoginActivity extends AppCompatActivity
             }
 
             @Override
-            public void onFailure(Call<Login> call, Throwable t)
+            public void onFailure(Call<Token> call, Throwable t)
             {
 
             }

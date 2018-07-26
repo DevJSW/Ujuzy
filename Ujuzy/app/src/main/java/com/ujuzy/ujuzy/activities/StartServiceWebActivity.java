@@ -94,7 +94,7 @@ public class StartServiceWebActivity extends AppCompatActivity {
 
             }
         });
-        myWebView.loadUrl("https://ujuzy.com/");
+        myWebView.loadUrl("https://ujuzy.com/services/create");
     }
 
     /*@Override

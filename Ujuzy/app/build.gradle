@@ -40,31 +40,28 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:26.1.0'
     implementation 'com.android.support:cardview-v7:26.1.0'
 
-    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.8.0'
-    implementation 'com.android.support:support-annotations:27.1.1'
+    compile 'com.squareup.retrofit2:retrofit:2.4.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.4.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.8.0'
+    compile 'com.android.support:support-annotations:27.1.1'
 
     //IMAGE LIBS
-    implementation 'de.hdodenhof:circleimageview:2.1.0'
-    implementation 'com.github.bumptech.glide:glide:3.8.0'
-    implementation 'com.squareup.picasso:picasso:2.5.2'
+    compile 'de.hdodenhof:circleimageview:2.1.0'
+    compile 'com.github.bumptech.glide:glide:3.8.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
 
     //time
-    implementation 'com.github.curioustechizen.android-ago:library:1.3.4'
+    compile 'com.github.curioustechizen.android-ago:library:1.3.4'
 
     //slider
-    implementation 'com.nineoldandroids:library:2.4.0'
-    implementation 'com.daimajia.slider:library:1.1.5@aar'
+    compile 'com.nineoldandroids:library:2.4.0'
+    compile 'com.daimajia.slider:library:1.1.5@aar'
 
     //Image Cropper
-    implementation 'com.theartofdev.edmodo:android-image-cropper:2.5.1'
-
-    //search dialog
-    implementation 'com.github.mirrajabi:search-dialog:1.2.2'
+    compile 'com.theartofdev.edmodo:android-image-cropper:2.5.1'
 
     //compile 'io.realm:realm-android:0.71.0'
-    /* compile 'io.realm:realm-android:5.0.1'
+   /* compile 'io.realm:realm-android:5.0.1'
     annotationProcessor 'io.realm:realm-android:5.3.1'*/
 
 }

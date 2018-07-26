@@ -86,9 +86,7 @@ public class ServiceActivity extends AppCompatActivity implements BaseSliderView
 
         initWindows();
         initServiceInfo();
-        if (!serviceUrl.isEmpty() || serviceUrl != null)
         initSlider();
-
         initToolbarBtns();
         //initFab();
 

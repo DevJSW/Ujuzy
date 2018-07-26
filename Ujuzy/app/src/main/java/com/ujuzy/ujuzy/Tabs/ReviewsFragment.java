@@ -82,7 +82,7 @@ public class ReviewsFragment extends Fragment
             }
         });
 */
-      //  getReviews();
+       // getReviews();
         return v;
     }
 
@@ -93,7 +93,7 @@ public class ReviewsFragment extends Fragment
         noService.setVisibility(View.GONE);
     }
 
-   /* public Object getReviews() {
+    /*public Object getReviews() {
 
         Api api = RetrofitInstance.getService();
         Call<Service> callReviews = api.getReviewsByServiceId(service_id);

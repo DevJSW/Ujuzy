@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -23,27 +22,23 @@ import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ujuzy.ujuzy.R;
+import com.ujuzy.ujuzy.SqliteDatabase.ServicesDatabase;
 import com.ujuzy.ujuzy.adapters.CountryAdapter;
 import com.ujuzy.ujuzy.adapters.ServiceAdapter;
 import com.ujuzy.ujuzy.model.Datum;
 import com.ujuzy.ujuzy.model.RetrofitInstance;
-import com.ujuzy.ujuzy.model.Search;
 import com.ujuzy.ujuzy.model.Service;
 import com.ujuzy.ujuzy.services.Api;
+import com.ujuzy.ujuzy.services.NetworkChecker;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import ir.mirrajabi.searchdialog.SimpleSearchDialogCompat;
-import ir.mirrajabi.searchdialog.core.BaseSearchDialogCompat;
-import ir.mirrajabi.searchdialog.core.SearchResultListener;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
@@ -52,13 +47,14 @@ public class MainActivity extends AppCompatActivity
     private String BASE_URL = "https://api.ujuzy.com/";
     private ServiceAdapter serviceAdapter;
     private RecyclerView servicesListRv;
- //   ArrayList<Service> results;
+    //   ArrayList<Service> results;
     private ProgressBar progressBar1, progressBar2;
 
     private CountryAdapter countryAdapter;
     private RecyclerView countriesListRv, companyServicesListRv;
     ArrayList<Datum> results;
     private TextView tvSeeAllProf, tvSeeAllComp, noService, noServiceCo;
+    private ServicesDatabase SqlDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -69,60 +65,25 @@ public class MainActivity extends AppCompatActivity
         initWindow();
         initFab();
         initDrawer();
-        getServices();
+
+        //CHECK IF APP IS CONNECTED TO INTERNET
+        if (NetworkChecker.isNetworkAvailable(getApplicationContext()))
+        {
+            getServices();
+        } else {
+            getServicesFromDatabase();
+        }
+
         initSeeAll();
         initProgessBar();
         initHorizScrollMenu();
-        initSearch();
 
     }
 
-    private void initSearch()
+    private void getServicesFromDatabase()
     {
-        new SimpleSearchDialogCompat(MainActivity.this, "Search...",
-                "What are you looking for...?", null, createSearchSuggestions(),
-                new SearchResultListener<Search>() {
-                    @Override
-                    public void onSelected(BaseSearchDialogCompat dialog,
-                                           Search item, int position) {
-                        Toast.makeText(MainActivity.this, item.getTitle(),
-                                Toast.LENGTH_SHORT).show();
-                        dialog.dismiss();
-                    }
-                }).show();
 
-
-    }
-
-
-    private ArrayList<Search> createSearchSuggestions()
-    {
-        ArrayList<Search> searchItems = new ArrayList<>();
-        searchItems.add(new Search("Plumbers"));
-        searchItems.add(new Search("Electricians"));
-        searchItems.add(new Search("Carpenter"));
-        searchItems.add(new Search("Masons"));
-        searchItems.add(new Search("Tailors"));
-        searchItems.add(new Search("Welders"));
-        searchItems.add(new Search("Professions"));
-        searchItems.add(new Search("Companies"));
-        return searchItems;
-    }
-
-
-    private void initProgessBar()
-    {
-        progressBar1 = (ProgressBar) findViewById(R.id.progressBar1);
-        progressBar2 = (ProgressBar) findViewById(R.id.progressBar2);
-
-        progressBar1.setVisibility(View.VISIBLE);
-        progressBar2.setVisibility(View.VISIBLE);
-
-        noService = (TextView) findViewById(R.id.noService);
-        noServiceCo = (TextView) findViewById(R.id.noService2);
-
-        noService.setVisibility(View.GONE);
-        noServiceCo.setVisibility(View.GONE);
+        List<Datum> serviceList = SqlDatabase.getServicesFromSqlDB();
     }
 
     private void initHorizScrollMenu()
@@ -237,6 +198,20 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    private void initProgessBar()
+    {
+        progressBar1 = (ProgressBar) findViewById(R.id.progressBar1);
+        progressBar2 = (ProgressBar) findViewById(R.id.progressBar2);
+
+        progressBar1.setVisibility(View.VISIBLE);
+        progressBar2.setVisibility(View.VISIBLE);
+
+        noService = (TextView) findViewById(R.id.noService);
+        noServiceCo = (TextView) findViewById(R.id.noService2);
+
+        noService.setVisibility(View.GONE);
+        noServiceCo.setVisibility(View.GONE);
+    }
 
     private void initSeeAll()
     {
@@ -333,7 +308,6 @@ public class MainActivity extends AppCompatActivity
         companyServicesListRv.setLayoutManager(compServiceLayoutManager);
         companyServicesListRv.setAdapter(serviceAdapter);
 
-
     }
 
 
@@ -378,7 +352,7 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                startActivity(new Intent(MainActivity.this, LoginActivity.class));
+                startActivity(new Intent(MainActivity.this, StartServiceWebActivity.class));
             }
         });
     }
@@ -430,17 +404,15 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_camera)
         {
-            startActivity(new Intent(MainActivity.this, ProfileActivity.class));
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
             // Handle the camera action
         } else if (id == R.id.nav_gallery)
         {
 
         } else if (id == R.id.nav_slideshow)
         {
-
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://ujuzy.com"));
             startActivity(browserIntent);
-
         } else if (id == R.id.nav_manage)
         {
             startActivity(new Intent(MainActivity.this, SettingsActivity.class));
