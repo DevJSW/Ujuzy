@@ -58,6 +58,8 @@ public class ServiceActivity extends AppCompatActivity implements BaseSliderView
     String serviceTravel = "";
     String serviceCategory = "";
     String serviceAddInfo = "";
+    String serviceLatitude = "";
+    String serviceLongitude = "";
 
     String first_name = "";
     String last_name = "";
@@ -136,8 +138,12 @@ public class ServiceActivity extends AppCompatActivity implements BaseSliderView
         map.setOnClickListener(new View.OnClickListener()
         {
             @Override
-            public void onClick(View view) {
-                startActivity(new Intent(ServiceActivity.this, MapsActivity.class));
+            public void onClick(View view) { ;
+
+                Intent openMaps = new Intent(ServiceActivity.this, MapsActivity.class);
+                openMaps.putExtra("service_latitude",serviceLatitude);
+                openMaps.putExtra("service_longitude",serviceLongitude);
+                startActivity(openMaps);
             }
         });
 
@@ -155,7 +161,7 @@ public class ServiceActivity extends AppCompatActivity implements BaseSliderView
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
                 dialog.show();
 
-                TextView openReviews = (TextView) dialog.findViewById(R.id.options_reviews);
+                /*TextView openReviews = (TextView) dialog.findViewById(R.id.options_reviews);
                 openReviews.setOnClickListener(new View.OnClickListener()
                 {
                     @Override
@@ -164,7 +170,7 @@ public class ServiceActivity extends AppCompatActivity implements BaseSliderView
                         startActivity(new Intent(ServiceActivity.this, PostReviewsActivity.class));
                         dialog.dismiss();
                     }
-                });
+                });*/
 
                 TextView openProfile = (TextView) dialog.findViewById(R.id.options_profile);
                 openProfile.setOnClickListener(new View.OnClickListener()
@@ -279,6 +285,9 @@ public class ServiceActivity extends AppCompatActivity implements BaseSliderView
         serviceTravel = getIntent().getStringExtra("service_travel");
         serviceCategory = getIntent().getStringExtra("service_category");
         serviceAddInfo = getIntent().getStringExtra("service_additional_info");
+
+        serviceLatitude = getIntent().getStringExtra("service_latitude");
+        serviceLongitude = getIntent().getStringExtra("service_longitude");
 
         first_name = getIntent().getStringExtra("first_name");
         last_name = getIntent().getStringExtra("last_name");

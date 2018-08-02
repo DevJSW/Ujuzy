@@ -13,5 +13,14 @@
         android:layout_marginRight="25dp"
         android:src="@drawable/backbtn_black"/>
 
+    <com.ujuzy.ujuzy.CustomData.AllerFont
+        android:layout_width="wrap_content"
+        android:textColor="#fff"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:visibility="gone"
+        android:id="@+id/toolbarTv"
+        android:text="Service"
+        />
 
 </android.support.v7.widget.Toolbar>

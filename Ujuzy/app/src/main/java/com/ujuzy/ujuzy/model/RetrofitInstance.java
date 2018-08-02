@@ -3,6 +3,8 @@ package com.ujuzy.ujuzy.model;
 
 import com.ujuzy.ujuzy.services.Api;
 
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -14,7 +16,6 @@ public class RetrofitInstance
 {
 
     private static Retrofit retrofit = null;
-    private static String BASE_URL = "https://api.ujuzy.com/";
 
     public static Api getService()
     {
@@ -22,10 +23,28 @@ public class RetrofitInstance
         {
             retrofit = new Retrofit
                     .Builder()
-                    .baseUrl(BASE_URL)
+                    .baseUrl(Constants.HTTP.BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
+
+        return retrofit.create(Api.class);
+    }
+
+    public static Api getOkttpService()
+    {
+
+        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
+        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+
+
+        retrofit = new Retrofit.Builder()
+                .baseUrl(Constants.HTTP.BASE_URL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
+                .build();
+
 
         return retrofit.create(Api.class);
     }

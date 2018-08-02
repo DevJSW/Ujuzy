@@ -1,17 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:layout_height="55dp"
+    android:orientation="vertical"
+    android:background="#fff"
+    app:cardElevation="4dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!-- Single ListItem -->
-
-    <!-- Search Name -->
-    <TextView android:id="@+id/product_name"
-        android:layout_width="fill_parent"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dip"
-        android:textSize="16dip"
-        android:textStyle="bold"/>
+        android:layout_marginRight="5dp"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/liny"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/photoRely"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="55dp"
+                    android:layout_height="match_parent"
+                    android:id="@+id/iv_avatar"
+                    android:scaleType="fitXY"
+                    android:layout_marginRight="5dp"
+                    android:src="@drawable/placeholder_image"/>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/openProfile"
+                android:layout_toRightOf="@+id/photoRely"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="12dp"
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="1dp">
+
+                    <com.ujuzy.ujuzy.CustomData.AllerFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tv_service_name"
+                        android:text="name"
+                        android:lines="1"
+                        android:textColor="@color/colorPrimary"
+                        android:textSize="15dp"
+                        android:layout_marginLeft="1dp"
+                        android:scaleType="fitXY"
+                        />
+
+
+                </RelativeLayout>
+
+
+                    <com.ujuzy.ujuzy.CustomData.AllerFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tv_service_details"
+                        android:text="name"
+                        android:lines="1"
+                        android:textColor="@color/font_black_light"
+                        android:textSize="14dp"
+                        android:layout_marginLeft="1dp"
+                        android:scaleType="fitXY"
+                        />
+
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+        <!-- </RelativeLayout>-->
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#e2e1e1"/>
 
 </LinearLayout>
+

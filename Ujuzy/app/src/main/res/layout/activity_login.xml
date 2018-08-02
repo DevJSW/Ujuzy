@@ -5,23 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/colorPrimary"
     tools:context="com.ujuzy.ujuzy.activities.LoginActivity">
 
-    <!--<include layout="@layout/login_toolbar"
+    <include layout="@layout/login_toolbar"
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
+        android:layout_height="55dp"
+        android:background="@color/colorPrimary"
         app:layout_scrollFlags="scroll|enterAlways"
-        />-->
+        />
 
     <ImageView
         android:layout_width="130dp"
         android:layout_height="85dp"
         android:layout_above="@+id/lin_lay"
+        android:layout_margin="20dp"
+        android:visibility="gone"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/ujuzy_white"/>
+        android:src="@drawable/ujuzy"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -80,7 +81,56 @@
             android:text="Sign in"
             android:textColor="#ffff"
             android:textStyle="bold" />
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <!-- Link to Login Screen -->
+
+            <com.ujuzy.ujuzy.CustomData.MyButton
+                android:id="@+id/btn_signup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:text="Dont have an account?"
+                android:textAllCaps="false"
+                android:textColor="@color/colorAccent"
+                android:textSize="14dp"
+                android:layout_weight="1"
+                android:layout_gravity="left" />
+
+            <com.ujuzy.ujuzy.CustomData.MyButton
+                android:id="@+id/btn_reset_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:text="Forgot password?"
+                android:textAllCaps="false"
+                android:textColor="@color/colorPrimaryDark"
+                android:layout_weight="1"
+                android:layout_gravity="right" />
+
+        </LinearLayout>
+
+
     </LinearLayout>
+
+    <com.ujuzy.ujuzy.CustomData.AllerBoldFont
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/backBtnTv"
+        android:text="@string/back"
+        android:layout_below="@+id/lin_lay"
+        android:layout_margin="10dp"
+        android:visibility="gone"
+        android:textColor="@color/white"
+        android:textSize="15dp"
+        android:gravity="center_horizontal"/>
 
     <ProgressBar
         android:id="@+id/progressBar"

@@ -21,16 +21,16 @@ public class Datum {
     private String serviceDetails;
     @SerializedName("cost")
     @Expose
-    private String cost;
+    private Object cost;
     @SerializedName("offer_cost")
     @Expose
-    private String offerCost;
+    private Object offerCost;
     @SerializedName("additional_info")
     @Expose
     private String additionalInfo;
     @SerializedName("images")
     @Expose
-    private List<String> images = null;
+    private List<Image> images = null;
     @SerializedName("category")
     @Expose
     private String category;
@@ -39,7 +39,7 @@ public class Datum {
     private Boolean travel;
     @SerializedName("location")
     @Expose
-    private String location;
+    private Location location;
     @SerializedName("duration")
     @Expose
     private Duration duration;
@@ -52,18 +52,21 @@ public class Datum {
     @SerializedName("created_at")
     @Expose
     private String createdAt;
+    @SerializedName("is_new")
+    @Expose
+    private Boolean isNew;
     @SerializedName("created_by")
     @Expose
-    private String createdBy;
-    @SerializedName("updated_at")
-    @Expose
-    private String updatedAt;
+    private CreatedBy createdBy;
     @SerializedName("updated_by")
     @Expose
     private Object updatedBy;
     @SerializedName("user")
     @Expose
     private User user;
+    @SerializedName("skill_list")
+    @Expose
+    private List<SkillList> skillList = null;
 
     public String getId() {
         return id;
@@ -89,19 +92,19 @@ public class Datum {
         this.serviceDetails = serviceDetails;
     }
 
-    public String getCost() {
+    public Object getCost() {
         return cost;
     }
 
-    public void setCost(String cost) {
+    public void setCost(Object cost) {
         this.cost = cost;
     }
 
-    public String getOfferCost() {
+    public Object getOfferCost() {
         return offerCost;
     }
 
-    public void setOfferCost(String offerCost) {
+    public void setOfferCost(Object offerCost) {
         this.offerCost = offerCost;
     }
 
@@ -113,11 +116,11 @@ public class Datum {
         this.additionalInfo = additionalInfo;
     }
 
-    public List<String> getImages() {
+    public List<Image> getImages() {
         return images;
     }
 
-    public void setImages(List<String> images) {
+    public void setImages(List<Image> images) {
         this.images = images;
     }
 
@@ -137,11 +140,11 @@ public class Datum {
         this.travel = travel;
     }
 
-    public String getLocation() {
+    public Location getLocation() {
         return location;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(Location location) {
         this.location = location;
     }
 
@@ -177,20 +180,20 @@ public class Datum {
         this.createdAt = createdAt;
     }
 
-    public String getCreatedBy() {
+    public Boolean getIsNew() {
+        return isNew;
+    }
+
+    public void setIsNew(Boolean isNew) {
+        this.isNew = isNew;
+    }
+
+    public CreatedBy getCreatedBy() {
         return createdBy;
     }
 
-    public void setCreatedBy(String createdBy) {
+    public void setCreatedBy(CreatedBy createdBy) {
         this.createdBy = createdBy;
-    }
-
-    public String getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(String updatedAt) {
-        this.updatedAt = updatedAt;
     }
 
     public Object getUpdatedBy() {
@@ -208,5 +211,15 @@ public class Datum {
     public void setUser(User user) {
         this.user = user;
     }
+
+    public List<SkillList> getSkillList() {
+        return skillList;
+    }
+
+    public void setSkillList(List<SkillList> skillList) {
+        this.skillList = skillList;
+    }
+
+
 
 }

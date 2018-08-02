@@ -16,7 +16,9 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:visibility="gone"
-        android:textSize="15dp"
+        android:gravity="center_horizontal"
+        android:layout_margin="40dp"
+        android:textSize="17dp"
         android:text="No Services"
         android:id="@+id/noService"/>
 

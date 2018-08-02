@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +17,19 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.ujuzy.ujuzy.R;
+import com.ujuzy.ujuzy.Realm.RealmAllServiceAdapter;
+import com.ujuzy.ujuzy.Realm.RealmHelper;
+import com.ujuzy.ujuzy.Realm.RealmServiceAdapter;
+import com.ujuzy.ujuzy.Realm.RealmSuggestedServiceAdapter;
 import com.ujuzy.ujuzy.activities.ProfileActivity;
 import com.ujuzy.ujuzy.map.MapsActivity;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,10 +54,28 @@ public class AboutService extends Fragment {
     //String profile_pic = "";
     String user_role = "";
 
+    List<String> serviceDetails;
+    List<String> serviceCost;
+    List<String> serviceCreatedBy;
+    List<String> serviceTravel;
+    List<String> serviceCategory;
+    List<String> serviceDutation;
+    List<String> serviceAt;
+    Spinner spinner_details;
+    Spinner spinner_cost;
+    Spinner spinner_travel;
+    Spinner spinner_category;
+    Spinner spinner_duration;
+    Spinner spinner_createdat;
+    Spinner spinner_createdby;
 
-    private RelativeLayout rlOpenProfile, rlLocation, rlShare;
+    private Realm realm;
+    private RealmChangeListener realmChangeListener;
+    private RealmSuggestedServiceAdapter serviceRealmAdapter;
 
-    private TextView serviceDetailsTv, serviceCreatedByTv, serviceCreatedAtTv, serviceCostTv, serviceTravelTv, serviceDurationTv, serviceAddInfoTv, serviceCategoryTv;
+    private TextView noService;
+
+    private RecyclerView servicesListRv;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,14 +83,18 @@ public class AboutService extends Fragment {
         // Inflate the layout for this fragment
         final View v = inflater.inflate(R.layout.fragment_about, container, false);
 
-        serviceCreatedByTv = (TextView) v.findViewById(R.id.tv_created_by);
-        serviceDetailsTv = (TextView) v.findViewById(R.id.tv_service_details);
-        serviceCreatedAtTv = (TextView) v.findViewById(R.id.tv_created_at);
-        serviceCostTv = (TextView) v.findViewById(R.id.tv_cost);
-        serviceTravelTv = (TextView) v.findViewById(R.id.tv_travel);
-        serviceDurationTv = (TextView) v.findViewById(R.id.tv_duration);
-        serviceAddInfoTv = (TextView) v.findViewById(R.id.tv_add_info);
-        serviceCategoryTv = (TextView) v.findViewById(R.id.tv_category);
+
+        spinner_details = (Spinner) v.findViewById(R.id.spinner_details);
+        spinner_cost = (Spinner) v.findViewById(R.id.spinner_cost);
+        spinner_travel = (Spinner) v.findViewById(R.id.spinner_travel);
+        spinner_category = (Spinner) v.findViewById(R.id.spinner_category);
+        spinner_duration = (Spinner) v.findViewById(R.id.spinner_dutation);
+        spinner_createdby = (Spinner) v.findViewById(R.id.spinner_createdby);
+        spinner_createdat = (Spinner) v.findViewById(R.id.spinner_createdat);
+        spinner_cost = (Spinner) v.findViewById(R.id.spinner_cost);
+
+        noService = (TextView) v.findViewById(R.id.noService);
+        servicesListRv = (RecyclerView) v.findViewById(R.id.service_list);
 
        /* rlLocation = (RelativeLayout) v.findViewById(R.id.rl_location);
         rlOpenProfile = (RelativeLayout) v.findViewById(R.id.rl_open_profile);
@@ -72,8 +103,381 @@ public class AboutService extends Fragment {
         initUserInfo();
         initServiceInfo();
        // initMenu();
+        initTabs();
+        initSimilarServClose();
 
         return v;
+    }
+
+    private void initSimilarServClose()
+    {
+        realm = Realm.getDefaultInstance();
+        final RealmHelper helper = new RealmHelper(realm);
+
+        //QUERY/FILTER REALM DATABASE
+        helper.filterRealmDatabase("category", service_category);
+
+        //CHECK IF DATABASE IS EMPTY
+        if (helper.refreshDatabase().size() < 1 || helper.refreshDatabase().size() == 0)
+        {
+
+            noService.setVisibility(View.VISIBLE);
+            noService.setText("Oh no 😌😞 this is embarrassing but no " + service_category + " services near you!");
+        } else {
+
+            noService.setVisibility(View.GONE);
+        }
+
+
+        serviceRealmAdapter = new RealmSuggestedServiceAdapter(getActivity(), helper.refreshDatabase());
+
+        //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+        final LinearLayoutManager serviceLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        servicesListRv.setLayoutManager(serviceLayoutManager);
+        servicesListRv.setAdapter(serviceRealmAdapter);
+
+        //HANDLE DATA CHANGE FOR REFRESH
+        realmChangeListener = new RealmChangeListener()
+        {
+            @Override
+            public void onChange(Object o) {
+                //REFRESH
+                serviceRealmAdapter = new RealmSuggestedServiceAdapter(getActivity(), helper.refreshDatabase());
+                servicesListRv.setAdapter(serviceRealmAdapter);
+            }
+        };
+
+        //ADD CHANGE LIST TO REALM
+        realm.addChangeListener(realmChangeListener);
+    }
+
+    private void initTabs()
+    {
+        initServiceDetailsTabs();
+        if (service_creator != null)
+        initCreatedby();
+        if (service_creator == null)
+        spinner_createdby.setVisibility(View.GONE);
+        if (service_category != null)
+        initCategory();
+        if (service_category == null)
+        spinner_category.setVisibility(View.GONE);
+        if (service_travel != null)
+        initTravel();
+        if (service_travel == null)
+        spinner_travel.setVisibility(View.GONE);
+        if (service_created_at != null)
+        initCreatedAt();
+        if (service_created_at == null)
+        spinner_createdat.setVisibility(View.GONE);
+        if (service_cost != null)
+        initOfferCost();
+        if (service_cost == null)
+            spinner_cost.setVisibility(View.GONE);
+        if (service_duration != null)
+        initServiceDuration();
+        if (service_duration == null)
+            spinner_duration.setVisibility(View.GONE);
+    }
+
+    private void initServiceDuration() {
+        String[] service_duration_string = new String[]{
+                "Duration",
+                service_cost
+        };
+
+        serviceDutation = new ArrayList<>(Arrays.asList(service_duration_string));
+
+        // Initializing an ArrayAdapter
+        final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
+                getActivity(), R.layout.spinner_item, serviceDutation) {
+            @Override
+            public boolean isEnabled(int position) {
+                if (position == 0) {
+                    // Disable the first item from Spinner
+                    // First item will be use for hint
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if (position == 0) {
+                    // Set the hint text color gray
+                    tv.setTextColor(Color.GRAY);
+                } else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
+
+
+        spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_item);
+        spinner_duration.setAdapter(spinnerArrayAdapter);
+    }
+
+    private void initCreatedAt() {
+        String[] service_at_string = new String[]{
+                "Created At",
+                service_cost
+        };
+
+        serviceAt = new ArrayList<>(Arrays.asList(service_at_string));
+
+        // Initializing an ArrayAdapter
+        final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
+                getActivity(), R.layout.spinner_item, serviceAt) {
+            @Override
+            public boolean isEnabled(int position) {
+                if (position == 0) {
+                    // Disable the first item from Spinner
+                    // First item will be use for hint
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if (position == 0) {
+                    // Set the hint text color gray
+                    tv.setTextColor(Color.GRAY);
+                } else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
+
+
+        spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_item);
+        spinner_createdat.setAdapter(spinnerArrayAdapter);
+    }
+
+    private void initOfferCost() {
+        String[] service_cost_string = new String[]{
+                "Offer Cost",
+                "Ksh " + service_cost
+        };
+
+        serviceCost = new ArrayList<>(Arrays.asList(service_cost_string));
+
+        // Initializing an ArrayAdapter
+        final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
+                getActivity(), R.layout.spinner_item, serviceCost) {
+            @Override
+            public boolean isEnabled(int position) {
+                if (position == 0) {
+                    // Disable the first item from Spinner
+                    // First item will be use for hint
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if (position == 0) {
+                    // Set the hint text color gray
+                    tv.setTextColor(Color.GRAY);
+                } else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
+
+
+        spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_item);
+        spinner_cost.setAdapter(spinnerArrayAdapter);
+    }
+
+    private void initTravel() {
+
+        String[] service_travel_string = new String[]{
+                "Travel",
+                service_travel
+        };
+
+        serviceTravel = new ArrayList<>(Arrays.asList(service_travel_string));
+
+        // Initializing an ArrayAdapter
+        final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
+                getActivity(), R.layout.spinner_item, serviceTravel) {
+            @Override
+            public boolean isEnabled(int position) {
+                if (position == 0) {
+                    // Disable the first item from Spinner
+                    // First item will be use for hint
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if (position == 0) {
+                    // Set the hint text color gray
+                    tv.setTextColor(Color.GRAY);
+                } else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
+
+
+        spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_item);
+        spinner_travel.setAdapter(spinnerArrayAdapter);
+    }
+
+    private void initCategory() {
+
+        String[] service_category_string = new String[]{
+                "Category",
+                service_category
+        };
+
+        serviceCategory = new ArrayList<>(Arrays.asList(service_category_string));
+
+        // Initializing an ArrayAdapter
+        final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
+                getActivity(), R.layout.spinner_item, serviceCategory) {
+            @Override
+            public boolean isEnabled(int position) {
+                if (position == 0) {
+                    // Disable the first item from Spinner
+                    // First item will be use for hint
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if (position == 0) {
+                    // Set the hint text color gray
+                    tv.setTextColor(Color.GRAY);
+                } else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
+
+
+        spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_item);
+        spinner_category.setAdapter(spinnerArrayAdapter);
+    }
+
+    private void initCreatedby() {
+
+        String[] service_createdby = new String[]{
+                "Created By",
+                service_creator
+        };
+
+        serviceCreatedBy = new ArrayList<>(Arrays.asList(service_createdby));
+
+        // Initializing an ArrayAdapter
+        final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
+                getActivity(), R.layout.spinner_item, serviceCreatedBy) {
+            @Override
+            public boolean isEnabled(int position) {
+                if (position == 0) {
+                    // Disable the first item from Spinner
+                    // First item will be use for hint
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if (position == 0) {
+                    // Set the hint text color gray
+                    tv.setTextColor(Color.GRAY);
+                } else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
+
+
+        spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_item);
+        spinner_createdby.setAdapter(spinnerArrayAdapter);
+
+    }
+
+    private void initServiceDetailsTabs()
+    {
+        String[] service_details_string = new String[]{
+                "About service",
+                service_details
+        };
+
+        serviceDetails = new ArrayList<>(Arrays.asList(service_details_string));
+
+        // Initializing an ArrayAdapter
+        final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
+                getActivity(), R.layout.spinner_item, serviceDetails) {
+            @Override
+            public boolean isEnabled(int position) {
+                if (position == 0) {
+                    // Disable the first item from Spinner
+                    // First item will be use for hint
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if (position == 0) {
+                    // Set the hint text color gray
+                    tv.setTextColor(Color.GRAY);
+                } else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
+
+
+        spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_item);
+        spinner_details.setAdapter(spinnerArrayAdapter);
+
     }
 
     private void initUserInfo()
@@ -86,49 +490,6 @@ public class AboutService extends Fragment {
           //  profile_pic = bundle2.getString("profile_pic", null);
             user_role = bundle2.getString("user_role", null);
         }
-    }
-
-    private void initMenu()
-    {
-        rlShare.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                Intent myIntent = new Intent(Intent.ACTION_SEND);
-                myIntent.setType("text/plain");
-                String shareBody ="Ujuzy App";
-                String shareSub = service_details;
-                myIntent.putExtra(Intent.EXTRA_SUBJECT,shareBody);
-                myIntent.putExtra(Intent.EXTRA_TEXT,shareSub);
-                view.getContext().startActivity(Intent.createChooser(myIntent,"Share this Service"));
-            }
-        });
-
-        rlLocation.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-
-                startActivity(new Intent(getActivity(), MapsActivity.class));
-            }
-        });
-
-        rlOpenProfile.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                Intent profileActivity = new Intent(view.getContext(), ProfileActivity.class);
-                profileActivity.putExtra("service_id", service_id);
-                profileActivity.putExtra("first_name", first_name);
-                profileActivity.putExtra("last_name", last_name);
-             //   profileActivity.putExtra("profile_pic", profile_pic);
-                profileActivity.putExtra("user_role", user_role);
-                startActivity(profileActivity);
-            }
-        });
     }
 
     private void initServiceInfo()
@@ -150,15 +511,6 @@ public class AboutService extends Fragment {
             service_add_info = bundle2.getString("serviceAddInfo", null);
         }
 
-        if (service_creator != null)
-        serviceCreatedByTv.setText(first_name + " " + last_name);
-        if (service_created_at != null)
-        serviceCreatedAtTv.setText(service_created_at);
-        serviceDetailsTv.setText(service_details);
-        serviceDurationTv.setText(service_days + " " + service_hours);
-        serviceTravelTv.setText(service_travel);
-        serviceCategoryTv.setText(service_category);
-        serviceCostTv.setText("Ksh " + service_cost);
 
     }
 

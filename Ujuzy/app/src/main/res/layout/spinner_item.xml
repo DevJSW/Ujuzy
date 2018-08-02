@@ -6,9 +6,8 @@
     android:textStyle="italic"
     android:fontFamily="sans-serif-medium"
     android:text="topic"
-    android:layout_marginLeft="5dp"
-    android:maxLines="1"
+    android:layout_margin="7dp"
     android:ellipsize="end"
     android:textSize="17dp"
-    android:padding="10dp"
+    android:padding="15dp"
     />

@@ -22,7 +22,7 @@ public class User {
     private Object entityName;
     @SerializedName("profile_pic")
     @Expose
-    private Object profilePic;
+    private String profilePic;
     @SerializedName("user_role")
     @Expose
     private String userRole;
@@ -62,11 +62,11 @@ public class User {
         this.entityName = entityName;
     }
 
-    public Object getProfilePic() {
+    public String getProfilePic() {
         return profilePic;
     }
 
-    public void setProfilePic(Object profilePic) {
+    public void setProfilePic(String profilePic) {
         this.profilePic = profilePic;
     }
 

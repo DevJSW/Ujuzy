@@ -13,7 +13,7 @@
 
         <ImageView
             android:layout_width="180dp"
-            android:layout_height="160dp"
+            android:layout_height="170dp"
             android:scaleType="fitXY"
             android:layout_marginBottom="20dp"
             android:src="@drawable/intro_survey"/>
@@ -21,7 +21,7 @@
         <com.ujuzy.ujuzy.CustomData.AllerBoldFont
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Review professions"
+            android:text="Proposition"
             android:textSize="19dp"
             android:textColor="@color/colorPrimaryDark"
             android:textStyle="bold" />
@@ -34,7 +34,7 @@
             android:layout_marginTop="15dp"
             android:textSize="15dp"
             android:gravity="center"
-            android:text="@string/lorem_ipsum_"
+            android:text="We leverage on strategic partnerships to continuously build up our robust data bank of certified artisans/service providers which households &amp; firms can refer to when needs with satisfaction."
             android:textAlignment="center"
             android:textColor="@color/colorPrimary" />
 

@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.ujuzy.ujuzy.R;
+import com.ujuzy.ujuzy.activities.NewServiceActivity;
 import com.ujuzy.ujuzy.activities.ServiceActivity;
 import com.ujuzy.ujuzy.model.Datum;
 
@@ -56,6 +57,7 @@ public class SeeAllAdapter extends RecyclerView.Adapter<SeeAllAdapter.ServicesVi
 
         holder.serviceName.setText(servicesList.get(position).getServiceName());
         holder.serviceDetails.setText(servicesList.get(position).getServiceDetails());
+        holder.costTv.setText("Ksh " + servicesList.get(position).getCost());
         /*holder.senderFirstName.setText(servicesList.get(position).getUser().getFirstname());
         holder.senderLastName.setText(servicesList.get(position).getUser().getLastname());*/
 
@@ -79,24 +81,34 @@ public class SeeAllAdapter extends RecyclerView.Adapter<SeeAllAdapter.ServicesVi
             @Override
             public void onClick(View view)
             {
-                Intent openRead = new Intent(view.getContext(), ServiceActivity.class);
-                openRead.putExtra("user_id", servicesList.get(position).getCreatedBy());
+                Intent openRead = new Intent(view.getContext(), NewServiceActivity.class);
+                openRead.putExtra("user_id", servicesList.get(position).getCreatedBy().getId());
                 openRead.putExtra("service_id", servicesList.get(position).getId());
                 openRead.putExtra("service_url", photo);
                 openRead.putExtra("service_name", servicesList.get(position).getServiceName());
                 openRead.putExtra("service_details", servicesList.get(position).getServiceDetails());
-                openRead.putExtra("service_location", servicesList.get(position).getLocation());
-                openRead.putExtra("service_createdby", servicesList.get(position).getCreatedBy());
-                openRead.putExtra("service_cost", servicesList.get(position).getCost());
-                //  openRead.putExtra("service_duration", servicesList.get(position).getDuration());
+                //openRead.putExtra("service_location", servicesList.get(position).getCity().toString());
+                openRead.putExtra("service_createdby", servicesList.get(position).getCreatedBy().getFirstname());
+                openRead.putExtra("service_cost", servicesList.get(position).getCost().toString());
+                openRead.putExtra("service_duration_days", servicesList.get(position).getDuration().getDays().toString());
+                openRead.putExtra("service_duration_hours", servicesList.get(position).getDuration().getHours().toString());
                 openRead.putExtra("service_created_at", servicesList.get(position).getCreatedAt());
+                openRead.putExtra("service_category", servicesList.get(position).getCategory());
+                openRead.putExtra("service_additional_info", servicesList.get(position).getCategory());
+                openRead.putExtra("service_travel", servicesList.get(position).getTravel());
+                openRead.putExtra("user_thumb", servicesList.get(position).getCreatedBy().getThumb());
+                openRead.putExtra("no_of_personnel", servicesList.get(position).getNoOfPersonnel());
+
+                //USER LOCATION
+                //openRead.putExtra("service_latitude", servicesList.get(position).getLocation().getLat().toString());
+                // openRead.putExtra("service_longitude", servicesList.get(position).getLocation().getLon().toString());
 
                 // USER INFORMATION
                 openRead.putExtra("user_id", servicesList.get(position).getUser().getId());
                 openRead.putExtra("first_name", servicesList.get(position).getUser().getFirstname());
                 openRead.putExtra("last_name", servicesList.get(position).getUser().getLastname());
                 openRead.putExtra("user_role", servicesList.get(position).getUser().getUserRole());
-                openRead.putExtra("profile_pic", servicesList.get(position).getUser().getProfilePic().toString());
+                openRead.putExtra("profile_pic", servicesList.get(position).getUser().getProfilePic());
                 view.getContext().startActivity(openRead);
             }
         });
@@ -112,7 +124,7 @@ public class SeeAllAdapter extends RecyclerView.Adapter<SeeAllAdapter.ServicesVi
     class ServicesViewHolder extends RecyclerView.ViewHolder
     {
 
-        TextView serviceName, serviceDetails, senderFirstName, senderLastName;
+        TextView serviceName, serviceDetails, senderFirstName, senderLastName, costTv;
         ImageView avatar;
 
         public ServicesViewHolder(View itemView)
@@ -122,6 +134,7 @@ public class SeeAllAdapter extends RecyclerView.Adapter<SeeAllAdapter.ServicesVi
             serviceName = itemView.findViewById(R.id.tv_service_name);
             serviceDetails = itemView.findViewById(R.id.tv_service_details);
             avatar = itemView.findViewById(R.id.iv_avatar);
+            costTv = itemView.findViewById(R.id.costTv);
             /*senderFirstName = itemView.findViewById(R.id.tv_sender_name);
             senderLastName = itemView.findViewById(R.id.tv_sender_last_name);*/
 

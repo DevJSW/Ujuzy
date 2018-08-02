@@ -7,37 +7,36 @@
     android:orientation="vertical"
     tools:context=".activities.SearchActivity">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
+        android:background="@color/colorPrimary"
         android:layout_height="65dp"
-        android:background="@color/colorPrimary">
+        android:orientation="horizontal">
 
         <ImageView
             android:layout_width="30dp"
             android:layout_height="match_parent"
-            android:padding="6dp"
+            android:padding="5dp"
+            android:id="@+id/backBtn"
             android:layout_marginRight="4dp"
             android:layout_marginLeft="8dp"
-            android:layout_gravity="center_vertical"
-            android:id="@+id/backBtn"
-            android:layout_centerVertical="true"
             android:src="@drawable/backbtn"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@+id/backBtn"
             android:elevation="1dp"
             android:background="@drawable/search_layout"
             android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginRight="10dp">
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp">
 
             <com.ujuzy.ujuzy.CustomData.AllerEditText
                 android:layout_width="match_parent"
                 android:layout_height="45dp"
-                android:id="@+id/searchInputEt"
+                android:id="@+id/searchInput"
+                android:textSize="17dp"
                 android:layout_marginLeft="10dp"
                 android:hint="What are you searching for..."
                 android:layout_toLeftOf="@+id/searchIcon"
@@ -54,11 +53,42 @@
                 android:layout_centerVertical="true"/>
         </RelativeLayout>
 
-    </RelativeLayout>
+    </LinearLayout>
 
-    <ListView
-        android:id="@+id/list_view"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/bottomRely"
+        android:layout_marginBottom="15dp"
+        android:orientation="vertical">
+
+        <ProgressBar
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="20dp"
+            android:id="@+id/progressBar"
+            android:visibility="gone"
+            android:layout_centerInParent="true"/>
+
+        <com.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center_horizontal"
+            android:id="@+id/noService"
+            android:visibility="gone"
+            android:layout_margin="40dp"
+            android:textSize="17dp" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/service_list"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/view1"
+            android:layout_height="match_parent">
+
+
+        </android.support.v7.widget.RecyclerView>
+
+    </RelativeLayout>
 
 </LinearLayout>

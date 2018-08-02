@@ -10,10 +10,13 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ujuzy.ujuzy.R;
+import com.ujuzy.ujuzy.model.Constants;
 import com.ujuzy.ujuzy.model.Login;
 import com.ujuzy.ujuzy.model.Token;
 import com.ujuzy.ujuzy.model.User;
@@ -28,9 +31,12 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class LoginActivity extends AppCompatActivity
 {
 
+    private String webview_url = "https://sso.ujuzy.com/auth/realms/ujuzy/login-actions/reset-credentials?client_id=account&tab_id=zyBFF6oQ_B0";
     private static String Token;
-    private Button btnLogin;
+    private Button btnLogin, btnSignUp, forgtPassBtn;
     private EditText inputEmail, inputPassword;
+    private TextView backBtnTv;
+    private ImageView backBtnIv;
     private ProgressBar progressBar;
     private Api api;
 
@@ -46,6 +52,60 @@ public class LoginActivity extends AppCompatActivity
 
         initWindows();
         iniLogin();
+        initSignUp();
+        initBackBtn();
+        initWebView();
+    }
+
+    private void initWebView()
+    {
+        forgtPassBtn = (Button) findViewById(R.id.btn_reset_password);
+        forgtPassBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                Intent webView = new Intent(LoginActivity.this, WebViewActivity.class);
+                webView.putExtra("webview_url", webview_url);
+                webView.putExtra("page_titile", "Forgot Password");
+                startActivity(webView);
+            }
+        });
+
+    }
+
+    private void initBackBtn()
+    {
+        backBtnTv = (TextView) findViewById(R.id.backBtnTv);
+        backBtnTv.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                finish();
+            }
+        });
+
+        backBtnIv = (ImageView) findViewById(R.id.backBtn);
+        backBtnIv.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                finish();
+            }
+        });
+    }
+
+    private void initSignUp()
+    {
+        btnSignUp = (Button) findViewById(R.id.btn_signup);
+        btnSignUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
+            }
+        });
     }
 
     private void initWindows()
@@ -65,7 +125,7 @@ public class LoginActivity extends AppCompatActivity
     {
 
         Retrofit.Builder builder = new Retrofit.Builder()
-                .baseUrl("https://api.ujuzy.com/")
+                .baseUrl(Constants.HTTP.BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create());
 
         Retrofit retrofit = builder.build();
@@ -91,30 +151,35 @@ public class LoginActivity extends AppCompatActivity
         String email = inputEmail.getText().toString();
         String password = inputEmail.getText().toString();
 
-        Login login = new Login(email, password);
-        Call<Token> call = api.login(login);
+        if (!email.isEmpty() || !password.isEmpty()) {
 
-        call.enqueue(new Callback<Token>()
-        {
-            @Override
-            public void onResponse(Call<Token> call, Response<Token> response)
-            {
-                if (response.isSuccessful())
-                {
-                    Token = response.body().getToken();
-                    progressBar.setVisibility(View.GONE);
-                    Toast.makeText(LoginActivity.this, response.body().getToken(), Toast.LENGTH_LONG).show();
-                } else {
-                    progressBar.setVisibility(View.GONE);
-                    Toast.makeText(LoginActivity.this, "Login Incorrect", Toast.LENGTH_SHORT).show();
+            Login login = new Login(email, password);
+            Call<Token> call = api.login(login);
+
+            call.enqueue(new Callback<Token>() {
+                @Override
+                public void onResponse(Call<Token> call, Response<Token> response) {
+                    if (response.isSuccessful()) {
+                        Token = response.body().getToken();
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(LoginActivity.this, response.body().getToken(), Toast.LENGTH_LONG).show();
+                    } else {
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(LoginActivity.this, "Login Incorrect", Toast.LENGTH_SHORT).show();
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<Token> call, Throwable t)
-            {
+                @Override
+                public void onFailure(Call<Token> call, Throwable t) {
 
-            }
-        });
+                }
+            });
+
+        } else {
+
+            progressBar.setVisibility(View.GONE);
+            Toast.makeText(LoginActivity.this, "Email & password must not be empty!", Toast.LENGTH_LONG).show();
+
+        }
     }
 }

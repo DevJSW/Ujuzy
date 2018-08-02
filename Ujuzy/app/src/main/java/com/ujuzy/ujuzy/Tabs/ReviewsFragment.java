@@ -55,6 +55,8 @@ public class ReviewsFragment extends Fragment
             service_id = bundle2.getString("serviceId", null);
         }
 
+        initProgessBar();
+
         /*Retrofit retrofit = new Retrofit
                 .Builder()
                 .baseUrl(BASE_URL)
@@ -82,18 +84,18 @@ public class ReviewsFragment extends Fragment
             }
         });
 */
-       // getReviews();
+        //getReviews();
         return v;
     }
 
     private void initProgessBar()
     {
 
-        progressBar.setVisibility(View.VISIBLE);
-        noService.setVisibility(View.GONE);
+        noService.setVisibility(View.VISIBLE);
+        noService.setText("No reviews posted yet!");
     }
 
-    /*public Object getReviews() {
+   /* public Object getReviews() {
 
         Api api = RetrofitInstance.getService();
         Call<Service> callReviews = api.getReviewsByServiceId(service_id);
@@ -103,7 +105,7 @@ public class ReviewsFragment extends Fragment
             @Override
             public void onResponse(Call<Service> callReviews, Response<Service> response)
             {
-
+                progressBar.setVisibility(View.VISIBLE);
                 Service service = response.body();
 
                 if (service != null && service.getData() != null)

@@ -9,6 +9,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 
 import android.support.v4.app.Fragment;
@@ -31,10 +33,15 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.ujuzy.ujuzy.R;
+import com.ujuzy.ujuzy.Realm.RealmAllServiceAdapter;
+import com.ujuzy.ujuzy.Realm.RealmHelper;
 import com.ujuzy.ujuzy.Tabs.AboutService;
 import com.ujuzy.ujuzy.Tabs.AboutUserFragment;
 import com.ujuzy.ujuzy.Tabs.ReviewsFragment;
 import com.ujuzy.ujuzy.Tabs.ServicesFragment;
+
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
 
 public class ProfileActivity extends AppCompatActivity {
 
@@ -49,8 +56,9 @@ public class ProfileActivity extends AppCompatActivity {
     String profile_pic = "";
     String user_role = "";
 
-    private TextView firstNameTv, lastNameTv, userRoleTv;
+    private TextView firstNameTv, lastNameTv, userRoleTv, noService;
     private ImageView profilePicIv, backBtn;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -78,6 +86,7 @@ public class ProfileActivity extends AppCompatActivity {
         initBackBtn();
 
     }
+
 
     private void initBackBtn()
     {
@@ -215,6 +224,7 @@ public class ProfileActivity extends AppCompatActivity {
                     //bundle2.putString("UserId", UserId);
                     bundle2.putString("userId", user_id);
                     bundle2.putString("serviceId", service_id);
+                    bundle2.putString("firstName", first_name);
                     tab2.setArguments(bundle2);
                     return tab2;
                 case 1:
@@ -237,4 +247,6 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
     }
+
+
 }

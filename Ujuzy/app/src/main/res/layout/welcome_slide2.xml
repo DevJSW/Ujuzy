@@ -13,7 +13,7 @@
 
         <ImageView
             android:layout_width="180dp"
-            android:layout_height="160dp"
+            android:layout_height="170dp"
             android:scaleType="fitXY"
             android:layout_marginBottom="20dp"
             android:src="@drawable/into_jobs"/>
@@ -21,7 +21,7 @@
         <com.ujuzy.ujuzy.CustomData.AllerBoldFont
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Find professions"
+            android:text="Find Services"
             android:textSize="19dp"
             android:gravity="center"
             android:textColor="@color/colorPrimaryDark"
@@ -35,7 +35,7 @@
             android:layout_marginTop="15dp"
             android:textSize="15dp"
             android:gravity="center"
-            android:text="@string/lorem_ipsum_"
+            android:text="We have an array of services and are continuously adding more service providers to meet local demand for these services. Our main services: Plumbing, Electrical, Welding, Masonry, Painting, Tiling, Carpentry, Landscaping &amp; many more..."
             android:textAlignment="center"
             android:textColor="@color/colorPrimary" />
 

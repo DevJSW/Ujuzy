@@ -1,13 +1,19 @@
 package com.ujuzy.ujuzy.activities;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -19,42 +25,62 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ujuzy.ujuzy.R;
+import com.ujuzy.ujuzy.Realm.RealmHelper;
+import com.ujuzy.ujuzy.Realm.RealmService;
+import com.ujuzy.ujuzy.Realm.RealmServiceAdapter;
 import com.ujuzy.ujuzy.SqliteDatabase.ServicesDatabase;
 import com.ujuzy.ujuzy.adapters.CountryAdapter;
 import com.ujuzy.ujuzy.adapters.ServiceAdapter;
+import com.ujuzy.ujuzy.map.MapsActivity;
+import com.ujuzy.ujuzy.model.Constants;
 import com.ujuzy.ujuzy.model.Datum;
 import com.ujuzy.ujuzy.model.RetrofitInstance;
 import com.ujuzy.ujuzy.model.Service;
 import com.ujuzy.ujuzy.services.Api;
 import com.ujuzy.ujuzy.services.NetworkChecker;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmConfiguration;
+import io.realm.RealmList;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
 {
+    private static String TAG = "MainActivity.this";
+    private String webview_url = "https://ujuzy.com/services/create";
     private Toolbar toolbar;
-    private String BASE_URL = "https://api.ujuzy.com/";
     private ServiceAdapter serviceAdapter;
+    private RealmServiceAdapter serviceReamAdapter;
     private RecyclerView servicesListRv;
-    //   ArrayList<Service> results;
     private ProgressBar progressBar1, progressBar2;
 
-    private CountryAdapter countryAdapter;
-    private RecyclerView countriesListRv, companyServicesListRv;
+    private RelativeLayout searchRely;
+
+    private Realm realm;
+    private RealmChangeListener realmChangeListener;
+
+    private RecyclerView companyServicesListRv;
     ArrayList<Datum> results;
+    ArrayList<RealmService> reamResults;
     private TextView tvSeeAllProf, tvSeeAllComp, noService, noServiceCo;
-    private ServicesDatabase SqlDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -65,26 +91,125 @@ public class MainActivity extends AppCompatActivity
         initWindow();
         initFab();
         initDrawer();
+        initProgessBar();
 
         //CHECK IF APP IS CONNECTED TO INTERNET
         if (NetworkChecker.isNetworkAvailable(getApplicationContext()))
         {
-            getServices();
+            getServicesFromApi();
         } else {
-            getServicesFromDatabase();
+
         }
 
+        getServicesFromDatabase();
+
         initSeeAll();
-        initProgessBar();
+        //initProgessBar();
+        initSearch();
         initHorizScrollMenu();
 
     }
 
-    private void getServicesFromDatabase()
-    {
-
-        List<Datum> serviceList = SqlDatabase.getServicesFromSqlDB();
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // stop keyboard from show when activity is started.
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
     }
+
+    private void getProfServices()
+    {
+        realm = Realm.getDefaultInstance();
+        final RealmHelper helper = new RealmHelper(realm);
+
+        //RETRIEVE
+        helper.filterRealmDatabase("user_role", "Professional");
+
+        //CHECK IF DATABASE IS EMPTY
+        if (helper.refreshDatabase().size() < 1 || helper.refreshDatabase().size() == 0)
+        {
+            noService.setVisibility(View.VISIBLE);
+
+        } else {
+            noService.setVisibility(View.GONE);
+        }
+
+        //CHECK IF DATABASE IS EMPTY
+//        if (helper.refreshDatabase().size() < 1 || helper.refreshDatabase().size() == 0)
+//        {
+//            noService = (TextView) findViewById(R.id.noService);
+//            noService.setVisibility(View.VISIBLE);
+//            noService.setText("Oh sorry 😌😞 this is embarrassing but no Professional services posted yet!");
+//        } else {
+//            noService = (TextView) findViewById(R.id.noService);
+//            noService.setVisibility(View.GONE);
+//        }
+
+        servicesListRv = (RecyclerView) findViewById(R.id.service_list);
+        serviceReamAdapter = new RealmServiceAdapter(getApplicationContext(), helper.refreshDatabase());
+
+        //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+        final LinearLayoutManager serviceLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+        servicesListRv.setLayoutManager(serviceLayoutManager);
+        servicesListRv.setAdapter(serviceReamAdapter);
+
+        //HANDLE DATA CHANGE FOR REFRESH
+        realmChangeListener = new RealmChangeListener()
+        {
+            @Override
+            public void onChange(Object o) {
+                //REFRESH
+                serviceReamAdapter = new RealmServiceAdapter(getApplicationContext(), helper.refreshDatabase());
+                servicesListRv.setAdapter(serviceReamAdapter);
+            }
+        };
+
+        //ADD CHANGE LIST TO REALM
+        realm.addChangeListener(realmChangeListener);
+    }
+
+    private void getCompServices()
+    {
+        realm = Realm.getDefaultInstance();
+        final RealmHelper helper = new RealmHelper(realm);
+
+        //RETRIEVE
+        helper.filterRealmDatabase("user_role", "company");
+
+        //CHECK IF DATABASE IS EMPTY
+        if (helper.refreshDatabase().size() < 1 || helper.refreshDatabase().size() == 0)
+        {
+
+            noServiceCo.setVisibility(View.VISIBLE);
+
+        } else {
+
+            noServiceCo.setVisibility(View.GONE);
+        }
+
+        companyServicesListRv = (RecyclerView) findViewById(R.id.company_service_list);
+        serviceReamAdapter = new RealmServiceAdapter(getApplicationContext(), helper.refreshDatabase());
+
+        //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+        final LinearLayoutManager compServiceLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+        companyServicesListRv.setLayoutManager(compServiceLayoutManager);
+        companyServicesListRv.setAdapter(serviceReamAdapter);
+
+        //HANDLE DATA CHANGE FOR REFRESH
+        realmChangeListener = new RealmChangeListener()
+        {
+            @Override
+            public void onChange(Object o) {
+                //REFRESH
+                serviceReamAdapter = new RealmServiceAdapter(getApplicationContext(), helper.refreshDatabase());
+                companyServicesListRv.setAdapter(serviceReamAdapter);
+            }
+        };
+
+        //ADD CHANGE LIST TO REALM
+        realm.addChangeListener(realmChangeListener);
+    }
+
 
     private void initHorizScrollMenu()
     {
@@ -94,7 +219,7 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
 
                 String category_type = "";
-                String category_title = "Plumbers";
+                String category_title = "Plumbing";
 
                 Intent filterPlumbers = new Intent(MainActivity.this, FilterServicesActivity.class);
                 filterPlumbers.putExtra("category_title", category_title);
@@ -110,7 +235,23 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
 
                 String category_type = "";
-                String category_title = "Electricians";
+                String category_title = "Electrical";
+
+                Intent filterPlumbers = new Intent(MainActivity.this, FilterServicesActivity.class);
+                filterPlumbers.putExtra("category_type", category_type);
+                filterPlumbers.putExtra("category_title", category_title);
+                startActivity(filterPlumbers);
+
+            }
+        });
+
+        LinearLayout paintingScrollLl = (LinearLayout) findViewById(R.id.paintingScrollLl);
+        paintingScrollLl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String category_type = "";
+                String category_title = "Painting";
 
                 Intent filterPlumbers = new Intent(MainActivity.this, FilterServicesActivity.class);
                 filterPlumbers.putExtra("category_type", category_type);
@@ -126,7 +267,7 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
 
                 String category_type = "";
-                String category_title = "Masons";
+                String category_title = "Masonry";
 
                 Intent filterPlumbers = new Intent(MainActivity.this, FilterServicesActivity.class);
                 filterPlumbers.putExtra("category_type", category_type);
@@ -135,6 +276,103 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
+
+        LinearLayout meidaScrollLl = (LinearLayout) findViewById(R.id.mediaScrollLl);
+        meidaScrollLl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String category_type = "";
+                String category_title = "Broadcast Media";
+
+                Intent filterPlumbers = new Intent(MainActivity.this, FilterServicesActivity.class);
+                filterPlumbers.putExtra("category_type", category_type);
+                filterPlumbers.putExtra("category_title", category_title);
+                startActivity(filterPlumbers);
+
+            }
+        });
+
+        LinearLayout legalScrollLl = (LinearLayout) findViewById(R.id.legalScrollLl);
+        legalScrollLl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String category_type = "";
+                String category_title = "Legal";
+
+                Intent filterPlumbers = new Intent(MainActivity.this, FilterServicesActivity.class);
+                filterPlumbers.putExtra("category_type", category_type);
+                filterPlumbers.putExtra("category_title", category_title);
+                startActivity(filterPlumbers);
+
+            }
+        });
+
+        LinearLayout accountingScrollLl = (LinearLayout) findViewById(R.id.accountingScrollLl);
+        accountingScrollLl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String category_type = "";
+                String category_title = "Accounting";
+
+                Intent filterPlumbers = new Intent(MainActivity.this, FilterServicesActivity.class);
+                filterPlumbers.putExtra("category_type", category_type);
+                filterPlumbers.putExtra("category_title", category_title);
+                startActivity(filterPlumbers);
+
+            }
+        });
+
+        LinearLayout securityScrollLl = (LinearLayout) findViewById(R.id.securityScrollLl);
+        securityScrollLl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String category_type = "";
+                String category_title = "Security";
+
+                Intent filterPlumbers = new Intent(MainActivity.this, FilterServicesActivity.class);
+                filterPlumbers.putExtra("category_type", category_type);
+                filterPlumbers.putExtra("category_title", category_title);
+                startActivity(filterPlumbers);
+
+            }
+        });
+
+        LinearLayout cosmeticsScrollLl = (LinearLayout) findViewById(R.id.cosmeticsScrollLl);
+        cosmeticsScrollLl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String category_type = "";
+                String category_title = "Cosmetics";
+
+                Intent filterPlumbers = new Intent(MainActivity.this, FilterServicesActivity.class);
+                filterPlumbers.putExtra("category_type", category_type);
+                filterPlumbers.putExtra("category_title", category_title);
+                startActivity(filterPlumbers);
+
+            }
+        });
+
+        LinearLayout landscapingScrollLl = (LinearLayout) findViewById(R.id.landscapingScrollLl);
+        landscapingScrollLl.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                String category_type = "";
+                String category_title = "Landscaping";
+
+                Intent filterPlumbers = new Intent(MainActivity.this, FilterServicesActivity.class);
+                filterPlumbers.putExtra("category_type", category_type);
+                filterPlumbers.putExtra("category_title", category_title);
+                startActivity(filterPlumbers);
+
+            }
+        });
+
 
         LinearLayout weldersScrollLl = (LinearLayout) findViewById(R.id.weldersScrollLl);
         weldersScrollLl.setOnClickListener(new View.OnClickListener() {
@@ -158,7 +396,7 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
 
                 String category_type = "";
-                String category_title = "Carpenters";
+                String category_title = "Carpentry";
 
                 Intent filterPlumbers = new Intent(MainActivity.this, FilterServicesActivity.class);
                 filterPlumbers.putExtra("category_type", category_type);
@@ -198,13 +436,36 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    private void getServicesFromDatabase()
+    {
+
+        getProfServices();
+        getCompServices();
+
+    }
+
+    private void initSearch()
+    {
+
+        searchRely = (RelativeLayout) findViewById(R.id.searchRely);
+        searchRely.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, SearchActivity.class));
+            }
+
+        });
+
+    }
+
     private void initProgessBar()
     {
-        progressBar1 = (ProgressBar) findViewById(R.id.progressBar1);
+        /*progressBar1 = (ProgressBar) findViewById(R.id.progressBar1);
         progressBar2 = (ProgressBar) findViewById(R.id.progressBar2);
 
         progressBar1.setVisibility(View.VISIBLE);
-        progressBar2.setVisibility(View.VISIBLE);
+        progressBar2.setVisibility(View.VISIBLE);*/
 
         noService = (TextView) findViewById(R.id.noService);
         noServiceCo = (TextView) findViewById(R.id.noService2);
@@ -232,36 +493,38 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                startActivity(new Intent(MainActivity.this, SeeAllActivity.class));
+                startActivity(new Intent(MainActivity.this, SeeAllCoServicesActivity.class));
             }
         });
     }
 
-    public Object getServices()
+    public void getServicesFromApi()
     {
 
         Api api = RetrofitInstance.getService();
         Call<Service> call = api.getServices();
-
         call.enqueue(new Callback<Service>()
         {
             @Override
             public void onResponse(Call<Service> call, Response<Service> response)
             {
 
-                Service service = response.body();
-
-                if (service != null && service.getData() != null)
+                if (response.isSuccessful())
                 {
-                    results = (ArrayList<Datum>) service.getData();
+
+                    Service serviceList = response.body();
+                    results = (ArrayList<Datum>) serviceList.getData();
+
+
                     /**
-                     * displaying results on a recyclerview
+                     * displaying results to adapter
                      */
 
                     if (results.size() < 1 || results.size() == 0)
                     {
-                        progressBar1.setVisibility(View.GONE);
-                        progressBar2.setVisibility(View.GONE);
+
+                        /*progressBar1.setVisibility(View.GONE);
+                        progressBar2.setVisibility(View.GONE);*/
 
                         noService.setVisibility(View.VISIBLE);
                         noServiceCo.setVisibility(View.VISIBLE);
@@ -273,7 +536,16 @@ public class MainActivity extends AppCompatActivity
                         viewData();
                     }
 
+                } else {
+
+                    /*progressBar1.setVisibility(View.GONE);
+                    progressBar2.setVisibility(View.GONE);*/
+
+                    noService.setVisibility(View.VISIBLE);
+                    noServiceCo.setVisibility(View.VISIBLE);
+
                 }
+
             }
 
             @Override
@@ -286,27 +558,28 @@ public class MainActivity extends AppCompatActivity
         });
 
 
-        return results;
+       // return results;
     }
 
     private void viewData()
     {
 
-        countriesListRv = (RecyclerView) findViewById(R.id.service_list);
+       // servicesListRv = (RecyclerView) findViewById(R.id.service_list);
         serviceAdapter = new ServiceAdapter(getApplicationContext(), results);
 
-        //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+       /* //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
         final LinearLayoutManager serviceLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
-        countriesListRv.setLayoutManager(serviceLayoutManager);
-        countriesListRv.setAdapter(serviceAdapter);
+        servicesListRv.setLayoutManager(serviceLayoutManager);
+        servicesListRv.setAdapter(serviceAdapter);*/
 
-        companyServicesListRv = (RecyclerView) findViewById(R.id.company_service_list);
+        //companyServicesListRv = (RecyclerView) findViewById(R.id.company_service_list);
         serviceAdapter = new ServiceAdapter(getApplicationContext(), results);
 
         //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
-        final LinearLayoutManager compServiceLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+        /*final LinearLayoutManager compServiceLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
         companyServicesListRv.setLayoutManager(compServiceLayoutManager);
-        companyServicesListRv.setAdapter(serviceAdapter);
+        companyServicesListRv.setAdapter(serviceAdapter);*/
+
 
     }
 
@@ -352,7 +625,9 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                startActivity(new Intent(MainActivity.this, StartServiceWebActivity.class));
+                Intent webView = new Intent(MainActivity.this, WebViewActivity.class);
+                webView.putExtra("webview_url", webview_url);
+                startActivity(webView);
             }
         });
     }
@@ -408,14 +683,17 @@ public class MainActivity extends AppCompatActivity
             // Handle the camera action
         } else if (id == R.id.nav_gallery)
         {
+            startActivity(new Intent(MainActivity.this, FavouriteActivity.class));
 
         } else if (id == R.id.nav_slideshow)
         {
+
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://ujuzy.com"));
             startActivity(browserIntent);
+
         } else if (id == R.id.nav_manage)
         {
-            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+            startActivity(new Intent(MainActivity.this, LoginActivity.class));
 
         } else if (id == R.id.nav_share)
         {
@@ -434,4 +712,12 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (realmChangeListener != null)
+        realm.removeChangeListener(realmChangeListener);
+        if (realm != null)
+        realm.close();
+    }
 }

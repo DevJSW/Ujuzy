@@ -7,6 +7,8 @@ import com.ujuzy.ujuzy.model.Service;
 import com.ujuzy.ujuzy.model.Token;
 import com.ujuzy.ujuzy.model.User;
 
+import io.realm.RealmList;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -24,6 +26,12 @@ public interface Api
     @GET("services")
     Call<Service> getServices();
 
+    @GET("/services")
+    Call<ResponseBody> getPosts();
+
+    @GET("services")
+    Call<RealmList<ResponseBody>> getResServices();
+
     @GET("services/{service_id}/reviews")
     Call<Service> getReviewsByServiceId(@Header("Authentication") String token, @Path("service_id") String service_id);
 
@@ -32,4 +40,5 @@ public interface Api
 
     @POST("login")
     Call<Token> login(@Body Login login);
+
 }

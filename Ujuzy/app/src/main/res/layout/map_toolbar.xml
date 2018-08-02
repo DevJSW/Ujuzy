@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/toolbarheight"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
     app:theme="@style/AppTheme.ActionBar.Transparent">
 
     <ImageView
@@ -19,6 +18,7 @@
         android:layout_height="26dp"
         android:layout_marginTop="15dp"
         android:layout_marginRight="5dp"
+        android:visibility="gone"
         android:scaleType="fitXY"
         android:layout_alignParentRight="true"
         android:src="@drawable/ujuzy"/>

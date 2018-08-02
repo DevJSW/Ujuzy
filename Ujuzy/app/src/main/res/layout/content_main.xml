@@ -10,14 +10,14 @@
     tools:context="com.ujuzy.ujuzy.activities.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <!-- <com.ujuzy.ujuzy.CustomData.AllerFont
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:textColor="@color/font_black_light"
-         android:layout_margin="15dp"
-         android:textSize="14dp"
-         android:layout_marginBottom="15dp"
-         android:text="Select category"/>-->
+   <!-- <com.ujuzy.ujuzy.CustomData.AllerFont
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/font_black_light"
+        android:layout_margin="15dp"
+        android:textSize="14dp"
+        android:layout_marginBottom="15dp"
+        android:text="Select category"/>-->
 
     <ScrollView
         android:layout_width="match_parent"
@@ -33,8 +33,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/searchInput"
-                android:layout_marginBottom="30dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="10dp"
                 android:fillViewport="true"
                 android:measureAllChildren="false"
                 android:scrollbars="none" >
@@ -44,13 +44,13 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:layout_marginLeft="8dp"
-                    android:layout_marginRight="30dp"
                     android:orientation="horizontal" >
 
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/lin_lay_tasks"
+                        android:layout_marginRight="20dp"
                         android:orientation="horizontal">
 
                         <LinearLayout
@@ -65,7 +65,7 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="15dp"
                                 android:layout_margin="10dp"
-                                android:text="Plumbers"/>
+                                android:text="Plumbing"/>
 
                         </LinearLayout>
 
@@ -81,7 +81,23 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="15dp"
                                 android:layout_margin="10dp"
-                                android:text="Electricians"/>
+                                android:text="Electricals"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:id="@+id/mediaScrollLl"
+                            android:background="@drawable/custom_button2">
+
+                            <com.ujuzy.ujuzy.CustomData.AllerFont
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="15dp"
+                                android:layout_margin="10dp"
+                                android:text="Broadcast Media"/>
 
                         </LinearLayout>
 
@@ -97,7 +113,23 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="15dp"
                                 android:layout_margin="10dp"
-                                android:text="Masons"/>
+                                android:text="Masonry"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:id="@+id/paintingScrollLl"
+                            android:background="@drawable/custom_button2">
+
+                            <com.ujuzy.ujuzy.CustomData.AllerFont
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="10dp"
+                                android:textSize="15dp"
+                                android:text="Painting"/>
 
                         </LinearLayout>
 
@@ -129,7 +161,87 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="15dp"
                                 android:layout_margin="10dp"
-                                android:text="Carpenters"/>
+                                android:text="Carpentry"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:id="@+id/securityScrollLl"
+                            android:background="@drawable/custom_button2">
+
+                            <com.ujuzy.ujuzy.CustomData.AllerFont
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="15dp"
+                                android:layout_margin="10dp"
+                                android:text="Security"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:id="@+id/accountingScrollLl"
+                            android:background="@drawable/custom_button2">
+
+                            <com.ujuzy.ujuzy.CustomData.AllerFont
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="15dp"
+                                android:layout_margin="10dp"
+                                android:text="Accounting"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:id="@+id/legalScrollLl"
+                            android:background="@drawable/custom_button2">
+
+                            <com.ujuzy.ujuzy.CustomData.AllerFont
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="15dp"
+                                android:layout_margin="10dp"
+                                android:text="Legal"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:id="@+id/cosmeticsScrollLl"
+                            android:background="@drawable/custom_button2">
+
+                            <com.ujuzy.ujuzy.CustomData.AllerFont
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="15dp"
+                                android:layout_margin="10dp"
+                                android:text="Cosmetics"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:id="@+id/landscapingScrollLl"
+                            android:background="@drawable/custom_button2">
+
+                            <com.ujuzy.ujuzy.CustomData.AllerFont
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="15dp"
+                                android:layout_margin="10dp"
+                                android:text="Landscaping"/>
 
                         </LinearLayout>
 
@@ -173,7 +285,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="220dp"
+                android:layout_height="235dp"
                 android:id="@+id/bottomRely"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
@@ -188,14 +300,15 @@
                     android:layout_centerInParent="true"/>
 
                 <com.ujuzy.ujuzy.CustomData.AllerFont
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
                     android:layout_centerInParent="true"
                     android:id="@+id/noService"
                     android:textSize="15dp"
+                    android:layout_margin="50dp"
                     android:visibility="gone"
-                    android:text="No services"/>
-
+                    android:text="Sorry.. 😞 professional services not available at this time, try again later"/>
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -239,7 +352,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="220dp"
+                android:layout_height="235dp"
                 android:layout_marginBottom="15dp"
                 android:layout_marginTop="0dp"
                 android:background="#eaeaea"
@@ -282,13 +395,15 @@
                     android:layout_centerInParent="true"/>
 
                 <com.ujuzy.ujuzy.CustomData.AllerFont
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
                     android:layout_centerInParent="true"
                     android:id="@+id/noService2"
                     android:textSize="15dp"
+                    android:layout_margin="50dp"
                     android:visibility="gone"
-                    android:text="No services"/>
+                    android:text="Sorry.. 😞 company services not available at this time, try again later"/>
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/company_service_list"

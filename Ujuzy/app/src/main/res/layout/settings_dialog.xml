@@ -17,9 +17,27 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="18dp"
-            android:id="@+id/options_reviews"
+            android:id="@+id/options_map"
             android:textColor="@color/font_black"
-            android:text="Write review"/>
+            android:text="View service on map"/>
+
+        <com.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:layout_marginTop="20dp"
+            android:id="@+id/options_share"
+            android:textColor="@color/font_black"
+            android:text="Share this service"/>
+
+        <com.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textSize="18dp"
+            android:id="@+id/options_favourite"
+            android:textColor="@color/font_black"
+            android:text="Add service to favourites"/>
 
         <com.ujuzy.ujuzy.CustomData.AllerFont
             android:layout_width="match_parent"
@@ -28,7 +46,26 @@
             android:textSize="18dp"
             android:id="@+id/options_profile"
             android:textColor="@color/font_black"
-            android:text="View Profile"/>
+            android:text="View account"/>
+
+        <com.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textSize="18dp"
+            android:id="@+id/options_report"
+            android:textColor="@color/font_black"
+            android:text="Report this service"/>
+
+        <com.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textSize="18dp"
+            android:id="@+id/options_request"
+            android:textColor="@color/colorPrimary"
+            android:text="Request for this service"/>
+
 
 
     </LinearLayout>

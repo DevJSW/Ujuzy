@@ -14,110 +14,244 @@
         <include layout="@layout/see_all_toolbar"
             android:id="@+id/mToolbar"/>
 
-    <HorizontalScrollView
-        android:id="@+id/hsv"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/searchInput"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="15dp"
-        android:fillViewport="true"
-        android:measureAllChildren="false"
-        android:scrollbars="none" >
-        <LinearLayout
-            android:id="@+id/innerLay"
-            android:layout_width="wrap_content"
+        <HorizontalScrollView
+            android:id="@+id/hsv"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="20dp"
-            android:orientation="horizontal" >
-
+            android:layout_below="@+id/searchInput"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="15dp"
+            android:fillViewport="true"
+            android:measureAllChildren="false"
+            android:scrollbars="none" >
             <LinearLayout
+                android:id="@+id/innerLay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/lin_lay_tasks"
-                android:orientation="horizontal">
+                android:gravity="center_vertical"
+                android:layout_marginLeft="8dp"
+                android:orientation="horizontal" >
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:background="@drawable/custom_button2">
+                    android:id="@+id/lin_lay_tasks"
+                    android:layout_marginRight="20dp"
+                    android:orientation="horizontal">
 
-                    <com.ujuzy.ujuzy.CustomData.AllerFont
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="15dp"
-                        android:layout_margin="10dp"
-                        android:text="Plumbers"/>
+                        android:layout_marginLeft="8dp"
+                        android:id="@+id/plumberScrollLl"
+                        android:background="@drawable/custom_button2">
 
-                </LinearLayout>
+                        <com.ujuzy.ujuzy.CustomData.AllerFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15dp"
+                            android:layout_margin="10dp"
+                            android:text="Plumbing"/>
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:background="@drawable/custom_button2">
+                    </LinearLayout>
 
-                    <com.ujuzy.ujuzy.CustomData.AllerFont
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="15dp"
-                        android:layout_margin="10dp"
-                        android:text="Electricians"/>
+                        android:layout_marginLeft="8dp"
+                        android:id="@+id/elecScrollLl"
+                        android:background="@drawable/custom_button2">
 
-                </LinearLayout>
+                        <com.ujuzy.ujuzy.CustomData.AllerFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15dp"
+                            android:layout_margin="10dp"
+                            android:text="Electricals"/>
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:background="@drawable/custom_button2">
+                    </LinearLayout>
 
-                    <com.ujuzy.ujuzy.CustomData.AllerFont
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="15dp"
-                        android:layout_margin="10dp"
-                        android:text="Masons"/>
+                        android:layout_marginLeft="8dp"
+                        android:id="@+id/mediaScrollLl"
+                        android:background="@drawable/custom_button2">
 
-                </LinearLayout>
+                        <com.ujuzy.ujuzy.CustomData.AllerFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15dp"
+                            android:layout_margin="10dp"
+                            android:text="Broadcast Media"/>
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:background="@drawable/custom_button2">
+                    </LinearLayout>
 
-                    <com.ujuzy.ujuzy.CustomData.AllerFont
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="10dp"
-                        android:textSize="15dp"
-                        android:text="Welders"/>
+                        android:layout_marginLeft="8dp"
+                        android:id="@+id/masonScrollLl"
+                        android:background="@drawable/custom_button2">
 
-                </LinearLayout>
+                        <com.ujuzy.ujuzy.CustomData.AllerFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15dp"
+                            android:layout_margin="10dp"
+                            android:text="Masonry"/>
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:background="@drawable/custom_button2">
+                    </LinearLayout>
 
-                    <com.ujuzy.ujuzy.CustomData.AllerFont
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="15dp"
-                        android:layout_margin="10dp"
-                        android:text="Carpenters"/>
+                        android:layout_marginLeft="8dp"
+                        android:id="@+id/weldersScrollLl"
+                        android:background="@drawable/custom_button2">
+
+                        <com.ujuzy.ujuzy.CustomData.AllerFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="10dp"
+                            android:textSize="15dp"
+                            android:text="Welders"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:id="@+id/capentrScrollLl"
+                        android:background="@drawable/custom_button2">
+
+                        <com.ujuzy.ujuzy.CustomData.AllerFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15dp"
+                            android:layout_margin="10dp"
+                            android:text="Carpentry"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:id="@+id/securityScrollLl"
+                        android:background="@drawable/custom_button2">
+
+                        <com.ujuzy.ujuzy.CustomData.AllerFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15dp"
+                            android:layout_margin="10dp"
+                            android:text="Security"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:id="@+id/accountingScrollLl"
+                        android:background="@drawable/custom_button2">
+
+                        <com.ujuzy.ujuzy.CustomData.AllerFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15dp"
+                            android:layout_margin="10dp"
+                            android:text="Accounting"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:id="@+id/legalScrollLl"
+                        android:background="@drawable/custom_button2">
+
+                        <com.ujuzy.ujuzy.CustomData.AllerFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15dp"
+                            android:layout_margin="10dp"
+                            android:text="Legal"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:id="@+id/cosmeticsScrollLl"
+                        android:background="@drawable/custom_button2">
+
+                        <com.ujuzy.ujuzy.CustomData.AllerFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15dp"
+                            android:layout_margin="10dp"
+                            android:text="Cosmetics"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:id="@+id/landscapingScrollLl"
+                        android:background="@drawable/custom_button2">
+
+                        <com.ujuzy.ujuzy.CustomData.AllerFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15dp"
+                            android:layout_margin="10dp"
+                            android:text="Landscaping"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:id="@+id/tailorScrollLl"
+                        android:background="@drawable/custom_button2">
+
+                        <com.ujuzy.ujuzy.CustomData.AllerFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15dp"
+                            android:layout_margin="10dp"
+                            android:text="Tailors"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:id="@+id/seeallScrollLl"
+                        android:visibility="gone"
+                        android:background="@drawable/custom_button2">
+
+                        <com.ujuzy.ujuzy.CustomData.AllerFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="15dp"
+                            android:layout_margin="10dp"
+                            android:text="See all"/>
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
             </LinearLayout>
-
-        </LinearLayout>
-    </HorizontalScrollView>
+        </HorizontalScrollView>
 
 
     <RelativeLayout
@@ -143,18 +277,18 @@
             android:layout_centerInParent="true"/>
 
         <com.ujuzy.ujuzy.CustomData.AllerFont
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:gravity="center_horizontal"
             android:id="@+id/noService"
             android:visibility="gone"
-            android:textSize="15dp"
-            android:text="No services"/>
+            android:textSize="17dp"
+            android:layout_margin="40dp"/>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/service_list"
             android:layout_width="match_parent"
-            android:layout_marginLeft="5dp"
             android:layout_below="@+id/view1"
             android:layout_height="match_parent">
 

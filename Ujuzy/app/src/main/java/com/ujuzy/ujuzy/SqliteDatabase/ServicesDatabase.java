@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.ujuzy.ujuzy.model.Constants;
 import com.ujuzy.ujuzy.model.Datum;
+import com.ujuzy.ujuzy.model.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,9 +46,9 @@ public class ServicesDatabase extends SQLiteOpenHelper
         sqLiteDatabase.close();
     }
 
-    public List<Datum> getServicesFromSqlDB()
+    public  ArrayList<Datum> getServicesFromSqlDB()
     {
-        SQLiteDatabase sqLiteDatabase = this.getWritableDatabase();
+        SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
 
         Cursor cursor = sqLiteDatabase.rawQuery(Constants.DATABASE.GET_SERVICE_QUERY, null);
 
@@ -69,6 +70,6 @@ public class ServicesDatabase extends SQLiteOpenHelper
 
         }
 
-        return serviceList;
+        return (ArrayList<Datum>) serviceList;
     }
 }

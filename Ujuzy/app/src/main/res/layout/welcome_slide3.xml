@@ -13,7 +13,7 @@
 
         <ImageView
             android:layout_width="180dp"
-            android:layout_height="160dp"
+            android:layout_height="170dp"
             android:scaleType="fitXY"
             android:layout_marginBottom="20dp"
             android:src="@drawable/into_portfolio"/>
@@ -21,7 +21,7 @@
         <com.ujuzy.ujuzy.CustomData.AllerBoldFont
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Build your Portfolio"
+            android:text="How the app works"
             android:textSize="19dp"
             android:textColor="@color/colorPrimaryDark"
             android:textStyle="bold" />
@@ -34,7 +34,7 @@
             android:layout_marginTop="15dp"
             android:textSize="15dp"
             android:gravity="center"
-            android:text="@string/slide_3_desc"
+            android:text="The app allows fundi/contractor to market services in three simple steps: (1). Create an account. 2). Add your service details including budget &amp; timeline. (3). Wait for a CALL!"
             android:textAlignment="center"
             android:textColor="@color/colorPrimary" />
 

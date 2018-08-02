@@ -16,10 +16,16 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.ujuzy.ujuzy.R;
+import com.ujuzy.ujuzy.Realm.RealmHelper;
+import com.ujuzy.ujuzy.Realm.RealmService;
+import com.ujuzy.ujuzy.activities.NewServiceActivity;
 import com.ujuzy.ujuzy.activities.ServiceActivity;
 import com.ujuzy.ujuzy.model.Datum;
+import com.ujuzy.ujuzy.model.Location;
 
 import java.util.ArrayList;
+
+import io.realm.Realm;
 
 
 /**
@@ -31,6 +37,7 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.Services
 
     private ArrayList<Datum> servicesList;
     private Context context;
+    private Realm realm;   // it will be in the activation to settings in the inner first name
 
     public ServiceAdapter(Context context, ArrayList<Datum> servicesList)
     {
@@ -52,6 +59,41 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.Services
     public void onBindViewHolder(final ServicesViewHolder holder, final int position)
     {
 
+        /**
+         *
+         * ASSIGN DATA TO REALM DATABASE SERVICE
+         */
+
+        RealmService realmService = new  RealmService();
+        realmService.setId(servicesList.get(position).getId());
+        realmService.setServiceName(servicesList.get(position).getServiceName());
+        realmService.setServiceDetails(servicesList.get(position).getServiceDetails());
+        realmService.setCost(servicesList.get(position).getCost().toString());
+        realmService.setCreatedBy(servicesList.get(position).getUser().getFirstname());
+        realmService.setCategory(servicesList.get(position).getCategory());
+        realmService.setTravel(servicesList.get(position).getTravel());
+        realmService.setImage(servicesList.get(position).getImages().get(0).toString());
+        realmService.setFirst_name(servicesList.get(position).getUser().getFirstname());
+        realmService.setLast_name(servicesList.get(position).getUser().getLastname());
+        realmService.setUser_role(servicesList.get(position).getUser().getUserRole());
+        realmService.setCreatedBy(servicesList.get(position).getCreatedBy().getFirstname());
+       /* realmService.setLongitude((Double) servicesList.get(position).getLocation().getLng().toString());
+        realmService.setLatitude((Double) servicesList.get(position).getLocation().getLat());*/
+        realmService.setService_duration_days(servicesList.get(position).getDuration().getDays().toString());
+        realmService.setService_duration_hours(servicesList.get(position).getDuration().getHours().toString());
+        realmService.setNo_of_personnel(servicesList.get(position).getNoOfPersonnel());
+        realmService.setUser_id(servicesList.get(position).getUser().getId());
+        realmService.setUser_thumb(servicesList.get(position).getUser().getProfilePic());
+
+        //SAVE
+        realm = Realm.getDefaultInstance();
+        RealmHelper helper = new RealmHelper(realm);
+        helper.save(realmService);
+
+
+        /***************************** END *******************************/
+
+
         final String photo = servicesList.get(position).getImages().get(0).toString();
         //final String user_photo = servicesList.get(position).getUser().get;
 
@@ -61,6 +103,8 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.Services
         holder.senderFirstName.setText("Posted by:  " + servicesList.get(position).getUser().getFirstname());
         if (holder.senderRole != null)
         holder.senderRole.setText("An Ujuzy " + servicesList.get(position).getUser().getUserRole());
+
+        holder.costTv.setText("Ksh " + servicesList.get(position).getCost());
 
         Glide.with(context)
                 .load(photo).asBitmap()
@@ -99,21 +143,27 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.Services
             @Override
             public void onClick(View view)
             {
-                Intent openRead = new Intent(view.getContext(), ServiceActivity.class);
-                openRead.putExtra("user_id", servicesList.get(position).getCreatedBy());
+                Intent openRead = new Intent(view.getContext(), NewServiceActivity.class);
+                openRead.putExtra("user_id", servicesList.get(position).getCreatedBy().getId());
                 openRead.putExtra("service_id", servicesList.get(position).getId());
                 openRead.putExtra("service_url", photo);
                 openRead.putExtra("service_name", servicesList.get(position).getServiceName());
                 openRead.putExtra("service_details", servicesList.get(position).getServiceDetails());
-                openRead.putExtra("service_location", servicesList.get(position).getLocation());
-                openRead.putExtra("service_createdby", servicesList.get(position).getCreatedBy());
-                openRead.putExtra("service_cost", servicesList.get(position).getCost());
-                openRead.putExtra("service_duration_days", servicesList.get(position).getDuration().getDays());
-                openRead.putExtra("service_duration_hours", servicesList.get(position).getDuration().getHours());
+                //openRead.putExtra("service_location", servicesList.get(position).getCity().toString());
+                openRead.putExtra("service_createdby", servicesList.get(position).getCreatedBy().getFirstname());
+                openRead.putExtra("service_cost", servicesList.get(position).getCost().toString());
+                openRead.putExtra("service_duration_days", servicesList.get(position).getDuration().getDays().toString());
+                openRead.putExtra("service_duration_hours", servicesList.get(position).getDuration().getHours().toString());
                 openRead.putExtra("service_created_at", servicesList.get(position).getCreatedAt());
                 openRead.putExtra("service_category", servicesList.get(position).getCategory());
                 openRead.putExtra("service_additional_info", servicesList.get(position).getCategory());
                 openRead.putExtra("service_travel", servicesList.get(position).getTravel());
+                openRead.putExtra("user_thumb", servicesList.get(position).getCreatedBy().getThumb());
+                openRead.putExtra("no_of_personnel", servicesList.get(position).getNoOfPersonnel());
+
+                //USER LOCATION
+                //openRead.putExtra("service_latitude", servicesList.get(position).getLocation().getLat().toString());
+               // openRead.putExtra("service_longitude", servicesList.get(position).getLocation().getLon().toString());
 
                 // USER INFORMATION
                 openRead.putExtra("user_id", servicesList.get(position).getUser().getId());
@@ -136,7 +186,7 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.Services
     class ServicesViewHolder extends RecyclerView.ViewHolder
     {
 
-        TextView serviceName, serviceDetails, senderFirstName, senderLastName, senderRole;
+        TextView serviceName, serviceDetails, senderFirstName, senderLastName, senderRole, costTv;
         ImageView avatar, userAvatar;
 
         public ServicesViewHolder(View itemView)
@@ -144,6 +194,7 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.Services
             super(itemView);
 
             serviceName = itemView.findViewById(R.id.tv_service_name);
+            costTv = itemView.findViewById(R.id.costTv);
             senderFirstName = itemView.findViewById(R.id.tv_user_name);
             senderRole = itemView.findViewById(R.id.tv_user_role);
             serviceDetails = itemView.findViewById(R.id.tv_service_details);

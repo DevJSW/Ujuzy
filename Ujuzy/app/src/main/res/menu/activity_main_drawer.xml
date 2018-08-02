@@ -9,7 +9,7 @@
             android:title="Profile" />
         <item
             android:id="@+id/nav_gallery"
-            android:title="Bookmarks" />
+            android:title="Favourites" />
         <item
             android:id="@+id/nav_slideshow"
             android:title="About us" />

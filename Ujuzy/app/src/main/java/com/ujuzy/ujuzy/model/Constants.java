@@ -1,10 +1,16 @@
 package com.ujuzy.ujuzy.model;
 
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
+
 public class Constants
 {
     public static final class HTTP
     {
         public static final String BASE_URL = "https://api.ujuzy.com/";
+        public static final String SERVICES_ENDPOINT = "https://api.ujuzy.com/services/";
     }
 
     public static final class DATABASE
