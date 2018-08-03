@@ -45,6 +45,7 @@ import com.ujuzy.ujuzy.model.RetrofitInstance;
 import com.ujuzy.ujuzy.model.Service;
 import com.ujuzy.ujuzy.services.Api;
 import com.ujuzy.ujuzy.services.NetworkChecker;
+import com.ujuzy.ujuzy.services.ServiceInterface;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -97,6 +98,7 @@ public class MainActivity extends AppCompatActivity
         if (NetworkChecker.isNetworkAvailable(getApplicationContext()))
         {
             getServicesFromApi();
+            getServicesFromRetrofitApi();
         } else {
 
         }
@@ -498,12 +500,53 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    public void getServicesFromRetrofitApi() {
+        ServiceInterface apiInterface = RetrofitInstance.getService();
+        Call<Service> call = apiInterface.getServices();
+        call.enqueue(new Callback<Service>() {
+            @Override
+            public void onResponse(Call<Service> call, Response<Service> response) {
+                if(response.body() != null){
+                    Service myResponse = response.body();
+                    /*List<Detail> details = myResponse.getDetails();
+                    for(Detail d : details){
+                        if(d.getId().equals(id)){
+                            reqDetail = d;
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {//update your views here
+                                    tvName.setText(reqDetail.getName());
+                                }
+                            });
+                            *//*reqDetail will be having everything that you need and you can get it using the following code.
+                            reqDetail.getName();
+                            reqDetail.getAge();
+                            reqDetail.getEmail();
+                            reqDetail.getMobile();*//*
+                        }
+                    }*/
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Service> call, Throwable t) {
+
+            }
+        });
+    }
+
     public void getServicesFromApi()
     {
 
-        Api api = RetrofitInstance.getService();
-        Call<Service> call = api.getServices();
-        call.enqueue(new Callback<Service>()
+//        Api api = RetrofitInstance.getService();
+//        Call<Service> call = api.getServices();
+
+        ServiceInterface serviceInterface = RetrofitInstance.getService();
+        Call<Service> callService = serviceInterface.getServices();
+
+
+        callService.enqueue(new Callback<Service>()
         {
             @Override
             public void onResponse(Call<Service> call, Response<Service> response)
@@ -720,4 +763,5 @@ public class MainActivity extends AppCompatActivity
         if (realm != null)
         realm.close();
     }
+
 }

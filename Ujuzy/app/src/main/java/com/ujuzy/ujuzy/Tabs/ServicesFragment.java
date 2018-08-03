@@ -121,7 +121,7 @@ public class ServicesFragment extends Fragment {
 
 
 
-    public Object getServices()
+    /*public Object getServices()
     {
 
         Api api = RetrofitInstance.getService();
@@ -162,7 +162,7 @@ public class ServicesFragment extends Fragment {
 
 
         return results;
-    }
+    }*/
 
     private void viewData()
     {

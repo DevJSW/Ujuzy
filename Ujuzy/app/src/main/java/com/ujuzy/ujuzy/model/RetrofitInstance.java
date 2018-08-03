@@ -2,6 +2,7 @@ package com.ujuzy.ujuzy.model;
 
 
 import com.ujuzy.ujuzy.services.Api;
+import com.ujuzy.ujuzy.services.ServiceInterface;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -17,7 +18,7 @@ public class RetrofitInstance
 
     private static Retrofit retrofit = null;
 
-    public static Api getService()
+    public static ServiceInterface getService()
     {
         if (retrofit == null)
         {
@@ -28,7 +29,7 @@ public class RetrofitInstance
                     .build();
         }
 
-        return retrofit.create(Api.class);
+        return retrofit.create(ServiceInterface.class);
     }
 
     public static Api getOkttpService()

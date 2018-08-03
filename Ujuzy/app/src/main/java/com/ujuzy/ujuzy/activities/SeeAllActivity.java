@@ -114,7 +114,7 @@ public class SeeAllActivity extends AppCompatActivity
     }
 
 
-    public Object getServices()
+   /* public Object getServices()
     {
 
         Api api = RetrofitInstance.getService();
@@ -131,9 +131,9 @@ public class SeeAllActivity extends AppCompatActivity
                 if (service != null && service.getData() != null)
                 {
                     results = (ArrayList<Datum>) service.getData();
-                    /**
+                    *//**
                      * displaying results on a recyclerview
-                     */
+                     *//*
                     if (results.size() < 1 || results.size() == 0)
                     {
                         progressBar1.setVisibility(View.GONE);
@@ -157,7 +157,7 @@ public class SeeAllActivity extends AppCompatActivity
 
 
         return results;
-    }
+    }*/
 
     private void viewData()
     {

@@ -53,8 +53,7 @@ public class RealmService extends RealmObject
     }
 
 
-    public RealmService()
-    {
+    public RealmService() {
 
     }
 
