@@ -59,4 +59,7 @@ dependencies {
     // drop down menu
     implementation 'com.github.hakobast:dropdown-textview:0.2'
 
+    //VOLLEY
+    implementation 'com.android.volley:volley:1.0.0'
+
 }

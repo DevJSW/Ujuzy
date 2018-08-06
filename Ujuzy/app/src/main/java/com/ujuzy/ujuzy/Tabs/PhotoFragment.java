@@ -12,12 +12,22 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.ujuzy.ujuzy.R;
 import com.ujuzy.ujuzy.Realm.RealmAllServiceAdapter;
 import com.ujuzy.ujuzy.Realm.RealmHelper;
 import com.ujuzy.ujuzy.Realm.RealmPhotoAdapter;
+import com.ujuzy.ujuzy.Realm.RealmService;
+import com.ujuzy.ujuzy.activities.MainActivity;
 import com.ujuzy.ujuzy.adapters.ReviewsAdapter;
 import com.ujuzy.ujuzy.model.Datum;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -36,6 +46,7 @@ public class PhotoFragment extends Fragment
     ArrayList<Datum> results;
     String reviews;
     String service_id = "";
+    String service_url = "";
     private ProgressBar progressBar;
     private TextView noService;
 
@@ -55,6 +66,7 @@ public class PhotoFragment extends Fragment
         Bundle bundle2 = this.getArguments();
         if (bundle2 != null) {
             service_id = bundle2.getString("serviceId", null);
+            service_url = bundle2.getString("serviceUrl", null);
         }
 
         initProgessBar();
@@ -64,13 +76,14 @@ public class PhotoFragment extends Fragment
         return v;
     }
 
+
     private void initRealm()
     {
         realm = Realm.getDefaultInstance();
         final RealmHelper helper = new RealmHelper(realm);
 
         //QUERY/FILTER REALM DATABASE
-        helper.filterRealmDatabase("id",service_id);
+        helper.filterRealmDatabase("image",service_url);
 
         //CHECK IF DATABASE IS EMPTY
         if (helper.refreshDatabase().size() < 1 || helper.refreshDatabase().size() == 0)

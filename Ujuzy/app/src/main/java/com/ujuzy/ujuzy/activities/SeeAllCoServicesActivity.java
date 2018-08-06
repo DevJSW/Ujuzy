@@ -77,7 +77,17 @@ public class SeeAllCoServicesActivity extends AppCompatActivity {
         final RealmHelper helper = new RealmHelper(realm);
 
         //RETRIEVE
-        helper.retreiveFromDB();
+        helper.filterRealmDatabase("user_role", "company");
+
+        //CHECK IF DATABASE IS EMPTY
+        if (helper.refreshDatabase().size() < 1 || helper.refreshDatabase().size() == 0)
+        {
+            noService.setVisibility(View.VISIBLE);
+            noService.setText("Oh sorry 😌😞 this is embarrassing but no company services posted yet!");
+
+        } else {
+            noService.setVisibility(View.GONE);
+        }
 
         countriesListRv = (RecyclerView) findViewById(R.id.service_list);
         serviceRealmAdapter = new RealmAllServiceAdapter(getApplicationContext(), helper.refreshDatabase());
@@ -131,8 +141,8 @@ public class SeeAllCoServicesActivity extends AppCompatActivity {
                 {
                     results = (ArrayList<Datum>) service.getData();
                     *//**
-                     * displaying results on a recyclerview
-                     *//*
+     * displaying results on a recyclerview
+     *//*
                     if (results.size() < 1 || results.size() == 0)
                     {
                         progressBar1.setVisibility(View.GONE);

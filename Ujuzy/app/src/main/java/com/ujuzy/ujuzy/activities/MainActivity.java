@@ -31,6 +31,15 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.ujuzy.ujuzy.R;
 import com.ujuzy.ujuzy.Realm.RealmHelper;
 import com.ujuzy.ujuzy.Realm.RealmService;
@@ -46,6 +55,10 @@ import com.ujuzy.ujuzy.model.Service;
 import com.ujuzy.ujuzy.services.Api;
 import com.ujuzy.ujuzy.services.NetworkChecker;
 import com.ujuzy.ujuzy.services.ServiceInterface;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -75,6 +88,13 @@ public class MainActivity extends AppCompatActivity
 
     private RelativeLayout searchRely;
 
+    //json volley
+    private final String JSON_URL = "https://api.ujuzy.com/services";
+    private JsonArrayRequest request;
+    private RequestQueue requestQueue;
+    private List<Datum> serviceList;
+
+
     private Realm realm;
     private RealmChangeListener realmChangeListener;
 
@@ -88,6 +108,7 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
 
+
         initView();
         initWindow();
         initFab();
@@ -98,25 +119,150 @@ public class MainActivity extends AppCompatActivity
         if (NetworkChecker.isNetworkAvailable(getApplicationContext()))
         {
             getServicesFromApi();
-            getServicesFromRetrofitApi();
-        } else {
 
         }
 
+        //FETCH SERVICES FROM DATABASE
         getServicesFromDatabase();
 
         initSeeAll();
-        //initProgessBar();
         initSearch();
         initHorizScrollMenu();
 
+
+    }
+
+
+    private void volleyJsonRequest()
+    {
+
+        serviceList = new ArrayList<>();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                JSON_URL, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+
+                    for (int i = 0 ; i < jsonArray.length() ; i++)
+                    {
+
+                        JSONObject serviceObj = jsonArray.getJSONObject(i);
+                        JSONObject serviceImgObj = jsonArray.getJSONObject(i).getJSONObject("images");
+                        JSONObject serviceUserObj = jsonArray.getJSONObject(i).getJSONObject("user");
+                        JSONObject serviceLocationObj = jsonArray.getJSONObject(i).getJSONObject("location");
+                        JSONObject serviceDurationObj = jsonArray.getJSONObject(i).getJSONObject("duration");
+
+                        // ASSIGN DATA TO REALM DATABASE SERVICE
+
+                        RealmService realmService = new  RealmService();
+                        realmService.setId(serviceObj.getString("id"));
+                        realmService.setServiceName(serviceObj.getString("service_name"));
+                        realmService.setServiceDetails(serviceObj.getString("service_details"));
+                        realmService.setCost(serviceObj.getString("cost"));
+                        realmService.setCreatedBy(serviceObj.getString("created_by"));
+                        realmService.setCategory(serviceObj.getString("category"));
+                        realmService.setCreated_at(serviceObj.getString("created_at"));
+                        realmService.setImage(serviceImgObj.getString("thumb"));
+
+                        realmService.setUser_role(serviceUserObj.getString("user_role"));
+                        realmService.setUser_thumb(serviceUserObj.getString("profile_pic"));
+                        realmService.setFirst_name(serviceUserObj.getString("firstname"));
+                        realmService.setLast_name(serviceUserObj.getString("lastname"));
+                        realmService.setUser_id(serviceUserObj.getString("id"));
+
+                        realmService.setCity(serviceLocationObj.getString("city"));
+
+                        realmService.setService_duration_days(serviceDurationObj.getString("days"));
+                        realmService.setService_duration_hours(serviceDurationObj.getString("hours"));
+
+                        //realmService.setUser_thumb(joIMG.getString("thumb"));
+
+                        //SAVE
+                        realm = Realm.getDefaultInstance();
+                        RealmHelper helper = new RealmHelper(realm);
+                        helper.save(realmService);
+
+
+                        /**************************** END ******************************/
+
+
+
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        requestQueue = Volley.newRequestQueue(MainActivity.this);
+        requestQueue.add(stringRequest);
+
+
+        /*request = new JsonArrayRequest(JSON_URL, new com.android.volley.Response.Listener<JSONArray>() {
+            @Override
+            public void onResponse(JSONArray response) {
+
+                JSONObject jsonObject = null;
+
+                for (int i = 0 ; i < response.length() ; i++)
+                {
+                    try {
+
+                        jsonObject = response.getJSONObject(i);
+
+                        Service service = new Service();
+                        Datum datum = new Datum();
+                        results = (ArrayList<Datum>) service.getData();
+                        datum.setServiceName(jsonObject.getString("service_name"));
+                        datum.setServiceDetails(jsonObject.getString("service_details"));
+                        datum.setCost(jsonObject.getString("cost"));
+                        datum.setCategory(jsonObject.getString("category"));
+                        serviceList.add(datum);
+
+
+                    } catch (JSONException e) {
+
+                        e.printStackTrace();
+
+                    }
+                }
+
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        requestQueue = Volley.newRequestQueue(MainActivity.this);
+        requestQueue.add(request);*/
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        // stop keyboard from show when activity is started.
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
+        if (realm.isEmpty())
+        {
+            noService = (TextView) findViewById(R.id.noService);
+            noServiceCo = (TextView) findViewById(R.id.noService2);
+
+            noService.setVisibility(View.GONE);
+            noServiceCo.setVisibility(View.GONE);
+        }
     }
 
     private void getProfServices()
@@ -136,16 +282,6 @@ public class MainActivity extends AppCompatActivity
             noService.setVisibility(View.GONE);
         }
 
-        //CHECK IF DATABASE IS EMPTY
-//        if (helper.refreshDatabase().size() < 1 || helper.refreshDatabase().size() == 0)
-//        {
-//            noService = (TextView) findViewById(R.id.noService);
-//            noService.setVisibility(View.VISIBLE);
-//            noService.setText("Oh sorry 😌😞 this is embarrassing but no Professional services posted yet!");
-//        } else {
-//            noService = (TextView) findViewById(R.id.noService);
-//            noService.setVisibility(View.GONE);
-//        }
 
         servicesListRv = (RecyclerView) findViewById(R.id.service_list);
         serviceReamAdapter = new RealmServiceAdapter(getApplicationContext(), helper.refreshDatabase());
@@ -500,114 +636,79 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    public void getServicesFromRetrofitApi() {
-        ServiceInterface apiInterface = RetrofitInstance.getService();
-        Call<Service> call = apiInterface.getServices();
-        call.enqueue(new Callback<Service>() {
-            @Override
-            public void onResponse(Call<Service> call, Response<Service> response) {
-                if(response.body() != null){
-                    Service myResponse = response.body();
-                    /*List<Detail> details = myResponse.getDetails();
-                    for(Detail d : details){
-                        if(d.getId().equals(id)){
-                            reqDetail = d;
-
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {//update your views here
-                                    tvName.setText(reqDetail.getName());
-                                }
-                            });
-                            *//*reqDetail will be having everything that you need and you can get it using the following code.
-                            reqDetail.getName();
-                            reqDetail.getAge();
-                            reqDetail.getEmail();
-                            reqDetail.getMobile();*//*
-                        }
-                    }*/
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Service> call, Throwable t) {
-
-            }
-        });
-    }
-
     public void getServicesFromApi()
     {
 
-//        Api api = RetrofitInstance.getService();
-//        Call<Service> call = api.getServices();
+        //volley json request
+        volleyJsonRequest();
 
-        ServiceInterface serviceInterface = RetrofitInstance.getService();
-        Call<Service> callService = serviceInterface.getServices();
-
-
-        callService.enqueue(new Callback<Service>()
-        {
-            @Override
-            public void onResponse(Call<Service> call, Response<Service> response)
-            {
-
-                if (response.isSuccessful())
-                {
-
-                    Service serviceList = response.body();
-                    results = (ArrayList<Datum>) serviceList.getData();
-
-
-                    /**
-                     * displaying results to adapter
-                     */
-
-                    if (results.size() < 1 || results.size() == 0)
-                    {
-
-                        /*progressBar1.setVisibility(View.GONE);
-                        progressBar2.setVisibility(View.GONE);*/
-
-                        noService.setVisibility(View.VISIBLE);
-                        noServiceCo.setVisibility(View.VISIBLE);
-
-                    } else
-                    {
-                        progressBar1.setVisibility(View.GONE);
-                        progressBar2.setVisibility(View.GONE);
-                        viewData();
-                    }
-
-                } else {
-
-                    /*progressBar1.setVisibility(View.GONE);
-                    progressBar2.setVisibility(View.GONE);*/
-
-                    noService.setVisibility(View.VISIBLE);
-                    noServiceCo.setVisibility(View.VISIBLE);
-
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<Service> call, Throwable t)
-            {
-                noService.setVisibility(View.VISIBLE);
-                noServiceCo.setVisibility(View.VISIBLE);
-            }
-
-        });
-
-
-       // return results;
+//        ServiceInterface serviceInterface = RetrofitInstance.getService();
+//        Call<Service> callService = serviceInterface.getServices();
+//
+//
+//        callService.enqueue(new Callback<Service>()
+//        {
+//            @Override
+//            public void onResponse(Call<Service> call, Response<Service> response)
+//            {
+//
+//                if (response.isSuccessful())
+//                {
+//
+//                    Service serviceList = response.body();
+//                    results = (ArrayList<Datum>) serviceList.getData();
+//
+//
+//                    /**
+//                     * displaying results to adapter
+//                     */
+//
+//                    if (results.size() < 1 || results.size() == 0)
+//                    {
+//
+//                        /*progressBar1.setVisibility(View.GONE);
+//                        progressBar2.setVisibility(View.GONE);*/
+//
+//                       /* noService.setVisibility(View.VISIBLE);
+//                        noServiceCo.setVisibility(View.VISIBLE);*/
+//
+//                    } else
+//                    {
+//                        progressBar1.setVisibility(View.GONE);
+//                        progressBar2.setVisibility(View.GONE);
+//                        viewData();
+//                    }
+//
+//                } else {
+//
+//                    /*progressBar1.setVisibility(View.GONE);
+//                    progressBar2.setVisibility(View.GONE);*/
+//
+//                  /*  noService.setVisibility(View.VISIBLE);
+//                    noServiceCo.setVisibility(View.VISIBLE);*/
+//
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Call<Service> call, Throwable t)
+//            {
+//               /* noService.setVisibility(View.VISIBLE);
+//                noServiceCo.setVisibility(View.VISIBLE);*/
+//            }
+//
+//        });
+//
+//
+//       // return results;
     }
+
 
     private void viewData()
     {
 
-       // servicesListRv = (RecyclerView) findViewById(R.id.service_list);
+        // servicesListRv = (RecyclerView) findViewById(R.id.service_list);
         serviceAdapter = new ServiceAdapter(getApplicationContext(), results);
 
        /* //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
@@ -759,9 +860,9 @@ public class MainActivity extends AppCompatActivity
     protected void onDestroy() {
         super.onDestroy();
         if (realmChangeListener != null)
-        realm.removeChangeListener(realmChangeListener);
+            realm.removeChangeListener(realmChangeListener);
         if (realm != null)
-        realm.close();
+            realm.close();
     }
 
 }

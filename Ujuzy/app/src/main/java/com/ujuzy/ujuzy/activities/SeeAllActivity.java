@@ -77,8 +77,20 @@ public class SeeAllActivity extends AppCompatActivity
         realm = Realm.getDefaultInstance();
         final RealmHelper helper = new RealmHelper(realm);
 
+
         //RETRIEVE
-        helper.retreiveFromDB();
+        helper.filterRealmDatabase("user_role", "Professional");
+
+        //CHECK IF DATABASE IS EMPTY
+        if (helper.refreshDatabase().size() < 1 || helper.refreshDatabase().size() == 0)
+        {
+            noService.setVisibility(View.VISIBLE);
+            noService.setText("Oh sorry 😌😞 this is embarrassing but no professional services posted yet!");
+
+        } else {
+            noService.setVisibility(View.GONE);
+        }
+
 
         countriesListRv = (RecyclerView) findViewById(R.id.service_list);
         serviceRealmAdapter = new RealmAllServiceAdapter(getApplicationContext(), helper.refreshDatabase());
@@ -109,12 +121,11 @@ public class SeeAllActivity extends AppCompatActivity
         progressBar1 = (ProgressBar) findViewById(R.id.progressBar);
 
         noService = (TextView) findViewById(R.id.noService);
-        noService.setVisibility(View.VISIBLE);
         noService.setText("Oh sorry 😌😞 this is embarrassing but no professional services posted yet!");
     }
 
-
-   /* public Object getServices()
+    /*
+     *//* public Object getServices()
     {
 
         Api api = RetrofitInstance.getService();
@@ -131,9 +142,9 @@ public class SeeAllActivity extends AppCompatActivity
                 if (service != null && service.getData() != null)
                 {
                     results = (ArrayList<Datum>) service.getData();
-                    *//**
-                     * displaying results on a recyclerview
-                     *//*
+                    *//**//**
+ * displaying results on a recyclerview
+ *//**//*
                     if (results.size() < 1 || results.size() == 0)
                     {
                         progressBar1.setVisibility(View.GONE);
@@ -159,18 +170,18 @@ public class SeeAllActivity extends AppCompatActivity
         return results;
     }*/
 
-    private void viewData()
-    {
+private void viewData()
+{
 
-        countriesListRv = (RecyclerView) findViewById(R.id.service_list);
-        serviceAdapter = new SeeAllAdapter(getApplicationContext(), results);
+    countriesListRv = (RecyclerView) findViewById(R.id.service_list);
+    serviceAdapter = new SeeAllAdapter(getApplicationContext(), results);
 
-        //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
-        final LinearLayoutManager serviceLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
-        countriesListRv.setLayoutManager(serviceLayoutManager);
-        countriesListRv.setAdapter(serviceAdapter);
+    //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+    final LinearLayoutManager serviceLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
+    countriesListRv.setLayoutManager(serviceLayoutManager);
+    countriesListRv.setAdapter(serviceAdapter);
 
-    }
+}
 
     private void initHorizScrollMenu()
     {

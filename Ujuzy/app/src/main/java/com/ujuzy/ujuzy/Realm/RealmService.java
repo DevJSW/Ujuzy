@@ -26,9 +26,10 @@ public class RealmService extends RealmObject
     private String city;
     private String user_thumb;
     private int no_of_personnel;
+    private String created_at;
 
 
-    public RealmService(String id, String serviceName, String serviceDetails, String cost, String category, Boolean travel, String image, String additional_info, String created_by, String user_role, String first_name, String last_name, String service_duration_days, String service_duration_hours, String user_id, double latitude, double longitude, String city, String user_thumb, int no_of_personnel, String createdBy) {
+    public RealmService(String id, String serviceName, String serviceDetails, String cost, String category, Boolean travel, String image, String additional_info, String created_by, String user_role, String first_name, String last_name, String service_duration_days, String service_duration_hours, String user_id, double latitude, double longitude, String city, String user_thumb, int no_of_personnel, String createdBy, String created_at) {
         this.id = id;
         this.serviceName = serviceName;
         this.serviceDetails = serviceDetails;
@@ -50,6 +51,7 @@ public class RealmService extends RealmObject
         this.user_thumb = user_thumb;
         this.no_of_personnel = no_of_personnel;
         this.createdBy = createdBy;
+        this.created_at = created_at;
     }
 
 
@@ -225,5 +227,13 @@ public class RealmService extends RealmObject
 
     public void setNo_of_personnel(int no_of_personnel) {
         this.no_of_personnel = no_of_personnel;
+    }
+
+    public String getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
     }
 }
