@@ -17,22 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
             android:orientation="vertical">
-
-            <hakobastvatsatryan.DropdownTextView
-                android:id="@+id/first_dropdown_text_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:title_text="About Service"
-                app:title_text_color="@color/black"
-                app:title_text_size="16dp"
-                app:content_padding="2dp"
-                app:content_text="aFASHKJDHKAHDKHkehskhdiuhiHEFHASDKUHFDKASJHFKJSEHFDFHKJASHERHASFHDJHKDHFKEHFUHUHRUHUFHURHFURHFURQRALLAH"
-                app:content_text_color="@color/colorPrimary"
-                app:content_text_size="16dp"
-                app:arrow_drawable="@drawable/arrow_icon" comment="icon should be faced to the right"
-                app:bg_drawable_regular="@drawable/button_bg_dialogs"
-                app:bg_drawable_expanded="@drawable/button_bg_dialogs"
-                app:expand_duration="5" />
+            
 
             <Spinner
                 android:id="@+id/spinner_details"

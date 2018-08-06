@@ -74,7 +74,7 @@ public class ServicesFragment extends Fragment {
          */
 
 
-       initRealm();
+        initRealm();
 
         return v;
     }
@@ -85,7 +85,7 @@ public class ServicesFragment extends Fragment {
         final RealmHelper helper = new RealmHelper(realm);
 
         //QUERY/FILTER REALM DATABASE
-        helper.filterRealmDatabase("created_by", userId);
+        helper.filterRealmDatabase("user_id", userId);
 
         //CHECK IF DATABASE IS EMPTY
         if (helper.refreshDatabase().size() < 1 || helper.refreshDatabase().size() == 0)
@@ -119,50 +119,6 @@ public class ServicesFragment extends Fragment {
         realm.addChangeListener(realmChangeListener);
     }
 
-
-
-    /*public Object getServices()
-    {
-
-        Api api = RetrofitInstance.getService();
-        Call<Service> callUserServices = api.getServicesById(serviceId);
-
-        callUserServices.enqueue(new Callback<Service>()
-        {
-            @Override
-            public void onResponse(Call<Service> callUserServices, Response<Service> response)
-            {
-                progressBar.setVisibility(View.VISIBLE);
-                Service service = response.body();
-
-                if (service != null && service.getData() != null)
-                {
-                    results = (ArrayList<Datum>) service.getData();
-
-                    if (results.size() < 1 || results.size() == 0)
-                    {
-                        progressBar.setVisibility(View.GONE);
-
-                        noService.setVisibility(View.VISIBLE);
-
-                    } else
-                    {
-                        viewData();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Service> call, Throwable t)
-            {
-
-            }
-
-        });
-
-
-        return results;
-    }*/
 
     private void viewData()
     {

@@ -68,7 +68,7 @@ public class NewServiceActivity extends AppCompatActivity
 
     String first_name = "";
     String last_name = "";
-    //String profile_pic = "";
+    String profile_pic = "";
 
     private String webview_url = "https://ujuzy.com/#";
 
@@ -121,7 +121,7 @@ public class NewServiceActivity extends AppCompatActivity
         userId = getIntent().getStringExtra("user_id");
         serviceUrl = getIntent().getStringExtra("service_url");
         serviceName = getIntent().getStringExtra("service_name");
-        serviceDetails = getIntent().getStringExtra("service_details");
+        serviceDetails = getIntent().getStringExtra("service_detail");
         serviceLocation = getIntent().getStringExtra("service_location");
         serviceCreatedBy = getIntent().getStringExtra("service_createdby");
         serviceCreatedAt = getIntent().getStringExtra("service_created_at");
@@ -139,7 +139,7 @@ public class NewServiceActivity extends AppCompatActivity
         first_name = getIntent().getStringExtra("first_name");
         last_name = getIntent().getStringExtra("last_name");
         user_role = getIntent().getStringExtra("user_role");
-        //  profile_pic = getIntent().getStringExtra("profile_pic");
+        profile_pic = getIntent().getStringExtra("profile_pic");
 
        /* serviceCreatedAtTv = (TextView) findViewById(R.id.tv_created_at);
         serviceCreatedByTv = (TextView) findViewById(R.id.tv_created_by);
@@ -299,8 +299,8 @@ public class NewServiceActivity extends AppCompatActivity
                         profileActivity.putExtra("user_id", userId);
                         profileActivity.putExtra("first_name", first_name);
                         profileActivity.putExtra("last_name", last_name);
-                        //   profileActivity.putExtra("profile_pic", profile_pic);
-                        //profileActivity.putExtra("user_role", user_role);
+                        profileActivity.putExtra("profile_pic", profile_pic);
+                        profileActivity.putExtra("user_role", user_role);
                         startActivity(profileActivity);
                         dialog.dismiss();
                     }
@@ -400,8 +400,8 @@ public class NewServiceActivity extends AppCompatActivity
 
                     bundle.putString("first_name", first_name);
                     bundle.putString("last_name", last_name);
-                    // bundle.putString("profile_pic", profile_pic);
-                   // bundle.putString("user_role", user_role);
+                    bundle.putString("profile_pic", profile_pic);
+                    bundle.putString("user_role", user_role);
                     tab1.setArguments(bundle);
                     return tab1;
                 case 1:
@@ -415,6 +415,7 @@ public class NewServiceActivity extends AppCompatActivity
                     PhotoFragment tab3 = new PhotoFragment ();
                     Bundle bundle3 = new Bundle();
                     bundle3.putString("serviceId", serviceId);
+                    bundle3.putString("serviceUrl", serviceUrl);
                     tab3.setArguments(bundle3);
                     return tab3;
 
