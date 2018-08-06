@@ -438,6 +438,8 @@ public class NewServiceActivity extends AppCompatActivity
                     return "Reviews";
                 case 2:
                     return "Photos";
+                case 4:
+                    return "Photos";
 
             }
             return null;
