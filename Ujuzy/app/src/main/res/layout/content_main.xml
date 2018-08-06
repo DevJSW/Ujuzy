@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="match_parent"
-    android:layout_marginTop="15dp"
+
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.ujuzy.ujuzy.activities.MainActivity"
     tools:showIn="@layout/app_bar_main">
@@ -28,6 +28,11 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <include layout="@layout/toolbar"
+                android:id="@+id/mToolbar"
+                app:layout_scrollFlags="scroll|enterAlways"
+                />
+
             <HorizontalScrollView
                 android:id="@+id/hsv"
                 android:layout_width="fill_parent"
@@ -42,6 +47,7 @@
                     android:id="@+id/innerLay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fitsSystemWindows="true"
                     android:gravity="center_vertical"
                     android:layout_marginLeft="8dp"
                     android:orientation="horizontal" >
@@ -285,7 +291,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="235dp"
+                android:layout_height="245dp"
                 android:id="@+id/bottomRely"
                 android:layout_marginBottom="10dp"
                 android:layout_marginTop="10dp"
@@ -352,9 +358,9 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="235dp"
+                android:layout_height="245dp"
                 android:layout_marginBottom="15dp"
-                android:layout_marginTop="0dp"
+                android:layout_marginTop="5dp"
                 android:background="#eaeaea"
                 android:orientation="vertical">
 
@@ -417,6 +423,65 @@
 
             </RelativeLayout>
 
+            <!--<RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="235dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="0dp"
+                android:background="#eaeaea"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/rely3">
+
+                    <com.ujuzy.ujuzy.CustomData.AllerBoldFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/font_black_light"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="12dp"
+                        android:textSize="14dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="Services nearby"/>
+
+                    <com.ujuzy.ujuzy.CustomData.AllerFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/font_black_light"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginTop="12dp"
+                        android:textSize="14dp"
+                        android:id="@+id/seeServicesNearby"
+                        android:layout_marginBottom="8dp"
+                        android:text="See all >>"/>
+
+                </RelativeLayout>
+
+
+                <com.ujuzy.ujuzy.CustomData.AllerFont
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:layout_centerInParent="true"
+                    android:id="@+id/noService3"
+                    android:textSize="15dp"
+                    android:layout_margin="50dp"
+                    android:text="Currently no services nearby"/>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/nearby_service_list"
+                    android:layout_width="match_parent"
+                    android:layout_below="@+id/rely3"
+                    android:layout_marginLeft="5dp"
+                    android:layout_height="wrap_content"
+                    >
+
+                </android.support.v7.widget.RecyclerView>
+
+            </RelativeLayout>-->
 
         </LinearLayout>
 
