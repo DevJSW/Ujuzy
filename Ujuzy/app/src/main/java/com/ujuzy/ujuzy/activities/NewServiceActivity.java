@@ -150,7 +150,7 @@ public class NewServiceActivity extends AppCompatActivity
         //serviceCreatedAtTv = (TextView) findViewById(R.id.tv_created_by);
 
         serviceNameTv.setText("Category: " +serviceCategory);
-        serviceLocationTv.setText("Ksh: " +serviceCost);
+        serviceLocationTv.setText(serviceLocation);
 
         serviceImage = (ImageView) findViewById(R.id.service_avatar);
 

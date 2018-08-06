@@ -102,6 +102,7 @@ public class RealmServiceAdapter extends RecyclerView.Adapter<RealmServiceAdapte
                 openRead.putExtra("user_role", servicesList.get(position).getUser_role());
                 openRead.putExtra("service_latitude", servicesList.get(position).getLatitude());
                 openRead.putExtra("service_longitude", servicesList.get(position).getLongitude());
+                openRead.putExtra("service_location", servicesList.get(position).getCity());
                 view.getContext().startActivity(openRead);
             }
         });
