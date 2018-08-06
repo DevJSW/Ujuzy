@@ -86,47 +86,69 @@
             android:layout_marginBottom="2dp"
             android:textSize="12dp"
             android:ellipsize="end"
-            android:maxLines="2"
+            android:maxLines="1"
             android:lineSpacingExtra="1dp"
             android:text="Username"
             android:id="@+id/tv_service_details"
             />
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="2dp"
-        android:layout_marginBottom="1dp"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="17dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginRight="12dp"
         android:orientation="horizontal">
 
-        <RatingBar
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:isIndicator="true"
-            android:stepSize="0.1"
-            style="@android:style/Widget.DeviceDefault.Light.RatingBar.Small"
-            />
+            android:layout_marginLeft="2dp"
+            android:orientation="horizontal">
+
+            <RatingBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:isIndicator="true"
+                android:stepSize="0.1"
+                style="@android:style/Widget.DeviceDefault.Light.RatingBar.Small"
+                />
+
+            <com.ujuzy.ujuzy.CustomData.AllerFont
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/font_black_light"
+                android:layout_marginRight="5dp"
+                android:textSize="11dp"
+                android:layout_marginLeft="5dp"
+                android:text="(0)"/>
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:padding="1dp"
+            android:visibility="gone"
+            android:src="@drawable/fav_icon"
+            android:textSize="14dp"
+            android:id="@+id/favIv" />
+
+    </RelativeLayout>
+
 
         <com.ujuzy.ujuzy.CustomData.AllerFont
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/font_black_light"
+            android:textColor="@color/colorPrimaryDark"
             android:layout_marginRight="5dp"
-            android:textSize="11dp"
+            android:textSize="14dp"
+            android:id="@+id/costTv"
             android:layout_marginLeft="5dp"
-            android:text="(0)"/>
+            android:layout_marginBottom="7dp"
+            android:text="Ksh"/>
 
-    </LinearLayout>
 
-    <com.ujuzy.ujuzy.CustomData.AllerFont
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/colorPrimaryDark"
-        android:layout_marginRight="5dp"
-        android:textSize="14dp"
-        android:id="@+id/costTv"
-        android:layout_marginLeft="5dp"
-        android:layout_marginBottom="7dp"
-        android:text="Ksh"/>
 
 </GridLayout>

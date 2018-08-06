@@ -23,6 +23,8 @@ import com.ujuzy.ujuzy.model.Datum;
 
 import java.util.ArrayList;
 
+import io.realm.Realm;
+
 public class RealmServiceAdapter extends RecyclerView.Adapter<RealmServiceAdapter.ServicesViewHolder>
 {
 
@@ -51,6 +53,18 @@ public class RealmServiceAdapter extends RecyclerView.Adapter<RealmServiceAdapte
         holder.serviceName.setText(servicesList.get(position).getServiceName());
         holder.serviceDetails.setText(servicesList.get(position).getServiceDetails());
         holder.costTv.setText("Ksh " + servicesList.get(position).getCost());
+
+        Realm realm = Realm.getDefaultInstance();
+        RealmFavourite favourite = realm.where(RealmFavourite.class).equalTo("id", servicesList.get(position).getId()).findFirst();
+
+        if (favourite != null) {
+            // Exists
+            holder.favIconIv.setImageResource(R.drawable.fav_icon_red);
+
+        } else {
+            // Not exist
+            holder.favIconIv.setImageResource(R.drawable.fav_icon);
+        }
 
         Glide.with(context)
                 .load(servicesList.get(position).getImage())
@@ -104,7 +118,7 @@ public class RealmServiceAdapter extends RecyclerView.Adapter<RealmServiceAdapte
     {
         View mView;
         TextView serviceName, serviceDetails, senderFirstName, senderLastName, senderRole, costTv;
-        ImageView avatar, userAvatar;
+        ImageView avatar, userAvatar, favIconIv;
 
         public ServicesViewHolder(View itemView)
         {
@@ -118,6 +132,7 @@ public class RealmServiceAdapter extends RecyclerView.Adapter<RealmServiceAdapte
             serviceDetails = itemView.findViewById(R.id.tv_service_details);
             avatar = itemView.findViewById(R.id.iv_avatar);
             userAvatar = itemView.findViewById(R.id.iv_user_avatar);
+            favIconIv = itemView.findViewById(R.id.favIv);
 
         }
     }
