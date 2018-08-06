@@ -27,6 +27,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -252,16 +253,7 @@ public class NewServiceActivity extends AppCompatActivity
 
                         dialog.dismiss();
 
-                        Snackbar snackbar = Snackbar
-                                .make(view, "Service added to favourites!", Snackbar.LENGTH_LONG)
-                                .setAction("VIEW", new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        startActivity(new Intent(NewServiceActivity.this, FavouriteActivity.class));
-                                    }
-                                });
-
-                        snackbar.show();
+                        Toast.makeText(NewServiceActivity.this, "Services added to favourites", Toast.LENGTH_LONG).show();
 
                     }
                 });
