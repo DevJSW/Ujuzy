@@ -1,5 +1,10 @@
 package com.ujuzy.ujuzy.Realm;
 
+import com.ujuzy.ujuzy.model.SkillList;
+
+import java.util.List;
+
+import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
@@ -28,8 +33,14 @@ public class RealmService extends RealmObject
     private int no_of_personnel;
     private String created_at;
 
+    public RealmService(RealmList<RealmSkillList> skillList) {
+        this.skillList = skillList;
+    }
 
-    public RealmService(String id, String serviceName, String serviceDetails, String cost, String category, Boolean travel, String image, String additional_info, String created_by, String user_role, String first_name, String last_name, String service_duration_days, String service_duration_hours, String user_id, double latitude, double longitude, String city, String user_thumb, int no_of_personnel, String createdBy, String created_at) {
+    private RealmList<RealmSkillList> skillList = null;
+
+
+    public RealmService(String id, String serviceName, String serviceDetails, String cost, String category, Boolean travel, String image, String additional_info, String created_by, String user_role, String first_name, String last_name, String service_duration_days, String service_duration_hours, String user_id, double latitude, double longitude, String city, String user_thumb, int no_of_personnel, String createdBy, String created_at, RealmList<RealmSkillList> skillList) {
         this.id = id;
         this.serviceName = serviceName;
         this.serviceDetails = serviceDetails;
@@ -52,6 +63,7 @@ public class RealmService extends RealmObject
         this.no_of_personnel = no_of_personnel;
         this.createdBy = createdBy;
         this.created_at = created_at;
+        this.skillList = skillList;
     }
 
 
@@ -235,5 +247,13 @@ public class RealmService extends RealmObject
 
     public void setCreated_at(String created_at) {
         this.created_at = created_at;
+    }
+
+    public RealmList<RealmSkillList> getSkillList() {
+        return skillList;
+    }
+
+    public void setSkillList(RealmList<RealmSkillList> skillList) {
+        this.skillList = skillList;
     }
 }

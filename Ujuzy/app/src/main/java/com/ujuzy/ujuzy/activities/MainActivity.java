@@ -157,6 +157,8 @@ public class MainActivity extends AppCompatActivity
                         JSONObject serviceLocationObj = jsonArray.getJSONObject(i).getJSONObject("location");
                         JSONObject serviceDurationObj = jsonArray.getJSONObject(i).getJSONObject("duration");
 
+                        JSONArray skillList = serviceObj.getJSONArray("skill_list");
+
                         // ASSIGN DATA TO REALM DATABASE SERVICE
 
                         RealmService realmService = new  RealmService();
@@ -180,7 +182,11 @@ public class MainActivity extends AppCompatActivity
                         realmService.setService_duration_days(serviceDurationObj.getString("days"));
                         realmService.setService_duration_hours(serviceDurationObj.getString("hours"));
 
-                        //realmService.setUser_thumb(joIMG.getString("thumb"));
+                        for (int s = 0; s < skillList.length() ; s++) {
+
+
+
+                        }
 
                         //SAVE
                         realm = Realm.getDefaultInstance();
@@ -189,7 +195,6 @@ public class MainActivity extends AppCompatActivity
 
 
                         /**************************** END ******************************/
-
 
 
                     }
