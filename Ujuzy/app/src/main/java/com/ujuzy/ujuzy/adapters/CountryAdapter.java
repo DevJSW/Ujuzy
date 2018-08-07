@@ -1,11 +1,5 @@
 package com.ujuzy.ujuzy.adapters;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,9 +9,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ujuzy.ujuzy.R;
-import com.ujuzy.ujuzy.activities.ProfileActivity;
-import com.ujuzy.ujuzy.activities.ServiceActivity;
-import com.ujuzy.ujuzy.map.MapsActivity;
 import com.ujuzy.ujuzy.model.Result;
 
 import java.util.ArrayList;
@@ -37,7 +28,7 @@ public class CountryAdapter extends RecyclerView.Adapter<CountryAdapter.Countrys
     @Override
     public CountrysViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View view = layoutInflater.inflate(R.layout.service_row, parent, false);
+        View view = layoutInflater.inflate(R.layout.skill_row, parent, false);
 
         return new CountrysViewHolder(view);
     }

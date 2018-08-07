@@ -23,6 +23,7 @@ import com.ujuzy.ujuzy.Realm.RealmHelper;
 import com.ujuzy.ujuzy.Realm.RealmPhotoAdapter;
 import com.ujuzy.ujuzy.Realm.RealmService;
 import com.ujuzy.ujuzy.Realm.RealmSkillList;
+import com.ujuzy.ujuzy.adapters.SkillsAdapter;
 import com.ujuzy.ujuzy.model.Datum;
 import com.ujuzy.ujuzy.model.SkillList;
 
@@ -42,10 +43,9 @@ import io.realm.RealmChangeListener;
 public class SkillsFragment extends Fragment
 {
 
-    private RealmPhotoAdapter realmPhotoAdapter;
-    private RecyclerView photoListRv;
+    private SkillsAdapter skillsAdapter;
+    private RecyclerView skillListRv;
     private static String BASE_URL = "https://api.ujuzy.com/";
-    ArrayList<Datum> results;
     String reviews;
     String service_id = "";
     String service_url = "";
@@ -68,7 +68,7 @@ public class SkillsFragment extends Fragment
         // Inflate the layout for this fragment
         final View v = inflater.inflate(R.layout.fragment_skills, container, false);
 
-        photoListRv = (RecyclerView) v.findViewById(R.id.photo_list);
+        skillListRv = (RecyclerView) v.findViewById(R.id.skills_list);
         progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
         noService = (TextView) v.findViewById(R.id.noService);
 
@@ -84,7 +84,6 @@ public class SkillsFragment extends Fragment
 
         getJsonResponse();
 
-        initRealm();
         return v;
     }
 
@@ -128,6 +127,9 @@ public class SkillsFragment extends Fragment
 
                         }
 
+                        skillsAdapter = new SkillsAdapter(skillItems, getActivity());
+                        skillListRv.setAdapter(skillsAdapter);
+
                     }
 
                 } catch (JSONException e) {
@@ -145,49 +147,6 @@ public class SkillsFragment extends Fragment
         requestQueue = Volley.newRequestQueue(getActivity());
         requestQueue.add(stringRequest);
     }
-
-
-    private void initRealm()
-    {
-        realm = Realm.getDefaultInstance();
-        final RealmHelper helper = new RealmHelper(realm);
-
-        //QUERY/FILTER REALM DATABASE
-        helper.filterRealmDatabase("image",service_url);
-
-        //CHECK IF DATABASE IS EMPTY
-        if (helper.refreshDatabase().size() < 1 || helper.refreshDatabase().size() == 0)
-        {
-            noService.setVisibility(View.VISIBLE);
-            noService.setText("This service has no photo's posted yet!");
-        } else {
-
-            noService.setVisibility(View.GONE);
-
-        }
-
-        realmPhotoAdapter = new RealmPhotoAdapter(getActivity(), helper.refreshDatabase());
-
-        //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
-        final LinearLayoutManager serviceLayoutManager = new GridLayoutManager(getActivity(), 3);
-        photoListRv.setLayoutManager(serviceLayoutManager);
-        photoListRv.setAdapter(realmPhotoAdapter);
-
-        //HANDLE DATA CHANGE FOR REFRESH
-        realmChangeListener = new RealmChangeListener()
-        {
-            @Override
-            public void onChange(Object o) {
-                //REFRESH
-                realmPhotoAdapter = new RealmPhotoAdapter(getActivity(), helper.refreshDatabase());
-                photoListRv.setAdapter(realmPhotoAdapter);
-            }
-        };
-
-        //ADD CHANGE LIST TO REALM
-        realm.addChangeListener(realmChangeListener);
-    }
-
 
     private void initProgessBar()
     {

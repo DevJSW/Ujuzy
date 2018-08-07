@@ -19,7 +19,7 @@
         android:textSize="17dp"
         android:gravity="center_horizontal"
         android:layout_margin="40dp"
-        android:text="This service has no Photo's posted yet"
+        android:text="No skills posted yet"
         android:id="@+id/noService"/>
 
     <android.support.v7.widget.RecyclerView
@@ -27,7 +27,7 @@
         android:layout_height="match_parent"
         android:scrollbars="vertical"
         android:background="#f1efef"
-        android:id="@+id/photo_list">
+        android:id="@+id/skills_list">
 
     </android.support.v7.widget.RecyclerView>
 
