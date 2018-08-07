@@ -41,6 +41,7 @@ import com.ujuzy.ujuzy.Realm.RealmService;
 import com.ujuzy.ujuzy.Tabs.AboutService;
 import com.ujuzy.ujuzy.Tabs.PhotoFragment;
 import com.ujuzy.ujuzy.Tabs.ReviewsFragment;
+import com.ujuzy.ujuzy.Tabs.SkillsFragment;
 import com.ujuzy.ujuzy.map.MapsActivity;
 
 import io.realm.Realm;
@@ -150,7 +151,7 @@ public class NewServiceActivity extends AppCompatActivity
         //serviceCreatedAtTv = (TextView) findViewById(R.id.tv_created_by);
 
         serviceNameTv.setText("Category: " +serviceCategory);
-        serviceLocationTv.setText(serviceLocation);
+        serviceLocationTv.setText( serviceLocation);
 
         serviceImage = (ImageView) findViewById(R.id.service_avatar);
 
@@ -404,12 +405,19 @@ public class NewServiceActivity extends AppCompatActivity
                     return tab2;
 
                 case 2:
-                    PhotoFragment tab3 = new PhotoFragment ();
+                    SkillsFragment tab3 = new SkillsFragment ();
                     Bundle bundle3 = new Bundle();
                     bundle3.putString("serviceId", serviceId);
-                    bundle3.putString("serviceUrl", serviceUrl);
                     tab3.setArguments(bundle3);
                     return tab3;
+
+                case 3:
+                    PhotoFragment tab4 = new PhotoFragment ();
+                    Bundle bundle4 = new Bundle();
+                    bundle4.putString("serviceId", serviceId);
+                    bundle4.putString("serviceUrl", serviceUrl);
+                    tab4.setArguments(bundle4);
+                    return tab4;
 
             }
             return null;
@@ -418,7 +426,7 @@ public class NewServiceActivity extends AppCompatActivity
         @Override
         public int getCount() {
             // Show 3 total pages.
-            return 3;
+            return 4;
         }
 
         @Override
@@ -427,9 +435,9 @@ public class NewServiceActivity extends AppCompatActivity
                 case 0:
                     return "Overview";
                 case 1:
-                    return "Reviews";
+                    return "Skills";
                 case 2:
-                    return "Photos";
+                    return "Reviews";
                 case 4:
                     return "Photos";
 

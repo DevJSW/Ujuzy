@@ -5,24 +5,22 @@ import com.google.gson.annotations.SerializedName;
 
 public class SkillList
 {
-    @SerializedName("id")
-    @Expose
+
     private String id;
-    @SerializedName("service_name")
-    @Expose
     private String serviceName;
-    @SerializedName("cost")
-    @Expose
-    private Object cost;
-    @SerializedName("offer_cost")
-    @Expose
-    private Object offerCost;
-    @SerializedName("billing")
-    @Expose
+    private String cost;
+    private String offerCost;
     private String billing;
-    @SerializedName("no_of_personnel")
-    @Expose
     private Integer noOfPersonnel;
+
+    public SkillList(String id, String serviceName, String cost, String offerCost, String billing, Integer noOfPersonnel) {
+        this.id = id;
+        this.serviceName = serviceName;
+        this.cost = cost;
+        this.offerCost = offerCost;
+        this.billing = billing;
+        this.noOfPersonnel = noOfPersonnel;
+    }
 
     public String getId() {
         return id;
@@ -40,19 +38,19 @@ public class SkillList
         this.serviceName = serviceName;
     }
 
-    public Object getCost() {
+    public String getCost() {
         return cost;
     }
 
-    public void setCost(Object cost) {
+    public void setCost(String cost) {
         this.cost = cost;
     }
 
-    public Object getOfferCost() {
+    public String getOfferCost() {
         return offerCost;
     }
 
-    public void setOfferCost(Object offerCost) {
+    public void setOfferCost(String offerCost) {
         this.offerCost = offerCost;
     }
 
