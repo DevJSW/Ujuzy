@@ -25,7 +25,11 @@ import com.ujuzy.ujuzy.Realm.RealmService;
 import com.ujuzy.ujuzy.Realm.RealmSkillList;
 import com.ujuzy.ujuzy.adapters.SkillsAdapter;
 import com.ujuzy.ujuzy.model.Datum;
+import com.ujuzy.ujuzy.model.RetrofitInstance;
+import com.ujuzy.ujuzy.model.Service;
 import com.ujuzy.ujuzy.model.SkillList;
+import com.ujuzy.ujuzy.services.Api;
+import com.ujuzy.ujuzy.services.ServiceInterface;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,6 +40,9 @@ import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -98,6 +105,8 @@ public class SkillsFragment extends Fragment
                     JSONObject jsonObject = new JSONObject(response);
 
                     JSONArray jsonArray = jsonObject.getJSONArray("data");
+                    JSONArray skillList = jsonObject.getJSONArray("skill_list");
+
 
                     for (int i = 0 ; i < jsonArray.length() ; i++)
                     {
@@ -107,8 +116,8 @@ public class SkillsFragment extends Fragment
                         JSONObject serviceUserObj = jsonArray.getJSONObject(i).getJSONObject("user");
                         JSONObject serviceLocationObj = jsonArray.getJSONObject(i).getJSONObject("location");
                         JSONObject serviceDurationObj = jsonArray.getJSONObject(i).getJSONObject("duration");
+                        JSONObject serviceSkilllistnObj = jsonArray.getJSONObject(i).getJSONObject("skill_list");
 
-                        JSONArray skillList = serviceObj.getJSONArray("skill_list");
 
                         for (int s = 0; s < skillList.length() ; s++) {
 
@@ -158,8 +167,6 @@ public class SkillsFragment extends Fragment
     @Override
     public void onDestroy() {
         super.onDestroy();
-        realm.removeChangeListener(realmChangeListener);
-        realm.close();
     }
 
 }

@@ -184,8 +184,6 @@ public class MainActivity extends AppCompatActivity
 
                         for (int s = 0; s < skillList.length() ; s++) {
 
-
-
                         }
 
                         //SAVE
