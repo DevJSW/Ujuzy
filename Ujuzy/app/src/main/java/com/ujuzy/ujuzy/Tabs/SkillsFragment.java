@@ -111,7 +111,9 @@ public class SkillsFragment extends Fragment
                     for (int i = 0 ; i < jsonArray.length() ; i++)
                     {
 
-                        JSONObject serviceObj = jsonArray.getJSONObject(i);
+                        JSONArray serviceArray = jsonArray.getJSONObject(i).getJSONArray("skill_list");
+
+                        JSONObject serviceObj = jsonArray.getJSONObject(i).getJSONObject("skill_list");
                         JSONObject serviceImgObj = jsonArray.getJSONObject(i).getJSONObject("images");
                         JSONObject serviceUserObj = jsonArray.getJSONObject(i).getJSONObject("user");
                         JSONObject serviceLocationObj = jsonArray.getJSONObject(i).getJSONObject("location");
@@ -119,7 +121,7 @@ public class SkillsFragment extends Fragment
                         JSONObject serviceSkilllistnObj = jsonArray.getJSONObject(i).getJSONObject("skill_list");
 
 
-                        for (int s = 0; s < skillList.length() ; s++) {
+                        for (int s = 0; s < serviceArray.length() ; s++) {
 
                             JSONObject skillObj = skillList.getJSONObject(i);
 
@@ -161,7 +163,7 @@ public class SkillsFragment extends Fragment
     {
 
         noService.setVisibility(View.VISIBLE);
-        noService.setText("No reviews posted yet!");
+        noService.setText("No Skills posted yet!");
     }
 
     @Override

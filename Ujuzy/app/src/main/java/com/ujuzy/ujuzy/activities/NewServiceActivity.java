@@ -397,19 +397,21 @@ public class NewServiceActivity extends AppCompatActivity
                     bundle.putString("user_role", user_role);
                     tab1.setArguments(bundle);
                     return tab1;
+
                 case 1:
+                    SkillsFragment tab3 = new SkillsFragment ();
+                    Bundle bundle3 = new Bundle();
+                    bundle3.putString("serviceId", serviceId);
+                    tab3.setArguments(bundle3);
+                    return tab3;
+
+                case 2:
                     ReviewsFragment tab2 = new ReviewsFragment ();
                     Bundle bundle2 = new Bundle();
                     bundle2.putString("serviceId", serviceId);
                     tab2.setArguments(bundle2);
                     return tab2;
 
-                case 2:
-                    SkillsFragment tab3 = new SkillsFragment ();
-                    Bundle bundle3 = new Bundle();
-                    bundle3.putString("serviceId", serviceId);
-                    tab3.setArguments(bundle3);
-                    return tab3;
 
                 case 3:
                     PhotoFragment tab4 = new PhotoFragment ();

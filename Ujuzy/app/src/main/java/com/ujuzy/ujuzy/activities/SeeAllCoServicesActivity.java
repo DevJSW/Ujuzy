@@ -2,7 +2,9 @@ package com.ujuzy.ujuzy.activities;
 
 import android.content.Intent;
 import android.os.Build;
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -40,7 +42,7 @@ public class SeeAllCoServicesActivity extends AppCompatActivity {
     private SeeAllAdapter serviceAdapter;
     private RealmAllServiceAdapter serviceRealmAdapter;
     private RecyclerView servicesListRv;
-    //   ArrayList<Service> results;
+    SwipeRefreshLayout mSwipeRefreshLayout;
     private ProgressBar progressBar1, progressBar2;
     private TextView noService, title;
 
@@ -63,8 +65,27 @@ public class SeeAllCoServicesActivity extends AppCompatActivity {
         initProgessBar();
         initHorizScrollMenu();
         initRealm();
+        initRefreshPage();
     }
 
+    private void initRefreshPage() {
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        initRealm();
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                }, 3000);
+
+            }
+        });
+    }
     private void initTitle()
     {
         title = (TextView) findViewById(R.id.toolbarTv);

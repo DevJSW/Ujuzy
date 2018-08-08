@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.ujuzy.ujuzy.CustomData.AllerFont
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textStyle="italic"
+    android:gravity="right"
+    android:fontFamily="sans-serif-medium"
+    android:text="topic"
+    android:textColor="@color/font_black_light"
+    android:maxLines="1"
+    android:ellipsize="end"
+    android:textSize="17dp"
+    android:paddingBottom="8dp"
+    android:paddingTop="8dp"
+    android:paddingRight="8dp"
+    android:paddingLeft="4dp"
+    />

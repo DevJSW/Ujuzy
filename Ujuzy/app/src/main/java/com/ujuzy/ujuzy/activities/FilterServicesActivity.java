@@ -1,16 +1,24 @@
 package com.ujuzy.ujuzy.activities;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
+import android.os.Handler;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.ujuzy.ujuzy.R;
@@ -24,6 +32,8 @@ import com.ujuzy.ujuzy.model.Service;
 import com.ujuzy.ujuzy.services.Api;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -37,6 +47,7 @@ public class FilterServicesActivity extends AppCompatActivity
 
     String category_type = "";
     String category_title = "";
+    String selectedFilter = null;
 
     private SeeAllAdapter serviceAdapter;
     private RecyclerView servicesListRv;
@@ -53,6 +64,11 @@ public class FilterServicesActivity extends AppCompatActivity
     private RealmAllServiceAdapter serviceRealmAdapter;
     RealmResults<RealmService> services;
 
+    SwipeRefreshLayout mSwipeRefreshLayout;
+    Spinner spinner_filter;
+    List<String> serviceFilter;
+    private TextView filterCount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,6 +81,77 @@ public class FilterServicesActivity extends AppCompatActivity
         initTitle();
 
         initRealm();
+        initRefreshPage();
+        initFilter();
+    }
+
+    private void initFilter()
+    {
+        spinner_filter = (Spinner) findViewById(R.id.spinner_filter);
+
+        String[] service_details_string = new String[]{
+                "Filter",
+                "Price: high-low",
+                "Price: low-high",
+                "Avg. Reviews",
+                "Newest"
+        };
+
+        serviceFilter = new ArrayList<>(Arrays.asList(service_details_string));
+
+        // Initializing an ArrayAdapter
+        final ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
+                getApplicationContext(), R.layout.spinner_filter_item, serviceFilter) {
+            @Override
+            public boolean isEnabled(int position) {
+                if (position == 0) {
+                    // Disable the first item from Spinner
+                    // First item will be use for hint
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+
+            @Override
+            public View getDropDownView(int position, View convertView,
+                                        ViewGroup parent) {
+                View view = super.getDropDownView(position, convertView, parent);
+                TextView tv = (TextView) view;
+                if (position == 0) {
+                    // Set the hint text color gray
+                    tv.setTextColor(Color.GRAY);
+                } else {
+                    tv.setTextColor(Color.BLACK);
+                }
+                return view;
+            }
+        };
+
+
+        spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_item);
+        spinner_filter.setAdapter(spinnerArrayAdapter);
+
+        /*spinner_filter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                selectedFilter = (String) parent.getItemAtPosition(position);
+                // If user change the default selection
+                // First item is disable and it is used for hint
+                if (position > 0) {
+                    // Notify the selected item text
+
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+
+        });*/
+
     }
 
     private void initRealm()
@@ -74,6 +161,9 @@ public class FilterServicesActivity extends AppCompatActivity
 
         //QUERY/FILTER REALM DATABASE
         helper.filterRealmDatabase("category", category_title);
+
+        filterCount = (TextView) findViewById(R.id.resultsCount);
+        filterCount.setText("( " + helper.refreshDatabase().size() + " ) Results");
 
         //CHECK IF DATABASE IS EMPTY
         if (helper.refreshDatabase().size() < 1 || helper.refreshDatabase().size() == 0)
@@ -111,6 +201,25 @@ public class FilterServicesActivity extends AppCompatActivity
         realm.addChangeListener(realmChangeListener);
     }
 
+    private void initRefreshPage() {
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refresh);
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        initRealm();
+                        mSwipeRefreshLayout.setRefreshing(false);
+                    }
+                }, 3000);
+
+            }
+        });
+    }
+
     private void initTitle()
     {
         TextView title = (TextView) findViewById(R.id.toolbarTv);
@@ -132,53 +241,6 @@ public class FilterServicesActivity extends AppCompatActivity
         noService.setText("Sorry, no " + category_title + " services posted yet!");
     }
 
-
-   /* public Object getServices()
-    {
-
-        Api api = RetrofitInstance.getService();
-        Call<Service> call = api.getServices();
-
-        call.enqueue(new Callback<Service>()
-        {
-            @Override
-            public void onResponse(Call<Service> call, Response<Service> response)
-            {
-                progressBar1.setVisibility(View.VISIBLE);
-                Service service = response.body();
-
-                if (service != null && service.getData() != null)
-                {
-                    results = (ArrayList<Datum>) service.getData();
-                    *//**
-                     * displaying results on a recyclerview
-                     *//*
-                    if (results.size() < 1 || results.size() == 0)
-                    {
-                        progressBar1.setVisibility(View.GONE);
-
-                        noService.setVisibility(View.VISIBLE);
-                        noService.setText("Sorry, no " + category_title + " services posted yet!");
-
-                    } else
-                    {
-                        progressBar1.setVisibility(View.GONE);
-                        viewData();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Service> call, Throwable t) {
-
-            }
-
-        });
-
-
-        return results;
-    }
-*/
     private void viewData()
     {
 

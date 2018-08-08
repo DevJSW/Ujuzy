@@ -79,7 +79,8 @@ public class SearchActivity extends AppCompatActivity
                 if (searchText.length() > 0) {
                     search();
                 } else {
-
+                    noService = (TextView) findViewById(R.id.noService);
+                    noService.setVisibility(View.GONE);
                 }
             }
 

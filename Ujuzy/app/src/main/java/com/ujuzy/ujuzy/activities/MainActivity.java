@@ -132,7 +132,6 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-
     private void volleyJsonRequest()
     {
 
@@ -258,14 +257,20 @@ public class MainActivity extends AppCompatActivity
     protected void onResume() {
         super.onResume();
 
-        if (realm.isEmpty())
+        /*if (realm.isEmpty())
         {
             noService = (TextView) findViewById(R.id.noService);
             noServiceCo = (TextView) findViewById(R.id.noService2);
 
             noService.setVisibility(View.GONE);
             noServiceCo.setVisibility(View.GONE);
-        }
+        } else {
+            noService = (TextView) findViewById(R.id.noService);
+            noServiceCo = (TextView) findViewById(R.id.noService2);
+
+            noService.setVisibility(View.VISIBLE);
+            noServiceCo.setVisibility(View.VISIBLE);
+        }*/
     }
 
     private void getProfServices()

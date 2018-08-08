@@ -294,7 +294,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="245dp"
                 android:id="@+id/bottomRely"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="20dp"
                 android:layout_marginTop="10dp"
                 android:background="#eaeaea"
                 android:orientation="vertical">
@@ -315,7 +315,7 @@
                     android:textSize="15dp"
                     android:layout_margin="50dp"
                     android:visibility="gone"
-                    android:text="Sorry.. 😞 professional services not available at this time, try again later"/>
+                    android:text="Sorry... 😞 professional services not available at this time, try again later"/>
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -327,7 +327,7 @@
                         android:textColor="@color/font_black_light"
                         android:layout_marginLeft="15dp"
                         android:layout_marginTop="12dp"
-                        android:textSize="14dp"
+                        android:textSize="17dp"
                         android:layout_marginBottom="8dp"
                         android:text="Profession services"/>
 
@@ -360,7 +360,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="245dp"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="20dp"
                 android:layout_marginTop="5dp"
                 android:background="#eaeaea"
                 android:orientation="vertical">
@@ -376,7 +376,7 @@
                         android:textColor="@color/font_black_light"
                         android:layout_marginLeft="15dp"
                         android:layout_marginTop="12dp"
-                        android:textSize="14dp"
+                        android:textSize="17dp"
                         android:layout_marginBottom="8dp"
                         android:text="Company services"/>
 
@@ -410,7 +410,7 @@
                     android:textSize="15dp"
                     android:layout_margin="50dp"
                     android:visibility="gone"
-                    android:text="Sorry.. 😞 company services not available at this time, try again later"/>
+                    android:text="Sorry... 😞 company services not available at this time, try again later"/>
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/company_service_list"
@@ -424,11 +424,11 @@
 
             </RelativeLayout>
 
-            <!--<RelativeLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="235dp"
-                android:layout_marginBottom="15dp"
-                android:layout_marginTop="0dp"
+                android:layout_height="245dp"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="5dp"
                 android:background="#eaeaea"
                 android:orientation="vertical">
 
@@ -443,9 +443,9 @@
                         android:textColor="@color/font_black_light"
                         android:layout_marginLeft="15dp"
                         android:layout_marginTop="12dp"
-                        android:textSize="14dp"
+                        android:textSize="17dp"
                         android:layout_marginBottom="8dp"
-                        android:text="Services nearby"/>
+                        android:text="Services in your Area"/>
 
                     <com.ujuzy.ujuzy.CustomData.AllerFont
                         android:layout_width="wrap_content"
@@ -455,6 +455,7 @@
                         android:layout_marginRight="15dp"
                         android:layout_marginTop="12dp"
                         android:textSize="14dp"
+                        android:visibility="gone"
                         android:id="@+id/seeServicesNearby"
                         android:layout_marginBottom="8dp"
                         android:text="See all >>"/>
@@ -470,7 +471,7 @@
                     android:id="@+id/noService3"
                     android:textSize="15dp"
                     android:layout_margin="50dp"
-                    android:text="Currently no services nearby"/>
+                    android:text="Services closest to you will be collected here"/>
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/nearby_service_list"
@@ -482,7 +483,7 @@
 
                 </android.support.v7.widget.RecyclerView>
 
-            </RelativeLayout>-->
+            </RelativeLayout>
 
         </LinearLayout>
 

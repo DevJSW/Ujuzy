@@ -253,13 +253,52 @@
             </LinearLayout>
         </HorizontalScrollView>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:id="@+id/view12"
+            android:background="#e2e1e1" />
+
+        <RelativeLayout
+            android:id="@+id/rl"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            >
+
+            <com.ujuzy.ujuzy.CustomData.AllerFont
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:textSize="17dp"
+                android:id="@+id/resultsCount"
+                android:textColor="@color/font_black_light"
+                android:text="( 0 ) Results"
+                android:layout_centerVertical="true"/>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_toLeftOf="@+id/spinner_filter"
+                android:background="#d4d2d2"/>
+
+            <Spinner
+                android:id="@+id/spinner_filter"
+                android:layout_width="wrap_content"
+                android:gravity="right"
+                android:layout_alignParentRight="true"
+                android:layout_height="match_parent"
+                />
+
+        </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/bottomRely"
         android:layout_marginBottom="15dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="0dp"
         android:orientation="vertical">
 
         <View
@@ -286,14 +325,20 @@
             android:textSize="17dp"
             android:layout_margin="40dp"/>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/service_list"
+        <android.support.v4.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/view1"
-            android:layout_height="match_parent">
+            android:id="@+id/refresh">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/service_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
 
-        </android.support.v7.widget.RecyclerView>
+            </android.support.v7.widget.RecyclerView>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
 
     </RelativeLayout>
     </LinearLayout>

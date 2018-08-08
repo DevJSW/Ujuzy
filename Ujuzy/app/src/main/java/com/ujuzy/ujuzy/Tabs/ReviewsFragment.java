@@ -57,34 +57,6 @@ public class ReviewsFragment extends Fragment
 
         initProgessBar();
 
-        /*Retrofit retrofit = new Retrofit
-                .Builder()
-                .baseUrl(BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        Api api = retrofit.create(Api.class);
-
-        api.getReviewsByServiceId(service_id).enqueue(new Callback<ResponseBody>()
-        {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response)
-            {
-
-
-                //results = (ArrayList<Datum>) response.body().toString();
-
-                viewData();
-
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-            }
-        });
-*/
-        //getReviews();
         return v;
     }
 
@@ -94,50 +66,6 @@ public class ReviewsFragment extends Fragment
         noService.setVisibility(View.VISIBLE);
         noService.setText("No reviews posted yet!");
     }
-
-   /* public Object getReviews() {
-
-        Api api = RetrofitInstance.getService();
-        Call<Service> callReviews = api.getReviewsByServiceId(service_id);
-
-        callReviews.enqueue(new Callback<Service>()
-        {
-            @Override
-            public void onResponse(Call<Service> callReviews, Response<Service> response)
-            {
-                progressBar.setVisibility(View.VISIBLE);
-                Service service = response.body();
-
-                if (service != null && service.getData() != null)
-                {
-                    results = (ArrayList<Datum>) service.getData();
-
-                    Log.d("RetrofitReviews", service.getData().toString());
-
-                    // displaying results on a recyclerview
-
-                    if (results.size() < 1 || results.size() == 0)
-                    {
-                        progressBar.setVisibility(View.GONE);
-
-                        noService.setVisibility(View.VISIBLE);
-
-                    } else
-                    {
-                        progressBar.setVisibility(View.GONE);
-                        viewData();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<Service> call, Throwable t) {
-
-            }
-
-        });
-        return results;
-    }*/
 
     private void viewData()
     {
