@@ -72,7 +72,14 @@ public class WebViewActivity extends AppCompatActivity {
 
     private void intWebView()
     {
+
         myWebView = (WebView) findViewById(R.id.webview);
+        WebSettings webSettings = myWebView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        myWebView.loadUrl(webview_url);
+        myWebView.setWebViewClient(new WebViewClient());
+
+        /*myWebView = (WebView) findViewById(R.id.webview);
         WebSettings webSettings = myWebView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         final AlertDialog alertDialog = new AlertDialog.Builder(this).create();
@@ -102,7 +109,7 @@ public class WebViewActivity extends AppCompatActivity {
 
             }
         });
-        myWebView.loadUrl(webview_url);
+        myWebView.loadUrl(webview_url);*/
     }
 
     /*@Override

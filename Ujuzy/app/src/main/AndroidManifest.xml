@@ -81,7 +81,8 @@
         <activity android:name=".activities.SignUpActivity" />
         <activity android:name=".activities.NewServiceActivity" />
         <activity android:name=".activities.SeeAllCoServicesActivity" />
-        <activity android:name=".activities.FavouriteActivity"></activity>
+        <activity android:name=".activities.FavouriteActivity" />
+        <activity android:name=".activities.RequestServiceActivity"></activity>
     </application>
 
 </manifest>
