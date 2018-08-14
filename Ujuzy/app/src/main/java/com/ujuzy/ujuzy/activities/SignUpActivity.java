@@ -118,7 +118,7 @@ public class SignUpActivity extends AppCompatActivity {
             {
                 Intent webView = new Intent(SignUpActivity.this, WebViewActivity.class);
                 webView.putExtra("webview_url", webview_url);
-                webView.putExtra("page_titile", "Forgot Password");
+                webView.putExtra("page_title", "Forgot Password");
                 startActivity(webView);
             }
         });
@@ -227,7 +227,7 @@ public class SignUpActivity extends AppCompatActivity {
             //Toast.makeText(getApplicationContext(), "Username should be one word e.g JohnDoe instead of John Doe!", Toast.LENGTH_SHORT).show();
         }
 
-        else if (first_name.length() < 3 || first_name.length() >15 ){
+        else if (first_name.length() < 3 || first_name.length() > 15 ){
             System.out.println("Username too short or too long");
             inputFirstName.setError("Name too short or too long");
         }
