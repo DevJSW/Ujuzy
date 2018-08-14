@@ -79,8 +79,8 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.Services
         realmService.setCreatedBy(servicesList.get(position).getCreatedBy().getFirstname());
        /* realmService.setLongitude((Double) servicesList.get(position).getLocation().getLng().toString());
         realmService.setLatitude((Double) servicesList.get(position).getLocation().getLat());*/
-        realmService.setService_duration_days(servicesList.get(position).getDuration().getDays().toString());
-        realmService.setService_duration_hours(servicesList.get(position).getDuration().getHours().toString());
+       /* realmService.setService_duration_days(servicesList.get(position).getDuration().getDays().toString());
+        realmService.setService_duration_hours(servicesList.get(position).getDuration().getHours().toString());*/
         realmService.setNo_of_personnel(servicesList.get(position).getNoOfPersonnel());
         realmService.setUser_id(servicesList.get(position).getUser().getId());
         realmService.setUser_thumb(servicesList.get(position).getUser().getProfilePic());
@@ -94,8 +94,8 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.Services
         /***************************** END *******************************/
 
 
-        final String photo = servicesList.get(position).getImages().get(0).toString();
-        //final String user_photo = servicesList.get(position).getUser().get;
+        final String photo = servicesList.get(position).getImages().get(0).getThumb();
+        //final String user_photo = servicesList.get(position).getUser().;
 
         holder.serviceName.setText(servicesList.get(position).getServiceName());
         holder.serviceDetails.setText(servicesList.get(position).getServiceDetails());
@@ -152,7 +152,9 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.Services
                 //openRead.putExtra("service_location", servicesList.get(position).getCity().toString());
                 openRead.putExtra("service_createdby", servicesList.get(position).getCreatedBy().getFirstname());
                 openRead.putExtra("service_cost", servicesList.get(position).getCost().toString());
+                if (servicesList.get(position).getDuration().getDays() != null)
                 openRead.putExtra("service_duration_days", servicesList.get(position).getDuration().getDays().toString());
+                if (servicesList.get(position).getDuration().getHours() != null)
                 openRead.putExtra("service_duration_hours", servicesList.get(position).getDuration().getHours().toString());
                 openRead.putExtra("service_created_at", servicesList.get(position).getCreatedAt());
                 openRead.putExtra("service_category", servicesList.get(position).getCategory());

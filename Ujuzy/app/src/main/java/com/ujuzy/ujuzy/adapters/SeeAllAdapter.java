@@ -53,7 +53,7 @@ public class SeeAllAdapter extends RecyclerView.Adapter<SeeAllAdapter.ServicesVi
     public void onBindViewHolder(final ServicesViewHolder holder, final int position)
     {
 
-        final String photo = servicesList.get(position).getImages().get(0).toString();
+        final String photo = servicesList.get(position).getImages().get(0).getThumb();
 
         holder.serviceName.setText(servicesList.get(position).getServiceName());
         holder.serviceDetails.setText(servicesList.get(position).getServiceDetails());
@@ -90,8 +90,10 @@ public class SeeAllAdapter extends RecyclerView.Adapter<SeeAllAdapter.ServicesVi
                 //openRead.putExtra("service_location", servicesList.get(position).getCity().toString());
                 openRead.putExtra("service_createdby", servicesList.get(position).getCreatedBy().getFirstname());
                 openRead.putExtra("service_cost", servicesList.get(position).getCost().toString());
-                openRead.putExtra("service_duration_days", servicesList.get(position).getDuration().getDays().toString());
-                openRead.putExtra("service_duration_hours", servicesList.get(position).getDuration().getHours().toString());
+                if (servicesList.get(position).getDuration().getDays() != null)
+                    openRead.putExtra("service_duration_days", servicesList.get(position).getDuration().getDays().toString());
+                if (servicesList.get(position).getDuration().getHours() != null)
+                    openRead.putExtra("service_duration_hours", servicesList.get(position).getDuration().getHours().toString());
                 openRead.putExtra("service_created_at", servicesList.get(position).getCreatedAt());
                 openRead.putExtra("service_category", servicesList.get(position).getCategory());
                 openRead.putExtra("service_additional_info", servicesList.get(position).getCategory());

@@ -7,27 +7,27 @@ public class Location {
 
     @SerializedName("lat")
     @Expose
-    private Integer lat;
+    private double lat;
     @SerializedName("lng")
     @Expose
-    private Integer lng;
+    private double lng;
     @SerializedName("city")
     @Expose
     private String city;
 
-    public Integer getLat() {
+    public double getLat() {
         return lat;
     }
 
-    public void setLat(Integer lat) {
+    public void setLat(double lat) {
         this.lat = lat;
     }
 
-    public Integer getLng() {
+    public double getLng() {
         return lng;
     }
 
-    public void setLng(Integer lng) {
+    public void setLng(double lng) {
         this.lng = lng;
     }
 

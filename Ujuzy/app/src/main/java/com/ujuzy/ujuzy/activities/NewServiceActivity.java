@@ -58,6 +58,7 @@ public class NewServiceActivity extends AppCompatActivity
     String serviceLocation = "";
     String serviceCreatedBy = "";
     String serviceCreatedAt = "";
+    String no_of_personnel = "";
 
     String serviceCost = "";
     String serviceDays = "";
@@ -129,6 +130,7 @@ public class NewServiceActivity extends AppCompatActivity
         serviceCreatedAt = getIntent().getStringExtra("service_created_at");
 
         serviceCost = getIntent().getStringExtra("service_cost");
+        no_of_personnel = getIntent().getStringExtra("no_of_personnel");
         serviceDays = getIntent().getStringExtra("service_duration_days");
         serviceHours = getIntent().getStringExtra("service_duration_hours");
         serviceTravel = getIntent().getStringExtra("service_travel");
@@ -277,6 +279,16 @@ public class NewServiceActivity extends AppCompatActivity
                 {
                     @Override
                     public void onClick(View view) {
+
+                        Intent requestActivity = new Intent(NewServiceActivity.this, RequestServiceActivity.class);
+                        requestActivity.putExtra("service_id", serviceId);
+                        requestActivity.putExtra("first_name", first_name);
+                        requestActivity.putExtra("last_name", last_name);
+                        requestActivity.putExtra("service_cost", serviceCost);
+                        requestActivity.putExtra("service_name", serviceName);
+                        requestActivity.putExtra("no_of_personnel", no_of_personnel);
+                        requestActivity.putExtra("profile_pic", profile_pic);
+                        startActivity(requestActivity);
                         dialog.dismiss();
                     }
                 });

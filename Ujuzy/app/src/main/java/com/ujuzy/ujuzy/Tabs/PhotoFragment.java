@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -26,7 +27,10 @@ import com.ujuzy.ujuzy.Realm.RealmService;
 import com.ujuzy.ujuzy.Realm.RealmSkillList;
 import com.ujuzy.ujuzy.activities.MainActivity;
 import com.ujuzy.ujuzy.adapters.ReviewsAdapter;
+import com.ujuzy.ujuzy.model.Constants;
 import com.ujuzy.ujuzy.model.Datum;
+import com.ujuzy.ujuzy.model.Service;
+import com.ujuzy.ujuzy.services.Api;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,6 +40,11 @@ import java.util.ArrayList;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -52,6 +61,8 @@ public class PhotoFragment extends Fragment
     String service_url = "";
     private ProgressBar progressBar;
     private TextView noService;
+
+    private Retrofit retrofit;
 
     private Realm realm;
     private RealmChangeListener realmChangeListener;
@@ -80,6 +91,8 @@ public class PhotoFragment extends Fragment
         initProgessBar();
 
        // getJsonResponse();
+
+        getPhoto();
 
         initRealm();
         return v;
@@ -225,6 +238,48 @@ public class PhotoFragment extends Fragment
         super.onDestroy();
         realm.removeChangeListener(realmChangeListener);
         realm.close();
+    }
+
+    private Retrofit getRetrofit()
+    {
+        if (this.retrofit == null)
+        {
+            this.retrofit = new Retrofit.Builder()
+                    .baseUrl(Constants.HTTP.SERVICES_ENDPOINT)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+        }
+        return this.retrofit;
+    }
+
+
+    public void getPhoto()
+    {
+        Api api = getRetrofit().create(Api.class);
+        Call<Service> ServiceData =  api.getServicesById(service_id);
+        ServiceData.enqueue(new Callback<Service>() {
+            @Override
+            public void onResponse(Call<Service> call, Response<Service> response) {
+
+                Service service = response.body();
+
+                if (service != null && service.getData() != null)
+                {
+                    results = (ArrayList<Datum>) service.getData();
+                    /**
+                     * displaying results on a recyclerview
+                     */
+                    //viewData();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Service> call, Throwable t) {
+
+              //  Toast.makeText(.this, t.getMessage(), Toast.LENGTH_LONG).show();
+
+            }
+        });
     }
 
 }

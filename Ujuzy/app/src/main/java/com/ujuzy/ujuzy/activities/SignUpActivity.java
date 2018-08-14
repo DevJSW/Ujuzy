@@ -19,11 +19,15 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.ujuzy.ujuzy.R;
 import com.ujuzy.ujuzy.model.Constants;
 import com.ujuzy.ujuzy.model.Login;
+import com.ujuzy.ujuzy.model.SignUp;
 import com.ujuzy.ujuzy.model.Token;
 import com.ujuzy.ujuzy.services.Api;
+import com.ujuzy.ujuzy.services.ServiceClient;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -44,6 +48,7 @@ public class SignUpActivity extends AppCompatActivity {
     private EditText inputEmail, inputPassword, inputFirstName, inputLastName, inputConfirmPass;
     private ImageView backBtnIv;
     private ProgressBar progressBar;
+    private Retrofit retrofit;
     private Api api;
 
     @Override
@@ -63,6 +68,45 @@ public class SignUpActivity extends AppCompatActivity {
         initSignUp();
         initBackBtn();
         initWebView();
+    }
+
+    private Retrofit getRetrofitAuth()
+    {
+
+        Gson gson = new GsonBuilder()
+                .setLenient()
+                .create();
+
+        if (this.retrofit == null)
+        {
+            this.retrofit = new Retrofit.Builder()
+                    .baseUrl(Constants.HTTP.AUTH_ENDPOINT)
+                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .build();
+        }
+        return this.retrofit;
+    }
+
+    public void SignUp(String firstName, String lastName, String email, String password, String confirm_password)
+    {
+        Api api = getRetrofitAuth().create(Api.class);
+        Call<SignUp> ServiceData =  api.signUp(firstName, lastName,email ,password, confirm_password);
+        ServiceData.enqueue(new Callback<SignUp>() {
+            @Override
+            public void onResponse(Call<SignUp> call, Response<SignUp> response) {
+                SignUp serviceResult = response.body();
+                Toast.makeText(SignUpActivity.this, (CharSequence) serviceResult, Toast.LENGTH_LONG).show();
+                progressBar.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onFailure(Call<SignUp> call, Throwable t) {
+
+                 Toast.makeText(SignUpActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                 progressBar.setVisibility(View.GONE);
+
+            }
+        });
     }
 
     private void initWebView()
@@ -148,7 +192,7 @@ public class SignUpActivity extends AppCompatActivity {
         String last_name = inputLastName.getText().toString();
         String email = inputEmail.getText().toString();
         String confirm_password = inputConfirmPass.getText().toString();
-        String password = inputEmail.getText().toString();
+        String password = inputPassword.getText().toString();
 
         String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
         Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
@@ -210,9 +254,9 @@ public class SignUpActivity extends AppCompatActivity {
 
         }
 
-        else if (password.length() < 6 || password.length() > 15 ){
+        else if (password.length() < 6 ){
             System.out.println("pass too short or too long");
-            inputPassword.setError("Password too short or too long!");
+            inputPassword.setError("Password too short!");
             //Toast.makeText(getApplicationContext(), "Password too short or too long!", Toast.LENGTH_SHORT).show();
         }
 
@@ -246,7 +290,12 @@ public class SignUpActivity extends AppCompatActivity {
 
             progressBar.setVisibility(View.VISIBLE);
 
-            Login login = new Login(email, password);
+           /* ServiceClient serviceClient = new ServiceClient();
+            serviceClient.SignUp(first_name, last_name, email, password, confirm_password);*/
+
+            SignUp(first_name, last_name, email, password, confirm_password);
+
+            /*Login login = new Login(email, password);
             Call<com.ujuzy.ujuzy.model.Token> call = api.login(login);
 
             call.enqueue(new Callback<Token>() {
@@ -267,7 +316,7 @@ public class SignUpActivity extends AppCompatActivity {
 
                 }
             });
-
+*/
         }
 
     }

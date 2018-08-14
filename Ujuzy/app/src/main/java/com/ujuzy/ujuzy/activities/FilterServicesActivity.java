@@ -172,10 +172,11 @@ public class FilterServicesActivity extends AppCompatActivity
             noService.setVisibility(View.VISIBLE);
             noService.setText("Oh sorry 😌😞 this is embarrassing but no " + category_title + " services posted yet!");
         } else {
+
             noService = (TextView) findViewById(R.id.noService);
             noService.setVisibility(View.GONE);
-        }
 
+        }
 
         countriesListRv = (RecyclerView) findViewById(R.id.service_list);
         serviceRealmAdapter = new RealmAllServiceAdapter(getApplicationContext(), helper.refreshDatabase());

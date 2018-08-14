@@ -10,7 +10,9 @@ public class Constants
     public static final class HTTP
     {
         public static final String BASE_URL = "https://api.ujuzy.com/";
-        public static final String SERVICES_ENDPOINT = "https://api.ujuzy.com/services/";
+        public static final String TOKEN_ENDPOINT = "https://sso.ujuzy.com/auth/realms/ujuzy/protocol/openid-connect/";
+        public static final String AUTH_ENDPOINT = "https://sso.ujuzy.com/auth/realms/ujuzy/clients-registrations/openid-connect/";
+        public static final String SERVICES_ENDPOINT = "https://api.ujuzy.com/";
     }
 
     public static final class DATABASE

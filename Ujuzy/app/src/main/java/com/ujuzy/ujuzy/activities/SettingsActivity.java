@@ -22,8 +22,15 @@ public class SettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
+        checkIfUserIsLoggedIn();
         initWindows();
         initEdit();
+    }
+
+    private void checkIfUserIsLoggedIn()
+    {
+        IsUserLoggedIn isUserLoggedIn = new IsUserLoggedIn(getApplicationContext());
+        isUserLoggedIn.IsUserLoggedIn();
     }
 
     private void initEdit()

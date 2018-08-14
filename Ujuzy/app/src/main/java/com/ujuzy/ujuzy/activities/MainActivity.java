@@ -30,6 +30,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -50,10 +51,12 @@ import com.ujuzy.ujuzy.adapters.ServiceAdapter;
 import com.ujuzy.ujuzy.map.MapsActivity;
 import com.ujuzy.ujuzy.model.Constants;
 import com.ujuzy.ujuzy.model.Datum;
+import com.ujuzy.ujuzy.model.Login;
 import com.ujuzy.ujuzy.model.RetrofitInstance;
 import com.ujuzy.ujuzy.model.Service;
 import com.ujuzy.ujuzy.services.Api;
 import com.ujuzy.ujuzy.services.NetworkChecker;
+import com.ujuzy.ujuzy.services.ServiceClient;
 import com.ujuzy.ujuzy.services.ServiceInterface;
 
 import org.json.JSONArray;
@@ -73,6 +76,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 public class MainActivity extends AppCompatActivity
@@ -94,6 +98,7 @@ public class MainActivity extends AppCompatActivity
     private RequestQueue requestQueue;
     private List<Datum> serviceList;
 
+    private Retrofit retrofit;
 
     private Realm realm;
     private RealmChangeListener realmChangeListener;
@@ -108,7 +113,6 @@ public class MainActivity extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
 
-
         initView();
         initWindow();
         initFab();
@@ -120,16 +124,58 @@ public class MainActivity extends AppCompatActivity
         {
             getServicesFromApi();
 
+        } else {
+            //FETCH SERVICES FROM DATABASE
+            getServicesFromDatabase();
         }
-
-        //FETCH SERVICES FROM DATABASE
-        getServicesFromDatabase();
 
         initSeeAll();
         initSearch();
         initHorizScrollMenu();
 
+    }
 
+    private Retrofit getRetrofit()
+    {
+        if (this.retrofit == null)
+        {
+            this.retrofit = new Retrofit.Builder()
+                    .baseUrl(Constants.HTTP.SERVICES_ENDPOINT)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+        }
+        return this.retrofit;
+    }
+
+    public void getServices()
+    {
+        Api api = getRetrofit().create(Api.class);
+        Call<Service> ServiceData =  api.getServices();
+        ServiceData.enqueue(new Callback<Service>() {
+            @Override
+            public void onResponse(Call<Service> call, Response<Service> response) {
+
+                Service service = response.body();
+
+                if (service != null && service.getData() != null)
+                {
+                    results = (ArrayList<Datum>) service.getData();
+                    /**
+                     * displaying results on a recyclerview
+                     */
+                    viewData();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Service> call, Throwable t) {
+
+                volleyJsonRequest();
+
+                Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+
+            }
+        });
     }
 
     private void volleyJsonRequest()
@@ -193,7 +239,6 @@ public class MainActivity extends AppCompatActivity
 
                         /**************************** END ******************************/
 
-
                     }
 
                 } catch (JSONException e) {
@@ -256,6 +301,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
+        getServicesFromDatabase();
+        getServices();
 
         /*if (realm.isEmpty())
         {
@@ -279,7 +326,8 @@ public class MainActivity extends AppCompatActivity
         final RealmHelper helper = new RealmHelper(realm);
 
         //RETRIEVE
-        helper.filterRealmDatabase("user_role", "Professional");
+        //helper.filterRealmDatabase("user_role", "Professional");
+        helper.retreiveFromDB();
 
         //CHECK IF DATABASE IS EMPTY
         if (helper.refreshDatabase().size() < 1 || helper.refreshDatabase().size() == 0)
@@ -642,13 +690,15 @@ public class MainActivity extends AppCompatActivity
                 startActivity(new Intent(MainActivity.this, SeeAllCoServicesActivity.class));
             }
         });
+
     }
 
     public void getServicesFromApi()
     {
 
         //volley json request
-        volleyJsonRequest();
+       // volleyJsonRequest();
+        getServices();
 
 //        ServiceInterface serviceInterface = RetrofitInstance.getService();
 //        Call<Service> callService = serviceInterface.getServices();
@@ -712,26 +762,21 @@ public class MainActivity extends AppCompatActivity
 //       // return results;
     }
 
-
     private void viewData()
     {
-
-        // servicesListRv = (RecyclerView) findViewById(R.id.service_list);
+        //ADD RESPONSE TO ADAPTER
         serviceAdapter = new ServiceAdapter(getApplicationContext(), results);
-
-       /* //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+        servicesListRv = (RecyclerView) findViewById(R.id.service_list);
         final LinearLayoutManager serviceLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
         servicesListRv.setLayoutManager(serviceLayoutManager);
-        servicesListRv.setAdapter(serviceAdapter);*/
+        servicesListRv.setAdapter(serviceAdapter);
 
-        //companyServicesListRv = (RecyclerView) findViewById(R.id.company_service_list);
+        companyServicesListRv = (RecyclerView) findViewById(R.id.company_service_list);
+
         serviceAdapter = new ServiceAdapter(getApplicationContext(), results);
-
-        //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
-        /*final LinearLayoutManager compServiceLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+        final LinearLayoutManager compServiceLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
         companyServicesListRv.setLayoutManager(compServiceLayoutManager);
-        companyServicesListRv.setAdapter(serviceAdapter);*/
-
+        companyServicesListRv.setAdapter(serviceAdapter);
 
     }
 
@@ -832,7 +877,7 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_camera)
         {
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
-            // Handle the camera action
+            // Handle the camera action   //
         } else if (id == R.id.nav_gallery)
         {
             startActivity(new Intent(MainActivity.this, FavouriteActivity.class));

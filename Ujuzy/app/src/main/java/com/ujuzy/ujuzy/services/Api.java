@@ -4,6 +4,7 @@ package com.ujuzy.ujuzy.services;
 
 import com.ujuzy.ujuzy.model.Login;
 import com.ujuzy.ujuzy.model.Service;
+import com.ujuzy.ujuzy.model.SignUp;
 import com.ujuzy.ujuzy.model.Token;
 import com.ujuzy.ujuzy.model.User;
 
@@ -11,6 +12,8 @@ import io.realm.RealmList;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -38,7 +41,12 @@ public interface Api
     @GET("services")
     Call<Service> getServicesById(@Query("id") String id);
 
-    @POST("login")
-    Call<Token> login(@Body Login login);
+    @FormUrlEncoded
+    @POST("token")
+    Call<Login> login(@Field("username") String username, @Field("password") String password, @Field("grant_type") String grant_type, @Field("client_id") String client_id);
+
+    @FormUrlEncoded
+    @POST("auth")
+    Call<SignUp> signUp(@Field("firstName") String firstName, @Field("lastName") String lastName, @Field("email") String email, @Field("password") String password, @Field("confirm-password") String confirm_password);
 
 }
