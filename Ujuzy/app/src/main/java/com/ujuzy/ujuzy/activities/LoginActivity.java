@@ -60,7 +60,7 @@ public class LoginActivity extends AppCompatActivity
         inputPassword = (EditText) findViewById(R.id.inputPassEt);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
 
-        checkIfUserIsLoggedIn();
+        //checkIfUserIsLoggedIn();
 
         initWindows();
         initSignUp();
