@@ -35,7 +35,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class LoginActivity extends AppCompatActivity
 {
 
-    private String username, password, grant_type, client_id;
+    private String username, password, grant_type, client_id, code;
     private String webview_url = "https://sso.ujuzy.com/auth/realms/ujuzy/login-actions/reset-credentials?client_id=account&tab_id=zyBFF6oQ_B0";
     private static String Token;
     private Button btnLogin, btnSignUp, forgtPassBtn;
@@ -94,6 +94,7 @@ public class LoginActivity extends AppCompatActivity
         password = inputPassword.getText().toString();
         client_id = "account";
         grant_type = "password";
+        code = "password";
 
         if (TextUtils.isEmpty(username)) {
             inputEmail.setError("Enter your email!");

@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity
 {
     private static String TAG = "MainActivity.this";
     private String webview_url = "https://ujuzy.com/services/create";
+    private String webview_url_login = "https://sso.ujuzy.com/auth/realms/ujuzy/protocol/openid-connect/auth?client_id=account&redirect_uri=https%3A%2F%2Fujuzy.com%2F&state=688620f9-6e0a-45db-a3da-3c74ed906ba8&response_mode=fragment&response_type=code&scope=openid&nonce=177be665-d9b7-4444-9def-6c23d2d4632e";
     private Toolbar toolbar;
     private ServiceAdapter serviceAdapter;
     private RealmServiceAdapter serviceReamAdapter;
@@ -101,7 +102,7 @@ public class MainActivity extends AppCompatActivity
     private Retrofit retrofit;
 
     private Realm realm;
-    private RealmChangeListener realmChangeListener;
+    private RealmChangeListener realmChangeListener;// it will come up with the most of it to the inner of it all, make sure you come up with all of the things
 
     private RecyclerView companyServicesListRv;
     ArrayList<Datum> results;
@@ -876,6 +877,11 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_camera)
         {
+/*
+            Intent webView = new Intent(MainActivity.this, Webview2Activity.class);
+            webView.putExtra("webview_url", webview_url_login);
+            webView.putExtra("page_title", "Sign in");
+            startActivity(webView);*/
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
             // Handle the camera action   //
         } else if (id == R.id.nav_gallery)
@@ -890,6 +896,10 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_manage)
         {
+           /* Intent webView = new Intent(MainActivity.this, Webview2Activity.class);
+            webView.putExtra("webview_url", webview_url_login);
+            webView.putExtra("page_title", "Sign in");
+            startActivity(webView);*/
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
 
         } else if (id == R.id.nav_share)

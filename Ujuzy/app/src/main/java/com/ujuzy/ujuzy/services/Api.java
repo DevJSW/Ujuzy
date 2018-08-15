@@ -43,10 +43,17 @@ public interface Api
 
     @FormUrlEncoded
     @POST("token")
-    Call<Login> login(@Field("username") String username, @Field("password") String password, @Field("grant_type") String grant_type, @Field("client_id") String client_id);
+    Call<Login> login(@Field("username") String username,
+                      @Field("password") String password,
+                      @Field("grant_type") String grant_type,
+                      @Field("client_id") String client_id);
 
     @FormUrlEncoded
     @POST("auth")
-    Call<SignUp> signUp(@Field("firstName") String firstName, @Field("lastName") String lastName, @Field("email") String email, @Field("password") String password, @Field("confirm-password") String confirm_password);
+    Call<SignUp> signUp(@Field("firstName") String firstName,
+                        @Field("lastName") String lastName,
+                        @Field("email") String email,
+                        @Field("password") String password,
+                        @Field("confirm-password") String confirm_password);
 
 }
