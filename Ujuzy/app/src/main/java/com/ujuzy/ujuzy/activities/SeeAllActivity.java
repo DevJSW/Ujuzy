@@ -21,16 +21,19 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ujuzy.ujuzy.R;
 import com.ujuzy.ujuzy.Realm.RealmAllServiceAdapter;
 import com.ujuzy.ujuzy.Realm.RealmHelper;
 import com.ujuzy.ujuzy.Realm.RealmServiceAdapter;
 import com.ujuzy.ujuzy.adapters.SeeAllAdapter;
+import com.ujuzy.ujuzy.model.Constants;
 import com.ujuzy.ujuzy.model.Datum;
 import com.ujuzy.ujuzy.model.RetrofitInstance;
 import com.ujuzy.ujuzy.model.Service;
 import com.ujuzy.ujuzy.services.Api;
+import com.ujuzy.ujuzy.services.NetworkChecker;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,6 +44,8 @@ import io.realm.RealmChangeListener;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SeeAllActivity extends AppCompatActivity
 {
@@ -55,6 +60,8 @@ public class SeeAllActivity extends AppCompatActivity
 
     private Realm realm;
     private RealmChangeListener realmChangeListener;
+
+    private Retrofit retrofit;
 
     private RecyclerView countriesListRv, companyServicesListRv;
     ArrayList<Datum> results;
@@ -75,9 +82,12 @@ public class SeeAllActivity extends AppCompatActivity
         initTitle();
         initProgessBar();
         initHorizScrollMenu();
+
         initRealm();
+
         initRefreshPage();
         initFilter();
+
     }
 
     private void initFilter()
@@ -198,13 +208,13 @@ public class SeeAllActivity extends AppCompatActivity
         }
 
 
-        countriesListRv = (RecyclerView) findViewById(R.id.service_list);
+        servicesListRv = (RecyclerView) findViewById(R.id.service_list);
         serviceRealmAdapter = new RealmAllServiceAdapter(getApplicationContext(), helper.refreshDatabase());
 
         //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
         final LinearLayoutManager serviceLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
-        countriesListRv.setLayoutManager(serviceLayoutManager);
-        countriesListRv.setAdapter(serviceRealmAdapter);
+        servicesListRv.setLayoutManager(serviceLayoutManager);
+        servicesListRv.setAdapter(serviceRealmAdapter);
 
         //HANDLE DATA CHANGE FOR REFRESH
         realmChangeListener = new RealmChangeListener()
@@ -213,7 +223,6 @@ public class SeeAllActivity extends AppCompatActivity
             public void onChange(Object o) {
                 //REFRESH
                 serviceRealmAdapter = new RealmAllServiceAdapter(getApplicationContext(), helper.refreshDatabase());
-                companyServicesListRv.setAdapter(serviceRealmAdapter);
                 servicesListRv.setAdapter(serviceRealmAdapter);
             }
         };
@@ -532,4 +541,47 @@ public class SeeAllActivity extends AppCompatActivity
         realm.removeChangeListener(realmChangeListener);
         realm.close();
     }
+
+   /* private Retrofit getRetrofit()
+    {
+        if (this.retrofit == null)
+        {
+            this.retrofit = new Retrofit.Builder()
+                    .baseUrl(Constants.HTTP.SERVICES_ENDPOINT)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+        }
+        return this.retrofit;
+    }
+
+    public void getServicesFromApi() {
+
+            Api api = getRetrofit().create(Api.class);
+            Call<Service> ServiceData =  api.getServices();
+            ServiceData.enqueue(new Callback<Service>() {
+                @Override
+                public void onResponse(Call<Service> call, Response<Service> response) {
+
+                    Service service = response.body();
+
+                    if (service != null && service.getData() != null)
+                    {
+                        results = (ArrayList<Datum>) service.getData();
+                        *//**
+                         * displaying results on a recyclerview
+                         *//*
+                        viewData();
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<Service> call, Throwable t) {
+
+                    //volleyJsonRequest();
+
+                    Toast.makeText(SeeAllActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+
+                }
+            });
+    }*/
 }

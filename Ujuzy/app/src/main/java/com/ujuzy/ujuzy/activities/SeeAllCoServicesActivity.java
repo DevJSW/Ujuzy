@@ -167,6 +167,7 @@ public class SeeAllCoServicesActivity extends AppCompatActivity {
             }
         });
     }
+
     private void initTitle()
     {
         title = (TextView) findViewById(R.id.toolbarTv);
@@ -193,13 +194,13 @@ public class SeeAllCoServicesActivity extends AppCompatActivity {
             noService.setVisibility(View.GONE);
         }
 
-        countriesListRv = (RecyclerView) findViewById(R.id.service_list);
+        companyServicesListRv = (RecyclerView) findViewById(R.id.service_list);
         serviceRealmAdapter = new RealmAllServiceAdapter(getApplicationContext(), helper.refreshDatabase());
 
         //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
         final LinearLayoutManager serviceLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
-        countriesListRv.setLayoutManager(serviceLayoutManager);
-        countriesListRv.setAdapter(serviceRealmAdapter);
+        companyServicesListRv.setLayoutManager(serviceLayoutManager);
+        companyServicesListRv.setAdapter(serviceRealmAdapter);
 
         //HANDLE DATA CHANGE FOR REFRESH
         realmChangeListener = new RealmChangeListener()
@@ -209,7 +210,6 @@ public class SeeAllCoServicesActivity extends AppCompatActivity {
                 //REFRESH
                 serviceRealmAdapter = new RealmAllServiceAdapter(getApplicationContext(), helper.refreshDatabase());
                 companyServicesListRv.setAdapter(serviceRealmAdapter);
-                servicesListRv.setAdapter(serviceRealmAdapter);
             }
         };
 

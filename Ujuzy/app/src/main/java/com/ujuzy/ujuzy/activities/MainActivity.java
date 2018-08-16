@@ -898,7 +898,7 @@ public class MainActivity extends AppCompatActivity
         {
            /* Intent webView = new Intent(MainActivity.this, Webview2Activity.class);
             webView.putExtra("webview_url", webview_url_login);
-            webView.putExtra("page_title", "Sign in");
+            webView.putExtra("page_title", "Sign in");               
             startActivity(webView);*/
             startActivity(new Intent(MainActivity.this, LoginActivity.class));
 

@@ -178,13 +178,13 @@ public class FilterServicesActivity extends AppCompatActivity
 
         }
 
-        countriesListRv = (RecyclerView) findViewById(R.id.service_list);
+        companyServicesListRv = (RecyclerView) findViewById(R.id.service_list);
         serviceRealmAdapter = new RealmAllServiceAdapter(getApplicationContext(), helper.refreshDatabase());
 
         //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
         final LinearLayoutManager serviceLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
-        countriesListRv.setLayoutManager(serviceLayoutManager);
-        countriesListRv.setAdapter(serviceRealmAdapter);
+        companyServicesListRv.setLayoutManager(serviceLayoutManager);
+        companyServicesListRv.setAdapter(serviceRealmAdapter);
 
         //HANDLE DATA CHANGE FOR REFRESH
         realmChangeListener = new RealmChangeListener()
@@ -194,7 +194,6 @@ public class FilterServicesActivity extends AppCompatActivity
                 //REFRESH
                 serviceRealmAdapter = new RealmAllServiceAdapter(getApplicationContext(), helper.refreshDatabase());
                 companyServicesListRv.setAdapter(serviceRealmAdapter);
-                servicesListRv.setAdapter(serviceRealmAdapter);
             }
         };
 
