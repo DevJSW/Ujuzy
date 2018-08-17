@@ -148,6 +148,7 @@ public class NewServiceActivity extends AppCompatActivity
        /* serviceCreatedAtTv = (TextView) findViewById(R.id.tv_created_at);
         serviceCreatedByTv = (TextView) findViewById(R.id.tv_created_by);
         serviceLocationTv = (TextView) findViewById(R.id.tv_service_location);*/
+
         serviceNameTv = (TextView) findViewById(R.id.tv_service_name);
         serviceLocationTv = (TextView) findViewById(R.id.tv_service_location);
         //serviceCreatedAtTv = (TextView) findViewById(R.id.tv_created_by);

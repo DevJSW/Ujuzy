@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity
 
                 volleyJsonRequest();
 
-                Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                //Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
 
             }
         });

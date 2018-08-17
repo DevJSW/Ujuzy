@@ -40,12 +40,12 @@ public class ServiceClient {
             this.retrofit = new Retrofit.Builder()
                     .baseUrl(Constants.HTTP.AUTH_ENDPOINT)
                     .addConverterFactory(GsonConverterFactory.create())
-                    .build();
+                    .build();  // internet of things
         }
         return this.retrofit;
     }
 
-    public void postLogin(String username, String password, String grant_type, String client_id)
+  /*  public void postLogin(String username, String password, String grant_type, String client_id)
     {
         Api api = getRetrofit().create(Api.class);
         Call<Login> ServiceData =  api.login(username, password, grant_type, client_id);
@@ -62,7 +62,7 @@ public class ServiceClient {
 
             }
         });
-    }
+    }*/
 
     public void SignUp(String firstName, String lastName, String email, String password, String confirm_password)
     {
@@ -70,19 +70,20 @@ public class ServiceClient {
         Call<SignUp> ServiceData =  api.signUp(firstName, lastName,email ,password, confirm_password);
         ServiceData.enqueue(new Callback<SignUp>() {
             @Override
-            public void onResponse(Call<SignUp> call, Response<SignUp> response) {
+            public void onResponse(Call<SignUp> call, Response<SignUp> response)
+            {
                 SignUp serviceResult = response.body();
             }
 
             @Override
-            public void onFailure(Call<SignUp> call, Throwable t) {
+            public void onFailure(Call<SignUp> call, Throwable t)
+            {
 
                // Toast.makeText(SignUpActivity., t.getMessage(), Toast.LENGTH_LONG).show();
 
             }
         });
     }
-
 
     public void getProfServices()
     {

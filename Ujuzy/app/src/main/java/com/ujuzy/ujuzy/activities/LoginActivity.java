@@ -35,7 +35,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class LoginActivity extends AppCompatActivity
 {
 
-    private String username, password, grant_type, client_id, code;
+    private String username, password, grant_type, client_id, client_secret;
     private String webview_url = "https://sso.ujuzy.com/auth/realms/ujuzy/login-actions/reset-credentials?client_id=account&tab_id=zyBFF6oQ_B0";
     private static String Token;
     private Button btnLogin, btnSignUp, forgtPassBtn;
@@ -92,16 +92,16 @@ public class LoginActivity extends AppCompatActivity
     {
         username = inputEmail.getText().toString();
         password = inputPassword.getText().toString();
-        client_id = "account";
+        client_id = "ujuzy_api";
+        client_secret = "867ae150-1ba7-4098-9c65-694477b20d17";
         grant_type = "password";
-        code = "password";
 
         if (TextUtils.isEmpty(username)) {
             inputEmail.setError("Enter your email!");
         } else if (TextUtils.isEmpty(password)){
             inputPassword.setError("Enter your password!");
         } else {
-            postLogin(username, password, grant_type, client_id);
+            postLogin(username, password, grant_type, client_id, client_secret);
         }
 
     }
@@ -118,10 +118,10 @@ public class LoginActivity extends AppCompatActivity
         return this.retrofit;
     }
 
-    public void postLogin(String username, String password, String grant_type, String client_id)
+    public void postLogin(String username, String password, String grant_type, String client_id, String client_secret)
     {
         Api api = getRetrofit().create(Api.class);
-        Call<Login> ServiceData =  api.login(username, password, grant_type, client_id);
+        Call<Login> ServiceData =  api.login(username, password, grant_type, client_id, client_secret);
         ServiceData.enqueue(new Callback<Login>() {
             @Override
             public void onResponse(Call<Login> call, Response<Login> response) {
@@ -143,7 +143,7 @@ public class LoginActivity extends AppCompatActivity
             @Override
             public void onFailure(Call<Login> call, Throwable t) {
 
-                 Toast.makeText(LoginActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(LoginActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
                 progressBar.setVisibility(View.GONE);
 
             }

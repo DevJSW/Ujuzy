@@ -214,12 +214,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             try {
                 addresses = geocoder.getFromLocation(latitude, longitude, 1);
 
-                /*String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
                 String city = addresses.get(0).getLocality();
                 String state = addresses.get(0).getAdminArea();
                 String country = addresses.get(0).getCountryName();
                 String postalCode = addresses.get(0).getPostalCode();
-                String knownName = addresses.get(0).getFeatureName();*/
+                String knownName = addresses.get(0).getFeatureName();
 
 
             } catch (IOException e) {
@@ -232,7 +232,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             // can't get location
             // GPS or Network is not enabled
             // Ask user to enable GPS/network in settings
-            /*gps.showSettingsAlert();*/
+            gps.showSettingsAlert();
         }
     }
 }

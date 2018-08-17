@@ -46,7 +46,8 @@ public interface Api
     Call<Login> login(@Field("username") String username,
                       @Field("password") String password,
                       @Field("grant_type") String grant_type,
-                      @Field("client_id") String client_id);
+                      @Field("client_id") String client_id,
+                      @Field("cient_secret") String cient_secret);
 
     @FormUrlEncoded
     @POST("auth")
