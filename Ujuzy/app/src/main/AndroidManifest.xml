@@ -98,6 +98,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.ReportActivity"></activity>
+
+        <service android:name="org.jboss.aerogear.android.authorization.oauth2.OAuth2AuthzService"/>
+
+
     </application>
 
 </manifest>

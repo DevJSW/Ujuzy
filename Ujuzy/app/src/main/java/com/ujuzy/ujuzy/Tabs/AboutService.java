@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import hakobastvatsatryan.DropdownTextView;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 
@@ -76,6 +77,7 @@ public class AboutService extends Fragment {
     private TextView noService;
 
     private RecyclerView servicesListRv;
+    private DropdownTextView serviceExpandableTv;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -95,6 +97,7 @@ public class AboutService extends Fragment {
 
         noService = (TextView) v.findViewById(R.id.noService);
         servicesListRv = (RecyclerView) v.findViewById(R.id.service_list);
+
 
        /* rlLocation = (RelativeLayout) v.findViewById(R.id.rl_location);
         rlOpenProfile = (RelativeLayout) v.findViewById(R.id.rl_open_profile);
@@ -123,6 +126,7 @@ public class AboutService extends Fragment {
 
             noService.setVisibility(View.VISIBLE);
             noService.setText("Oh no 😌😞 this is embarrassing but no " + service_category + " services near you!");
+
         } else {
 
             noService.setVisibility(View.GONE);
@@ -220,6 +224,7 @@ public class AboutService extends Fragment {
 
         spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_item);
         spinner_duration.setAdapter(spinnerArrayAdapter);
+
     }
 
     private void initCreatedAt() {

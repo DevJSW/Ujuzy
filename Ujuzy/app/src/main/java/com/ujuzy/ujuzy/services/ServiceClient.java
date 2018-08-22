@@ -38,7 +38,7 @@ public class ServiceClient {
         if (this.retrofit == null)
         {
             this.retrofit = new Retrofit.Builder()
-                    .baseUrl(Constants.HTTP.AUTH_ENDPOINT)
+                    .baseUrl(Constants.HTTP.REGISTRATION_ENDPOINT)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();  // internet of things
         }

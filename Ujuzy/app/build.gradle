@@ -62,4 +62,10 @@ dependencies {
     //VOLLEY
     implementation 'com.android.volley:volley:1.0.0'
 
+    //AEROGEAR
+    implementation ('org.jboss.aerogear:aerogear-android-authz:2.0.0') {
+        exclude module : 'compatibility-v4'
+        transitive = true
+    }
+
 }

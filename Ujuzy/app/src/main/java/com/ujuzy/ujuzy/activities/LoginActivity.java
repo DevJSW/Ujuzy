@@ -7,6 +7,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -23,6 +25,17 @@ import com.ujuzy.ujuzy.Realm.RealmTokenHelper;
 import com.ujuzy.ujuzy.model.Constants;
 import com.ujuzy.ujuzy.model.Login;
 import com.ujuzy.ujuzy.services.Api;
+
+import org.jboss.aerogear.android.authorization.AuthorizationManager;
+import org.jboss.aerogear.android.authorization.AuthzModule;
+import org.jboss.aerogear.android.authorization.oauth2.OAuth2AuthorizationConfiguration;
+import org.jboss.aerogear.android.pipe.PipeManager;
+import org.jboss.aerogear.android.pipe.rest.RestfulPipeConfiguration;
+import org.jboss.aerogear.android.pipe.rest.multipart.MultipartRequestBuilder;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Arrays;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -68,6 +81,54 @@ public class LoginActivity extends AppCompatActivity
         initWebView();
 
         initLogniBtn();
+        initAeroGear();
+
+    }
+
+    private void initAeroGear()
+    {
+    }
+
+    private void authz()
+    {
+
+        try {
+
+            AuthzModule authzModule = AuthorizationManager
+                    .config("KeyCloakAuthz", OAuth2AuthorizationConfiguration.class)
+                    .setBaseURL(new URL(Constants.HTTP.AUTH_BASE_URL))
+                    .setAuthzEndpoint("/auth/realms/ujuzy/protocol/openid-connect/auth")
+                    .setAccessTokenEndpoint("/auth/realms/ujuzy/protocol/openid-connect/token")
+                    .setAccountId(client_id)
+                    .setClientId(client_id)
+                    .setRedirectURL("https://ujuzy.com")
+                    .setScopes(Arrays.asList("openid"))
+                    .addAdditionalAuthorizationParam((Pair.create("grant_type", grant_type)))
+                    .addAdditionalAuthorizationParam((Pair.create("username", username)))
+                    .addAdditionalAuthorizationParam((Pair.create("password", password)))
+                    .asModule();
+
+            authzModule.requestAccess(this, new org.jboss.aerogear.android.core.Callback<String>() {
+                @Override
+                public void onSuccess(String data) {
+
+                    Toast.makeText(getApplicationContext(), data, Toast.LENGTH_LONG).show();
+
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    System.err.println("Error!!");
+                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
+
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     private void checkIfUserIsLoggedIn()
@@ -92,7 +153,7 @@ public class LoginActivity extends AppCompatActivity
     {
         username = inputEmail.getText().toString();
         password = inputPassword.getText().toString();
-        client_id = "ujuzy_api";
+        client_id = "account";
         client_secret = "867ae150-1ba7-4098-9c65-694477b20d17";
         grant_type = "password";
 
@@ -101,7 +162,9 @@ public class LoginActivity extends AppCompatActivity
         } else if (TextUtils.isEmpty(password)){
             inputPassword.setError("Enter your password!");
         } else {
-            postLogin(username, password, grant_type, client_id, client_secret);
+
+            authz();
+            //postLogin(username, password, grant_type, client_id, client_secret);
         }
 
     }

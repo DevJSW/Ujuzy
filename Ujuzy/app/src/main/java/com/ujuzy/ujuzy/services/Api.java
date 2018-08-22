@@ -16,6 +16,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -49,9 +50,12 @@ public interface Api
                       @Field("client_id") String client_id,
                       @Field("cient_secret") String cient_secret);
 
+
+    @Headers("Content-Type: application/x-www-form-urlencoded")
     @FormUrlEncoded
-    @POST("auth")
-    Call<SignUp> signUp(@Field("firstName") String firstName,
+    @POST("openid-connect")
+    Call<SignUp> signUp(/*@Header("Content-Type: form-url-encoded")*/
+                        @Field("firstName") String firstName,
                         @Field("lastName") String lastName,
                         @Field("email") String email,
                         @Field("password") String password,

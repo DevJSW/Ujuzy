@@ -121,8 +121,9 @@ public class MainActivity extends AppCompatActivity
         initProgessBar();
 
         //CHECK IF APP IS CONNECTED TO INTERNET
-        if (NetworkChecker.isNetworkAvailable(getApplicationContext()))
+        if (NetworkChecker.isNetworkAvailable(getApplicationContext()))  // it will take more than ti
         {
+            noService.setVisibility(View.GONE);
             getServicesFromApi();
 
         } else {
@@ -305,20 +306,6 @@ public class MainActivity extends AppCompatActivity
         getServicesFromDatabase();
         getServices();
 
-        /*if (realm.isEmpty())
-        {
-            noService = (TextView) findViewById(R.id.noService);
-            noServiceCo = (TextView) findViewById(R.id.noService2);
-
-            noService.setVisibility(View.GONE);
-            noServiceCo.setVisibility(View.GONE);
-        } else {
-            noService = (TextView) findViewById(R.id.noService);
-            noServiceCo = (TextView) findViewById(R.id.noService2);
-
-            noService.setVisibility(View.VISIBLE);
-            noServiceCo.setVisibility(View.VISIBLE);
-        }*/
     }
 
     private void getProfServices()

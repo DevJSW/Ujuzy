@@ -46,11 +46,18 @@ public class Webview2Activity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        Uri uri = getIntent().getData();
-
-        if (uri != null) {
-
-        }
+        // the intent filter defined in AndroidManifest will handle the return from ACTION_VIEW intent
+      /*  Uri uri = getIntent().getData();
+        if (uri != null && uri.toString().startsWith(redirectUri)) {
+            // use the parameter your API exposes for the code (mostly it's "code")
+            String code = uri.getQueryParameter("code");
+            if (code != null) {
+                // get access token
+                // we'll do that in a minute
+            } else if (uri.getQueryParameter("error") != null) {
+                // show an error message here
+            }
+        }*/
     }
 
     private void initToolbarTv()

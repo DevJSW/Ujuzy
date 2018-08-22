@@ -80,10 +80,11 @@ public class SignUpActivity extends AppCompatActivity {
         if (this.retrofit == null)
         {
             this.retrofit = new Retrofit.Builder()
-                    .baseUrl(Constants.HTTP.AUTH_ENDPOINT)
+                    .baseUrl(Constants.HTTP.REGISTRATION_ENDPOINT)
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();
         }
+
         return this.retrofit;
     }
 
@@ -204,7 +205,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         }
 
-        else if (first_name.length() < 3 || first_name.length() >15 ){
+        else if (first_name.length() < 3 || first_name.length() > 15 ){
             System.out.println("Name too short or too long");
             inputFirstName.setError("Name too short or too long");
         }
@@ -213,7 +214,7 @@ public class SignUpActivity extends AppCompatActivity {
         inputLastName.setError("Enter your username!");
         }
 
-        else if (last_name.length() < 3 || last_name.length() >15 ){
+        else if (last_name.length() < 3 || last_name.length() > 15 ){
             System.out.println("Name too short or too long");
             inputLastName.setError("Name too short or too long");
         }
