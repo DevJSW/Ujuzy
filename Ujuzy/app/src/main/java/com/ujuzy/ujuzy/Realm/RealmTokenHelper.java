@@ -58,12 +58,6 @@ public class RealmTokenHelper
         tokens = realm.where(RealmToken.class).findAll();
     }
 
-   /* //FILTER DATABASE
-    public void filterRealmDatabase(String token, String token)
-    {
-        tokens = realm.where(RealmToken.class).equalTo(token, category_title).findAll();
-    }
-*/
     //SEARCH FILTER DATABASE
     public void searchRealmDatabase(String searchInput, String searchText)
     {
