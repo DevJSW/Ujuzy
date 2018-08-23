@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorPrimary"
+    app:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="48dp"
+            android:padding="6dp"
+            android:id="@+id/backBtn"
+            android:layout_marginRight="7dp"
+            android:src="@drawable/backbtn"/>
+
+            <com.ujuzy.ujuzy.CustomData.AllerBoldFont
+                android:layout_width="match_parent"
+                android:textColor="#fff"
+                android:layout_height="match_parent"
+                android:textSize="20dp"
+                android:layout_marginTop="22dp"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_horizontal"
+                android:text="Profile"
+               />
+
+            <ImageView
+                android:layout_width="32dp"
+                android:layout_height="48dp"
+                android:padding="6dp"
+                android:id="@+id/menu"
+                android:layout_alignParentRight="true"
+                android:src="@drawable/dot_settings"/>
+
+            <com.ujuzy.ujuzy.CustomData.AllerButton
+                android:layout_width="75dp"
+                android:layout_height="35dp"
+                android:background="@drawable/button_bg_dialogs"
+                android:id="@+id/upgradeBtn"
+                android:textColor="@color/colorPrimaryDark"
+                android:visibility="gone"
+                android:text="Upgrade"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="6dp" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="10dp"
+            android:id="@+id/rely"
+            android:layout_gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:id="@+id/user_avator"
+                app:civ_border_color="#fff"
+                app:civ_border_width="1dp"
+                android:src="@drawable/if_profile_white"
+                android:layout_gravity="center_horizontal" />
+
+            <ImageView
+                android:layout_width="31dp"
+                android:layout_height="31dp"
+                android:id="@+id/brainy_badge"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"/>
+
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <com.ujuzy.ujuzy.CustomData.AllerBoldFont
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:id="@+id/tv_first_name"
+                android:text="first"
+                android:textColor="#fff"
+                android:textSize="17dp"
+                android:layout_marginRight="5dp"
+                android:layout_gravity="center_horizontal"/>
+
+            <com.ujuzy.ujuzy.CustomData.AllerBoldFont
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:id="@+id/tv_last_name"
+                android:text="last"
+                android:textColor="#fff"
+                android:textSize="17dp"
+                android:layout_gravity="center_horizontal"/>
+
+        </LinearLayout>
+
+
+        <com.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_user_role"
+            android:text="User role"
+            android:textColor="#fff"
+            android:textSize="15dp"
+            android:layout_marginBottom="15dp"
+            android:layout_gravity="center_horizontal"/>
+
+        <!--<LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/location_liny"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="10dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="15dp"
+                android:padding="1dp"
+                android:layout_toLeftOf="@+id/location"
+                android:src="@drawable/ic_location"/>
+
+            <com.brainy.erevu.data.MyFont
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/location"
+                android:textSize="14dp"
+                android:layout_marginBottom="5dp" />
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="17dp"
+                android:padding="1dp"
+                />
+
+        </LinearLayout>-->
+    </LinearLayout>
+</android.support.v7.widget.Toolbar>

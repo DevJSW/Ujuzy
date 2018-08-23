@@ -202,6 +202,66 @@
                 android:layout_marginLeft="15dp">
 
                 <com.ujuzy.ujuzy.CustomData.AllerEditText
+                    android:id="@+id/inputNameTxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter contact name"
+                    android:inputType="textPersonName"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColorHint="#121111"
+                    android:textColor="#121111" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_margin="15dp"
+                android:layout_marginLeft="15dp">
+
+                <com.ujuzy.ujuzy.CustomData.AllerEditText
+                    android:id="@+id/inputPhoneTxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter Phone"
+                    android:inputType="phone"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColorHint="#121111"
+                    android:textColor="#121111" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_margin="15dp"
+                android:layout_marginLeft="15dp">
+
+                <com.ujuzy.ujuzy.CustomData.AllerEditText
+                    android:id="@+id/inputTimeTxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter Time"
+                    android:inputType="time"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColorHint="#121111"
+                    android:textColor="#121111" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_margin="15dp"
+                android:layout_marginLeft="15dp">
+
+                <com.ujuzy.ujuzy.CustomData.AllerEditText
                     android:id="@+id/inputDateTxt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -29,8 +29,8 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void checkIfUserIsLoggedIn()
     {
-        IsUserLoggedIn isUserLoggedIn = new IsUserLoggedIn(getApplicationContext());
-        isUserLoggedIn.IsUserLoggedIn();
+       /* IsUserLoggedIn isUserLoggedIn = new IsUserLoggedIn(getApplicationContext());
+        isUserLoggedIn.IsUserLoggedIn();*/
     }
 
     private void initEdit()

@@ -26,9 +26,8 @@
         android:textSize="17dp"
         android:gravity="center_horizontal"
         android:layout_margin="80dp"
-        android:text="No Services posted yet"
+        android:text="Your requested services will be collected here"
         android:id="@+id/noService"/>
-
 
 
 

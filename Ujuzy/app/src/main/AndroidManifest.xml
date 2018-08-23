@@ -73,6 +73,7 @@
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activities.SeeAllActivity" />
+        <activity android:name=".activities.UserProfileActivity" />
         <activity android:name=".activities.OverviewActivity" />
         <activity android:name=".activities.PostReviewsActivity" />
         <activity android:name=".activities.WebViewActivity" />

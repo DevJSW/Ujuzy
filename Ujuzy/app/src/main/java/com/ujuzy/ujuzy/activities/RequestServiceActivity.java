@@ -15,6 +15,7 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Pair;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -30,9 +31,29 @@ import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.ujuzy.ujuzy.R;
 import com.ujuzy.ujuzy.Realm.RealmFavourite;
 import com.ujuzy.ujuzy.Realm.RealmFavouriteHelper;
+import com.ujuzy.ujuzy.Realm.RealmToken;
+import com.ujuzy.ujuzy.Realm.RealmTokenHelper;
 import com.ujuzy.ujuzy.map.MapsActivity;
+import com.ujuzy.ujuzy.model.Constants;
+import com.ujuzy.ujuzy.model.Request;
+import com.ujuzy.ujuzy.model.SignUp;
+import com.ujuzy.ujuzy.services.Api;
+
+import org.jboss.aerogear.android.authorization.AuthorizationManager;
+import org.jboss.aerogear.android.authorization.AuthzModule;
+import org.jboss.aerogear.android.authorization.oauth2.OAuth2AuthorizationConfiguration;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Arrays;
 
 import io.realm.Realm;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Header;
 
 public class RequestServiceActivity extends AppCompatActivity {
 
@@ -46,8 +67,11 @@ public class RequestServiceActivity extends AppCompatActivity {
 
     private TextView serviceNameTv, userFullName, noOfPersonnel, serviceCostTv;
     private ImageView userAvatar, backBtnIv;
-    private EditText inputDateEt, inputRequestEt;
+    private EditText inputDateEt, inputRequestEt, inputPhone, inputName, inputTimeEt;
     private Button confirmBtn;
+
+    private Realm realm;
+    private Retrofit retrofit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,10 +87,16 @@ public class RequestServiceActivity extends AppCompatActivity {
 
         confirmBtn = (Button) findViewById(R.id.btn_request);
         inputDateEt = (EditText) findViewById(R.id.inputDateTxt);
+        inputTimeEt = (EditText) findViewById(R.id.inputTimeTxt);
         inputRequestEt = (EditText) findViewById(R.id.inputRequestTxt);
+        inputPhone = (EditText) findViewById(R.id.inputPhoneTxt);
+        inputName = (EditText) findViewById(R.id.inputNameTxt);
 
         final String date = inputDateEt.getText().toString();
         final String request = inputRequestEt.getText().toString();
+        final String time = inputTimeEt.getText().toString();
+        final String phone = inputPhone.getText().toString();
+        final String name = inputName.getText().toString();
 
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,6 +106,105 @@ public class RequestServiceActivity extends AppCompatActivity {
                 } else if (TextUtils.isEmpty(request)){
                     inputRequestEt.setError("Describe your request!");
                 } else {
+
+                    realm = Realm.getDefaultInstance();
+                    final RealmTokenHelper helper = new RealmTokenHelper(realm);
+
+                    //RETRIEVE
+                    helper.retreiveFromDB();
+
+                    //CHECK IF DATABASE IS EMPTY
+                    if (helper.refreshDatabase().size() == 0)
+                    {
+                        try {
+
+                            AuthzModule authzModule = AuthorizationManager
+                                    .config("KeyCloakAuthz", OAuth2AuthorizationConfiguration.class)
+                                    .setBaseURL(new URL(Constants.HTTP.AUTH_BASE_URL))
+                                    .setAuthzEndpoint("/auth/realms/ujuzy/protocol/openid-connect/auth")
+                                    .setAccessTokenEndpoint("/auth/realms/ujuzy/protocol/openid-connect/token")
+                                    .setAccountId("account")
+                                    .setClientId("account")
+                                    .setRedirectURL("https://ujuzy.com")
+                                    .setScopes(Arrays.asList("openid"))
+                                    .addAdditionalAuthorizationParam((Pair.create("grant_type", "password")))
+                                    .asModule();
+
+                            authzModule.requestAccess(RequestServiceActivity.this, new org.jboss.aerogear.android.core.Callback<String>() {
+                                @Override
+                                public void onSuccess(String data) {
+
+                                    //SAVE TOKEN TO REALM DATABASE
+                                    RealmToken token = new RealmToken();
+                                    token.setToken(data);
+
+                                    realm = Realm.getDefaultInstance();
+                                    RealmTokenHelper helper = new RealmTokenHelper(realm);
+                                    helper.save(token);
+
+                                    requestService(name, phone, date, serviceId, time, request);
+                                }
+
+                                @Override
+                                public void onFailure(Exception e) {
+                                    System.err.println("Error!!");
+                                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            });
+
+
+                        } catch (MalformedURLException e) {
+                            e.printStackTrace();
+                        }
+
+                        //startActivity(new Intent(UserProfileActivity.this, LoginActivity.class));
+
+                    } else {
+
+                        try {
+
+                            AuthzModule authzModule = AuthorizationManager
+                                    .config("KeyCloakAuthz", OAuth2AuthorizationConfiguration.class)
+                                    .setBaseURL(new URL(Constants.HTTP.AUTH_BASE_URL))
+                                    .setAuthzEndpoint("/auth/realms/ujuzy/protocol/openid-connect/auth")
+                                    .setAccessTokenEndpoint("/auth/realms/ujuzy/protocol/openid-connect/token")
+                                    .setAccountId("account")
+                                    .setClientId("account")
+                                    .setRedirectURL("https://ujuzy.com")
+                                    .setScopes(Arrays.asList("openid"))
+                                    .addAdditionalAuthorizationParam((Pair.create("grant_type", "password")))
+                                    .asModule();
+
+                            authzModule.requestAccess(RequestServiceActivity.this, new org.jboss.aerogear.android.core.Callback<String>() {
+                                @Override
+                                public void onSuccess(String data) {
+
+                                    //SAVE TOKEN TO REALM DATABASE
+                                    RealmToken token = new RealmToken();
+                                    token.setToken(data);
+
+                                    realm = Realm.getDefaultInstance();
+                                    RealmTokenHelper helper = new RealmTokenHelper(realm);
+                                    helper.save(token);
+
+                                    requestService(name, phone, date, serviceId, time, request);
+
+
+                                }
+
+                                @Override
+                                public void onFailure(Exception e) {
+                                    System.err.println("Error!!");
+                                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                                }
+                            });
+
+
+                        } catch (MalformedURLException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
 
                 }
 
@@ -131,6 +260,37 @@ public class RequestServiceActivity extends AppCompatActivity {
 
     }
 
+    private Retrofit getRetrofit()
+    {
+        if (this.retrofit == null)
+        {
+            this.retrofit = new Retrofit.Builder()
+                    .baseUrl(Constants.HTTP.BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+        }
+        return this.retrofit;
+    }
+
+    public void requestService(String name, String phone, String date, String serviceId, String time, String info)
+    {
+        Api api = getRetrofit().create(Api.class);
+        Call<Request> ServiceData =  api.requestSercive(name, phone,date ,serviceId, time, info);
+        ServiceData.enqueue(new Callback<Request>() {
+            @Override
+            public void onResponse(Call<Request> call, Response<Request> response) {
+                Request serviceResult = response.body();
+                Toast.makeText(RequestServiceActivity.this, (CharSequence) serviceResult, Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onFailure(Call<Request> call, Throwable t) {
+
+                Toast.makeText(RequestServiceActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+
+            }
+        });
+    }
 
     private void initWindows()
     {

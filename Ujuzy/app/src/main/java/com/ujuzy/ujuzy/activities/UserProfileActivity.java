@@ -1,5 +1,6 @@
 package com.ujuzy.ujuzy.activities;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,8 +13,12 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Pair;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,13 +26,43 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.ujuzy.ujuzy.R;
+import com.ujuzy.ujuzy.Realm.RealmHelper;
+import com.ujuzy.ujuzy.Realm.RealmToken;
+import com.ujuzy.ujuzy.Realm.RealmTokenHelper;
+import com.ujuzy.ujuzy.Realm.RealmUserServiceAdapter;
+import com.ujuzy.ujuzy.Tabs.AboutUserFragment;
 import com.ujuzy.ujuzy.Tabs.ReviewsFragment;
 import com.ujuzy.ujuzy.Tabs.ServicesFragment;
+import com.ujuzy.ujuzy.Tabs.UserRequestedServiceFragment;
+import com.ujuzy.ujuzy.Tabs.UserServicesFragment;
+import com.ujuzy.ujuzy.adapters.Service2Adapter;
+import com.ujuzy.ujuzy.adapters.ServiceAdapter;
+import com.ujuzy.ujuzy.model.Constants;
+import com.ujuzy.ujuzy.model.Datum;
+import com.ujuzy.ujuzy.model.Service;
+import com.ujuzy.ujuzy.services.Api;
+
+import org.jboss.aerogear.android.authorization.AuthorizationManager;
+import org.jboss.aerogear.android.authorization.AuthzModule;
+import org.jboss.aerogear.android.authorization.oauth2.OAuth2AuthorizationConfiguration;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import io.realm.Realm;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class UserProfileActivity extends AppCompatActivity {
 
@@ -45,12 +80,17 @@ public class UserProfileActivity extends AppCompatActivity {
     private TextView firstNameTv, lastNameTv, userRoleTv, noService;
     private ImageView profilePicIv, backBtn;
 
+    private Service2Adapter userServiceAdapter;
+    private Realm realm;
+    private Retrofit retrofit;
+    ArrayList<Datum> results;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_user_profile);
 
         initWindows();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -70,7 +110,119 @@ public class UserProfileActivity extends AppCompatActivity {
 
         initUserInfo();
         initBackBtn();
+        initRetrofit();
+       // initRealm();
 
+    }
+
+    private Retrofit getRetrofit()
+    {
+        if (this.retrofit == null)
+        {
+            this.retrofit = new Retrofit.Builder()
+                    .baseUrl(Constants.HTTP.SERVICES_ENDPOINT)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+        }
+        return this.retrofit;
+    }
+
+    private void initRetrofit()
+    {
+        Api api = getRetrofit().create(Api.class);
+        Call<Service> ServiceData =  api.getServices();
+        ServiceData.enqueue(new Callback<Service>() {
+            @Override
+            public void onResponse(Call<Service> call, Response<Service> response) {
+
+                Service service = response.body();
+
+                if (service != null && service.getData() != null)
+                {
+                    results = (ArrayList<Datum>) service.getData();
+                    /**
+                     * displaying results on a recyclerview
+                     */
+                    viewData();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Service> call, Throwable t) {
+
+            }
+        });
+    }
+
+    private void viewData()
+    {
+        //ADD RESPONSE TO ADAPTER
+        userServiceAdapter = new Service2Adapter(getApplicationContext(), results);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+       // initRealm();
+    }
+
+    private void initRealm() {
+        realm = Realm.getDefaultInstance();
+        final RealmTokenHelper helper = new RealmTokenHelper(realm);
+
+        //RETRIEVE
+        helper.retreiveFromDB();
+
+        //CHECK IF DATABASE IS EMPTY
+        if (helper.refreshDatabase().size() == 0)
+        {
+            try {
+
+                AuthzModule authzModule = AuthorizationManager
+                        .config("KeyCloakAuthz", OAuth2AuthorizationConfiguration.class)
+                        .setBaseURL(new URL(Constants.HTTP.AUTH_BASE_URL))
+                        .setAuthzEndpoint("/auth/realms/ujuzy/protocol/openid-connect/auth")
+                        .setAccessTokenEndpoint("/auth/realms/ujuzy/protocol/openid-connect/token")
+                        .setAccountId("account")
+                        .setClientId("account")
+                        .setRedirectURL("https://ujuzy.com")
+                        .setScopes(Arrays.asList("openid"))
+                        .addAdditionalAuthorizationParam((Pair.create("grant_type", "password")))
+                        .asModule();
+
+                authzModule.requestAccess(this, new org.jboss.aerogear.android.core.Callback<String>() {
+                    @Override
+                    public void onSuccess(String data) {
+
+                        //SAVE TOKEN TO REALM DATABASE
+                        RealmToken token = new RealmToken();
+                        token.setToken(data);
+
+                        realm = Realm.getDefaultInstance();
+                        RealmTokenHelper helper = new RealmTokenHelper(realm);
+                        helper.save(token);
+
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        System.err.println("Error!!");
+                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        finish();
+                    }
+                });
+
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+
+            //startActivity(new Intent(UserProfileActivity.this, LoginActivity.class));
+
+        } else {
+
+        }
     }
 
     private void initBackBtn()
@@ -137,6 +289,13 @@ public class UserProfileActivity extends AppCompatActivity {
 
     }
 
+   /* @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.profile_menu, menu);
+        return true;
+    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -145,7 +304,11 @@ public class UserProfileActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+       /* //noinspection SimplifiableIfStatement
+        if (id == R.id.action_update)
+        {
+            return true;
+        }*/
 
         switch (item.getItemId()) {
 
@@ -204,7 +367,10 @@ public class UserProfileActivity extends AppCompatActivity {
             //returning the current tabs
             switch (position) {
                 case 0:
-                    ServicesFragment tab2 = new ServicesFragment ();
+                    AboutUserFragment tab1 = new AboutUserFragment ();
+                    return tab1;
+                case 1:
+                    UserServicesFragment tab2 = new UserServicesFragment ();
                     Bundle bundle2 = new Bundle();
                     //bundle2.putString("UserId", UserId);
                     bundle2.putString("userId", user_id);
@@ -212,7 +378,11 @@ public class UserProfileActivity extends AppCompatActivity {
                     bundle2.putString("firstName", first_name);
                     tab2.setArguments(bundle2);
                     return tab2;
-                case 1:
+
+                case 2:
+                    UserRequestedServiceFragment tab4 = new UserRequestedServiceFragment ();
+                    return tab4;
+                case 3:
                     ReviewsFragment tab3 = new ReviewsFragment ();
                     Bundle bundle3 = new Bundle();
                     bundle3.putString("serviceId", service_id);
@@ -220,18 +390,18 @@ public class UserProfileActivity extends AppCompatActivity {
                     tab3.setArguments(bundle3);
                     return tab3;
 
-
             }
             return null;
         }
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 2;
+            // Show 4 total pages.
+            return 4;
         }
 
     }
+
 
 
 }

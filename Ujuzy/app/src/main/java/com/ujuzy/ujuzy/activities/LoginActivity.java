@@ -20,6 +20,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ujuzy.ujuzy.R;
+import com.ujuzy.ujuzy.Realm.RealmHelper;
 import com.ujuzy.ujuzy.Realm.RealmToken;
 import com.ujuzy.ujuzy.Realm.RealmTokenHelper;
 import com.ujuzy.ujuzy.model.Constants;
@@ -112,13 +113,23 @@ public class LoginActivity extends AppCompatActivity
                 @Override
                 public void onSuccess(String data) {
 
+                    progressBar.setVisibility(View.GONE);
                     Toast.makeText(getApplicationContext(), data, Toast.LENGTH_LONG).show();
+
+                    //SAVE TOKEN TO REALM DATABASE
+                    RealmToken token = new RealmToken();
+                    token.setToken(data);
+
+                    realm = Realm.getDefaultInstance();
+                    RealmTokenHelper helper = new RealmTokenHelper(realm);
+                    helper.save(token);
 
                 }
 
                 @Override
                 public void onFailure(Exception e) {
                     System.err.println("Error!!");
+                    progressBar.setVisibility(View.GONE);
                     Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                 }
             });

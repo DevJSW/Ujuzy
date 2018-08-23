@@ -3,6 +3,7 @@ package com.ujuzy.ujuzy.services;
 
 
 import com.ujuzy.ujuzy.model.Login;
+import com.ujuzy.ujuzy.model.Request;
 import com.ujuzy.ujuzy.model.Service;
 import com.ujuzy.ujuzy.model.SignUp;
 import com.ujuzy.ujuzy.model.Token;
@@ -27,6 +28,7 @@ import retrofit2.http.Query;
 
 public interface Api
 {
+
     @GET("services")
     Call<Service> getServices();
 
@@ -60,5 +62,16 @@ public interface Api
                         @Field("email") String email,
                         @Field("password") String password,
                         @Field("confirm-password") String confirm_password);
+
+
+    @POST("requests")
+    Call<Request> requestSercive(
+            @Header("Authorization") String token,
+            @Field("name") String name,
+            @Field("phone_number") String phone_number,
+            @Field("date") String email,
+            @Field("service_id") String service_id,
+            @Field("time") String time,
+            @Field("request_info") String request_info);
 
 }

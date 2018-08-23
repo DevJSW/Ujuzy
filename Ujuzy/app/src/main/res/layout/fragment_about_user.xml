@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:orientation="vertical"
@@ -6,107 +6,127 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.ujuzy.ujuzy.Tabs.AboutUserFragment">
 
-    <com.ujuzy.ujuzy.CustomData.AllerBoldFont
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Info"
-        android:textColor="@color/font_black"
-        android:textSize="16dp"
-        android:layout_margin="15dp"/>
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <android.support.v7.widget.CardView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#e9e7e7"
-        app:cardElevation="1dp">
+        android:layout_marginTop="15dp"
+        android:orientation="vertical">
 
-        <LinearLayout
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_margin="15dp"
+        android:orientation="horizontal">
+
+        <com.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:textColor="@color/colorPrimary"
+            android:text="Name:"
+            android:textSize="15dp"/>
+
+        <com.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:id="@+id/tvName"
+            android:layout_marginLeft="10dp"
+            android:text="----"
+            android:textSize="15dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginLeft="15dp"
+        android:orientation="horizontal">
+
+        <com.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:textColor="@color/colorPrimary"
+            android:text="Email:"
+            android:textSize="15dp"/>
+
+        <com.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:id="@+id/tvEmail"
+            android:layout_marginLeft="10dp"
+            android:text="----"
+            android:textSize="15dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_margin="15dp"
+        android:orientation="horizontal">
+
+        <com.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:textColor="@color/colorPrimary"
+            android:text="Phone:"
+            android:textSize="15dp"/>
+
+        <com.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:id="@+id/tvPhone"
+            android:layout_marginLeft="10dp"
+            android:text="----"
+            android:textSize="15dp"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_line"
+        android:layout_margin="5dp"/>
+
+    <com.ujuzy.ujuzy.CustomData.AllerFont
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_margin="15dp"
+        android:id="@+id/tvEdit"
+        android:textColor="@color/font_black_light"
+        android:text="Edit Account"
+        android:textSize="15dp"/>
+
+    <com.ujuzy.ujuzy.CustomData.AllerFont
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_margin="15dp"
+        android:textColor="#f40909"
+        android:text="Log out"
+        android:textSize="15dp"/>
+
+        <com.ujuzy.ujuzy.CustomData.AllerFont
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#e9e7e7"
-            android:orientation="vertical">
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_margin="15dp"
-                android:layout_marginTop="15dp">
-
-                <com.ujuzy.ujuzy.CustomData.AllerFont
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/font_black"
-                    android:textSize="16dp"
-                    android:text="Gender:"
-                    />
-
-                <com.ujuzy.ujuzy.CustomData.AllerFont
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/colorAccent"
-                    android:id="@+id/points_earned"
-                    android:layout_alignParentRight="true"
-                    android:textSize="16dp"
-                    android:text="..."
-                    />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                android:layout_marginBottom="20dp">
-
-                <com.ujuzy.ujuzy.CustomData.AllerFont
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/font_black"
-                    android:textSize="16dp"
-                    android:text="Location:"
-                    />
-
-                <com.ujuzy.ujuzy.CustomData.AllerFont
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/colorAccent"
-                    android:id="@+id/reputation"
-                    android:textSize="16dp"
-                    android:layout_alignParentRight="true"
-                    android:text="..."
-                    />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                android:layout_marginBottom="20dp">
-
-                <com.ujuzy.ujuzy.CustomData.AllerFont
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/font_black"
-                    android:textSize="16dp"
-                    android:text="Services:"
-                    />
-
-                <com.ujuzy.ujuzy.CustomData.AllerFont
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/colorAccent"
-                    android:id="@+id/favourite"
-                    android:layout_alignParentRight="true"
-                    android:textSize="16dp"
-                    android:text="..."
-                    />
-
-            </RelativeLayout>
-
-
-
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
+            android:textSize="14dp"
+            android:textColor="@color/font_black_light"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="20dp"
+            android:gravity="center_horizontal"
+            android:text="Version Beta"/>
 
 </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+</RelativeLayout>

@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -45,6 +46,8 @@ import com.ujuzy.ujuzy.R;
 import com.ujuzy.ujuzy.Realm.RealmHelper;
 import com.ujuzy.ujuzy.Realm.RealmService;
 import com.ujuzy.ujuzy.Realm.RealmServiceAdapter;
+import com.ujuzy.ujuzy.Realm.RealmToken;
+import com.ujuzy.ujuzy.Realm.RealmTokenHelper;
 import com.ujuzy.ujuzy.SqliteDatabase.ServicesDatabase;
 import com.ujuzy.ujuzy.adapters.CountryAdapter;
 import com.ujuzy.ujuzy.adapters.ServiceAdapter;
@@ -59,12 +62,18 @@ import com.ujuzy.ujuzy.services.NetworkChecker;
 import com.ujuzy.ujuzy.services.ServiceClient;
 import com.ujuzy.ujuzy.services.ServiceInterface;
 
+import org.jboss.aerogear.android.authorization.AuthorizationManager;
+import org.jboss.aerogear.android.authorization.AuthzModule;
+import org.jboss.aerogear.android.authorization.oauth2.OAuth2AuthorizationConfiguration;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import io.realm.Realm;
@@ -84,7 +93,6 @@ public class MainActivity extends AppCompatActivity
 {
     private static String TAG = "MainActivity.this";
     private String webview_url = "https://ujuzy.com/services/create";
-    private String webview_url_login = "https://sso.ujuzy.com/auth/realms/ujuzy/protocol/openid-connect/auth?client_id=account&redirect_uri=https%3A%2F%2Fujuzy.com%2F&state=688620f9-6e0a-45db-a3da-3c74ed906ba8&response_mode=fragment&response_type=code&scope=openid&nonce=177be665-d9b7-4444-9def-6c23d2d4632e";
     private Toolbar toolbar;
     private ServiceAdapter serviceAdapter;
     private RealmServiceAdapter serviceReamAdapter;
@@ -688,66 +696,6 @@ public class MainActivity extends AppCompatActivity
        // volleyJsonRequest();
         getServices();
 
-//        ServiceInterface serviceInterface = RetrofitInstance.getService();
-//        Call<Service> callService = serviceInterface.getServices();
-//
-//
-//        callService.enqueue(new Callback<Service>()
-//        {
-//            @Override
-//            public void onResponse(Call<Service> call, Response<Service> response)
-//            {
-//
-//                if (response.isSuccessful())
-//                {
-//
-//                    Service serviceList = response.body();
-//                    results = (ArrayList<Datum>) serviceList.getData();
-//
-//
-//                    /**
-//                     * displaying results to adapter
-//                     */
-//
-//                    if (results.size() < 1 || results.size() == 0)
-//                    {
-//
-//                        /*progressBar1.setVisibility(View.GONE);
-//                        progressBar2.setVisibility(View.GONE);*/
-//
-//                       /* noService.setVisibility(View.VISIBLE);
-//                        noServiceCo.setVisibility(View.VISIBLE);*/
-//
-//                    } else
-//                    {
-//                        progressBar1.setVisibility(View.GONE);
-//                        progressBar2.setVisibility(View.GONE);
-//                        viewData();
-//                    }
-//
-//                } else {
-//
-//                    /*progressBar1.setVisibility(View.GONE);
-//                    progressBar2.setVisibility(View.GONE);*/
-//
-//                  /*  noService.setVisibility(View.VISIBLE);
-//                    noServiceCo.setVisibility(View.VISIBLE);*/
-//
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onFailure(Call<Service> call, Throwable t)
-//            {
-//               /* noService.setVisibility(View.VISIBLE);
-//                noServiceCo.setVisibility(View.VISIBLE);*/
-//            }
-//
-//        });
-//
-//
-//       // return results;
     }
 
     private void viewData()
@@ -864,12 +812,107 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_camera)
         {
-/*
-            Intent webView = new Intent(MainActivity.this, Webview2Activity.class);
-            webView.putExtra("webview_url", webview_url_login);
-            webView.putExtra("page_title", "Sign in");
-            startActivity(webView);*/
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+
+            realm = Realm.getDefaultInstance();
+            final RealmTokenHelper helper = new RealmTokenHelper(realm);
+
+            //RETRIEVE
+            helper.retreiveFromDB();
+
+            //CHECK IF DATABASE IS EMPTY
+            if (helper.refreshDatabase().size() == 0)
+            {
+                try {
+
+                    AuthzModule authzModule = AuthorizationManager
+                            .config("KeyCloakAuthz", OAuth2AuthorizationConfiguration.class)
+                            .setBaseURL(new URL(Constants.HTTP.AUTH_BASE_URL))
+                            .setAuthzEndpoint("/auth/realms/ujuzy/protocol/openid-connect/auth")
+                            .setAccessTokenEndpoint("/auth/realms/ujuzy/protocol/openid-connect/token")
+                            .setAccountId("account")
+                            .setClientId("account")
+                            .setRedirectURL("https://ujuzy.com")
+                            .setScopes(Arrays.asList("openid"))
+                            .addAdditionalAuthorizationParam((Pair.create("grant_type", "password")))
+                            .asModule();
+
+                    authzModule.requestAccess(this, new org.jboss.aerogear.android.core.Callback<String>() {
+                        @Override
+                        public void onSuccess(String data) {
+
+                            //SAVE TOKEN TO REALM DATABASE
+                            RealmToken token = new RealmToken();
+                            token.setToken(data);
+
+                            realm = Realm.getDefaultInstance();
+                            RealmTokenHelper helper = new RealmTokenHelper(realm);
+                            helper.save(token);
+
+                            startActivity(new Intent(MainActivity.this, UserProfileActivity.class));
+
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+                            System.err.println("Error!!");
+                            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+
+                //startActivity(new Intent(UserProfileActivity.this, LoginActivity.class));
+
+            } else {
+
+                try {
+
+                    AuthzModule authzModule = AuthorizationManager
+                            .config("KeyCloakAuthz", OAuth2AuthorizationConfiguration.class)
+                            .setBaseURL(new URL(Constants.HTTP.AUTH_BASE_URL))
+                            .setAuthzEndpoint("/auth/realms/ujuzy/protocol/openid-connect/auth")
+                            .setAccessTokenEndpoint("/auth/realms/ujuzy/protocol/openid-connect/token")
+                            .setAccountId("account")
+                            .setClientId("account")
+                            .setRedirectURL("https://ujuzy.com")
+                            .setScopes(Arrays.asList("openid"))
+                            .addAdditionalAuthorizationParam((Pair.create("grant_type", "password")))
+                            .asModule();
+
+                    authzModule.requestAccess(this, new org.jboss.aerogear.android.core.Callback<String>() {
+                        @Override
+                        public void onSuccess(String data) {
+
+                            //SAVE TOKEN TO REALM DATABASE
+                            RealmToken token = new RealmToken();
+                            token.setToken(data);
+
+                            realm = Realm.getDefaultInstance();
+                            RealmTokenHelper helper = new RealmTokenHelper(realm);
+                            helper.save(token);
+
+                            startActivity(new Intent(MainActivity.this, UserProfileActivity.class));
+
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+                            System.err.println("Error!!");
+                            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
             // Handle the camera action   //
         } else if (id == R.id.nav_gallery)
         {
@@ -881,15 +924,15 @@ public class MainActivity extends AppCompatActivity
             Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://ujuzy.com"));
             startActivity(browserIntent);
 
-        } else if (id == R.id.nav_manage)
+        } /*else if (id == R.id.nav_manage)
         {
-           /* Intent webView = new Intent(MainActivity.this, Webview2Activity.class);
+           *//* Intent webView = new Intent(MainActivity.this, Webview2Activity.class);
             webView.putExtra("webview_url", webview_url_login);
             webView.putExtra("page_title", "Sign in");               
-            startActivity(webView);*/
-            startActivity(new Intent(MainActivity.this, LoginActivity.class));
+            startActivity(webView);*//*
+            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
 
-        } else if (id == R.id.nav_share)
+        }*/ else if (id == R.id.nav_share)
         {
             Intent myIntent = new Intent(Intent.ACTION_SEND);
             myIntent.setType("text/plain");

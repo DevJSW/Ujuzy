@@ -45,6 +45,8 @@ public class CustomTablayout extends TabLayout {
             View tabViewChild = tabView.getChildAt(i);
             if (tabViewChild instanceof TextView) {
                 ((TextView) tabViewChild).setTypeface(mTypeface, Typeface.NORMAL);
+                ((TextView) tabViewChild).setTextSize(15);
+                ((TextView) tabViewChild).setSingleLine(true);
             }
         }
     }
