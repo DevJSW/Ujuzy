@@ -2,6 +2,7 @@ package com.ujuzy.ujuzy.activities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -16,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,11 +30,22 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.ujuzy.ujuzy.R;
 import com.ujuzy.ujuzy.Realm.RealmHelper;
+import com.ujuzy.ujuzy.Realm.RealmService;
 import com.ujuzy.ujuzy.Realm.RealmToken;
 import com.ujuzy.ujuzy.Realm.RealmTokenHelper;
 import com.ujuzy.ujuzy.Realm.RealmUserServiceAdapter;
@@ -46,16 +59,22 @@ import com.ujuzy.ujuzy.adapters.ServiceAdapter;
 import com.ujuzy.ujuzy.model.Constants;
 import com.ujuzy.ujuzy.model.Datum;
 import com.ujuzy.ujuzy.model.Service;
+import com.ujuzy.ujuzy.model.User;
 import com.ujuzy.ujuzy.services.Api;
 
 import org.jboss.aerogear.android.authorization.AuthorizationManager;
 import org.jboss.aerogear.android.authorization.AuthzModule;
 import org.jboss.aerogear.android.authorization.oauth2.OAuth2AuthorizationConfiguration;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import io.realm.Realm;
 import retrofit2.Call;
@@ -76,6 +95,9 @@ public class UserProfileActivity extends AppCompatActivity {
     String last_name = "";
     String profile_pic = "";
     String user_role = "";
+
+    private final String JSON_URL = "https://api.ujuzy.com/services";
+    private RequestQueue requestQueue;
 
     private TextView firstNameTv, lastNameTv, userRoleTv, noService;
     private ImageView profilePicIv, backBtn;
@@ -110,50 +132,93 @@ public class UserProfileActivity extends AppCompatActivity {
 
         initUserInfo();
         initBackBtn();
-        initRetrofit();
+       // initRetrofit();
+        getUserProfileUsingVolley();
        // initRealm();
 
+    }
+
+    private void getUserProfileUsingVolley() {
+
+        /*StringRequest stringRequest = new StringRequest(Request.Method.POST, JSON_URL, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("name",userAccount.getUsername());
+                params.put("phone_number",userAccount.getPassword());
+                params.put("date", Uri.encode(comment));
+                params.put("service_id",String.valueOf(postId));
+                params.put("time",String.valueOf(blogId));
+                params.put("request_info",String.valueOf(blogId));
+
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("Authorization",token);
+                params.put("Content-Type","application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+
+        requestQueue = Volley.newRequestQueue(UserProfileActivity.this);
+        requestQueue.add(stringRequest);
+*/
     }
 
     private Retrofit getRetrofit()
     {
         if (this.retrofit == null)
         {
+            Gson gson = new GsonBuilder()
+                    .setLenient()
+                    .create();
+
             this.retrofit = new Retrofit.Builder()
                     .baseUrl(Constants.HTTP.SERVICES_ENDPOINT)
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();
         }
         return this.retrofit;
     }
 
-    private void initRetrofit()
+   /* private void initRetrofit()
     {
         Api api = getRetrofit().create(Api.class);
-        Call<Service> ServiceData =  api.getServices();
-        ServiceData.enqueue(new Callback<Service>() {
+        Call<User> ServiceData =  api.getUserInfo();
+        ServiceData.enqueue(new Callback<User>() {
             @Override
-            public void onResponse(Call<Service> call, Response<Service> response) {
+            public void onResponse(Call<User> call, Response<User> response) {
 
-                Service service = response.body();
+                User user = response.body();
 
-                if (service != null && service.getData() != null)
-                {
-                    results = (ArrayList<Datum>) service.getData();
-                    /**
+
+                    *//**
                      * displaying results on a recyclerview
-                     */
-                    viewData();
-                }
+                     *//*
+                    //viewData();
             }
 
             @Override
-            public void onFailure(Call<Service> call, Throwable t) {
+            public void onFailure(Call<User> call, Throwable t) {
 
             }
         });
     }
-
+*/
     private void viewData()
     {
         //ADD RESPONSE TO ADAPTER

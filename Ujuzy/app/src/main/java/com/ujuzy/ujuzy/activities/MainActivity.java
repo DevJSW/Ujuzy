@@ -1,6 +1,7 @@
 package com.ujuzy.ujuzy.activities;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
@@ -33,6 +34,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
@@ -40,6 +42,8 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.ujuzy.ujuzy.R;
@@ -57,6 +61,7 @@ import com.ujuzy.ujuzy.model.Datum;
 import com.ujuzy.ujuzy.model.Login;
 import com.ujuzy.ujuzy.model.RetrofitInstance;
 import com.ujuzy.ujuzy.model.Service;
+import com.ujuzy.ujuzy.model.User;
 import com.ujuzy.ujuzy.services.Api;
 import com.ujuzy.ujuzy.services.NetworkChecker;
 import com.ujuzy.ujuzy.services.ServiceClient;
@@ -74,7 +79,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -133,11 +140,13 @@ public class MainActivity extends AppCompatActivity
         {
             noService.setVisibility(View.GONE);
             getServicesFromApi();
+            volleyJsonRequest();
 
         } else {
             //FETCH SERVICES FROM DATABASE
             getServicesFromDatabase();
         }
+
 
         initSeeAll();
         initSearch();
@@ -149,6 +158,10 @@ public class MainActivity extends AppCompatActivity
     {
         if (this.retrofit == null)
         {
+            /*Gson gson = new GsonBuilder()
+                    .setLenient()
+                    .create();*/
+
             this.retrofit = new Retrofit.Builder()
                     .baseUrl(Constants.HTTP.SERVICES_ENDPOINT)
                     .addConverterFactory(GsonConverterFactory.create())
@@ -838,11 +851,48 @@ public class MainActivity extends AppCompatActivity
 
                     authzModule.requestAccess(this, new org.jboss.aerogear.android.core.Callback<String>() {
                         @Override
-                        public void onSuccess(String data) {
+                        public void onSuccess(final String data) {
 
                             //SAVE TOKEN TO REALM DATABASE
                             RealmToken token = new RealmToken();
                             token.setToken(data);
+
+                            StringRequest stringRequest = new StringRequest(Request.Method.POST, JSON_URL, new com.android.volley.Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response)
+                                {
+                                    Toast.makeText(MainActivity.this, response.toString(),Toast.LENGTH_LONG).show();
+                                }
+                            }, new com.android.volley.Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Toast.makeText(MainActivity.this, error.toString(),Toast.LENGTH_LONG).show();
+                                }
+                            }) {
+                                /*@Override
+                                protected Map<String,String> getParams(){
+                                    Map<String,String> params = new HashMap<String, String>();
+                                    params.put("name",userAccount.getUsername());
+                                    params.put("phone_number",userAccount.getPassword());
+                                    params.put("date", Uri.encode(comment));
+                                    params.put("service_id",String.valueOf(postId));
+                                    params.put("time",String.valueOf(blogId));
+                                    params.put("request_info",String.valueOf(blogId));
+
+                                    return params;
+                                }*/
+
+                                @Override
+                                public Map<String, String> getHeaders() throws AuthFailureError {
+                                    Map<String,String> params = new HashMap<String, String>();
+                                    params.put("Authorization",data);
+                                    params.put("Content-Type","application/x-www-form-urlencoded");
+                                    return params;
+                                }
+                            };
+
+                            requestQueue = Volley.newRequestQueue(MainActivity.this);
+                            requestQueue.add(stringRequest);
 
                             realm = Realm.getDefaultInstance();
                             RealmTokenHelper helper = new RealmTokenHelper(realm);
@@ -863,7 +913,6 @@ public class MainActivity extends AppCompatActivity
                 } catch (MalformedURLException e) {
                     e.printStackTrace();
                 }
-
                 //startActivity(new Intent(UserProfileActivity.this, LoginActivity.class));
 
             } else {
@@ -884,11 +933,48 @@ public class MainActivity extends AppCompatActivity
 
                     authzModule.requestAccess(this, new org.jboss.aerogear.android.core.Callback<String>() {
                         @Override
-                        public void onSuccess(String data) {
+                        public void onSuccess(final String data) {
 
                             //SAVE TOKEN TO REALM DATABASE
                             RealmToken token = new RealmToken();
                             token.setToken(data);
+
+                            StringRequest stringRequest = new StringRequest(Request.Method.POST, JSON_URL, new com.android.volley.Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+
+                                    Toast.makeText(MainActivity.this, response.toString(),Toast.LENGTH_LONG).show();
+                                }
+                            }, new com.android.volley.Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Toast.makeText(MainActivity.this, error.toString(),Toast.LENGTH_LONG).show();
+                                }
+                            }) {
+                                /*@Override
+                                protected Map<String,String> getParams(){
+                                    Map<String,String> params = new HashMap<String, String>();
+                                    params.put("name",userAccount.getUsername());
+                                    params.put("phone_number",userAccount.getPassword());
+                                    params.put("date", Uri.encode(comment));
+                                    params.put("service_id",String.valueOf(postId));
+                                    params.put("time",String.valueOf(blogId));
+                                    params.put("request_info",String.valueOf(blogId));
+
+                                    return params;
+                                }
+
+                                @Override
+                                public Map<String, String> getHeaders() throws AuthFailureError {
+                                    Map<String,String> params = new HashMap<String, String>();
+                                    params.put("Authorization",data);
+                                    params.put("Content-Type","application/x-www-form-urlencoded");
+                                    return params;
+                                }*/
+                            };
+
+                            requestQueue = Volley.newRequestQueue(MainActivity.this);
+                            requestQueue.add(stringRequest);
 
                             realm = Realm.getDefaultInstance();
                             RealmTokenHelper helper = new RealmTokenHelper(realm);
@@ -948,6 +1034,42 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    /*public static void postNewComment(Context context, final UserAccount userAccount, final String comment, final int blogId, final int postId){
+        RequestQueue queue = Volley.newRequestQueue(context);
+        StringRequest sr = new StringRequest(Request.Method.POST,Constants.HTTP.BASE_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        }){
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("user",userAccount.getUsername());
+                params.put("pass",userAccount.getPassword());
+                params.put("comment", Uri.encode(comment));
+                params.put("comment_post_ID",String.valueOf(postId));
+                params.put("blogId",String.valueOf(blogId));
+
+                return params;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String,String> params = new HashMap<String, String>();
+                params.put("Authorization",token);
+                params.put("Content-Type","application/x-www-form-urlencoded");
+                return params;
+            }
+        };
+        queue.add(sr);
+    }*/
 
     @Override
     protected void onDestroy() {

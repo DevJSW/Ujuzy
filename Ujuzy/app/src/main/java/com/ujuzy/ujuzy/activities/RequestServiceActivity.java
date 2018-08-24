@@ -15,6 +15,7 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.view.Window;
@@ -25,9 +26,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.ujuzy.ujuzy.R;
 import com.ujuzy.ujuzy.Realm.RealmFavourite;
 import com.ujuzy.ujuzy.Realm.RealmFavouriteHelper;
@@ -46,6 +55,8 @@ import org.jboss.aerogear.android.authorization.oauth2.OAuth2AuthorizationConfig
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import io.realm.Realm;
 import retrofit2.Call;
@@ -54,6 +65,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Header;
+
+import static io.realm.SyncCredentials.IdentityProvider.ACCESS_TOKEN;
 
 public class RequestServiceActivity extends AppCompatActivity {
 
@@ -72,6 +85,12 @@ public class RequestServiceActivity extends AppCompatActivity {
 
     private Realm realm;
     private Retrofit retrofit;
+
+
+    //json volley
+    private final String JSON_URL = "https://api.ujuzy.com/requests";
+    private JsonArrayRequest request;
+    private RequestQueue requestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,9 +120,9 @@ public class RequestServiceActivity extends AppCompatActivity {
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (TextUtils.isEmpty(date)) {
+                /*if (TextUtils.isEmpty(date)) {
                     inputDateEt.setError("Enter time and date most suitable for you");
-                } else if (TextUtils.isEmpty(request)){
+                } else */if (!TextUtils.isEmpty(request)){
                     inputRequestEt.setError("Describe your request!");
                 } else {
 
@@ -132,7 +151,7 @@ public class RequestServiceActivity extends AppCompatActivity {
 
                             authzModule.requestAccess(RequestServiceActivity.this, new org.jboss.aerogear.android.core.Callback<String>() {
                                 @Override
-                                public void onSuccess(String data) {
+                                public void onSuccess(final String data) {
 
                                     //SAVE TOKEN TO REALM DATABASE
                                     RealmToken token = new RealmToken();
@@ -142,7 +161,43 @@ public class RequestServiceActivity extends AppCompatActivity {
                                     RealmTokenHelper helper = new RealmTokenHelper(realm);
                                     helper.save(token);
 
-                                    requestService(name, phone, date, serviceId, time, request);
+                                    //requestService(data, name, phone, date, serviceId, time, request);
+                                    StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.POST, JSON_URL, new com.android.volley.Response.Listener<String>() {
+                                        @Override
+                                        public void onResponse(String response) {
+
+
+                                        }
+                                    }, new com.android.volley.Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+
+                                        }
+                                    }) {
+                                        @Override
+                                        protected Map<String,String> getParams(){
+                                            Map<String,String> params = new HashMap<String, String>();
+                                            params.put("name",name);
+                                            params.put("phone_number",phone);
+                                            params.put("date", date);
+                                            params.put("service_id",serviceId);
+                                            params.put("time",time);
+                                            params.put("request_info",request);
+
+                                            return params;
+                                        }
+
+                                        @Override
+                                        public Map<String, String> getHeaders() throws AuthFailureError {
+                                            Map<String,String> params = new HashMap<String, String>();
+                                            params.put("Authorization",data);
+                                            params.put("Content-Type","application/x-www-form-urlencoded");
+                                            return params;
+                                        }
+                                    };
+
+                                    requestQueue = Volley.newRequestQueue(RequestServiceActivity.this);
+                                    requestQueue.add(stringRequest);
                                 }
 
                                 @Override
@@ -173,11 +228,11 @@ public class RequestServiceActivity extends AppCompatActivity {
                                     .setRedirectURL("https://ujuzy.com")
                                     .setScopes(Arrays.asList("openid"))
                                     .addAdditionalAuthorizationParam((Pair.create("grant_type", "password")))
-                                    .asModule();
+                                    .asModule();  // send token to backend database.
 
                             authzModule.requestAccess(RequestServiceActivity.this, new org.jboss.aerogear.android.core.Callback<String>() {
                                 @Override
-                                public void onSuccess(String data) {
+                                public void onSuccess(final String data) {
 
                                     //SAVE TOKEN TO REALM DATABASE
                                     RealmToken token = new RealmToken();
@@ -187,7 +242,45 @@ public class RequestServiceActivity extends AppCompatActivity {
                                     RealmTokenHelper helper = new RealmTokenHelper(realm);
                                     helper.save(token);
 
-                                    requestService(name, phone, date, serviceId, time, request);
+                                    //requestService(data, name, phone, date, serviceId, time, request);
+                                    StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.POST, JSON_URL, new com.android.volley.Response.Listener<String>() {
+                                        @Override
+                                        public void onResponse(String response) {
+
+
+                                        }
+                                    }, new com.android.volley.Response.ErrorListener() {
+                                        @Override
+                                        public void onErrorResponse(VolleyError error) {
+
+                                        }
+                                    }) {
+                                        @Override
+                                        protected Map<String,String> getParams(){
+                                            Map<String,String> params = new HashMap<String, String>();
+                                            params.put("name",name);
+                                            params.put("phone_number",phone);
+                                            params.put("date", date);
+                                            params.put("service_id",serviceId);
+                                            params.put("time",time);
+                                            params.put("request_info",request);
+
+                                            return params;
+                                        }
+
+                                        @Override
+                                        public Map<String, String> getHeaders() throws AuthFailureError {
+                                            Map<String,String> params = new HashMap<String, String>();
+                                            params.put("Authorization",data);
+                                            params.put("Content-Type","application/x-www-form-urlencoded");
+                                            return params;
+                                        }
+                                    };
+
+                                    requestQueue = Volley.newRequestQueue(RequestServiceActivity.this);
+                                    requestQueue.add(stringRequest);
+
+                                    postUsingVolley();
 
 
                                 }
@@ -210,6 +303,49 @@ public class RequestServiceActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private void postUsingVolley()
+    {
+
+       /* StringRequest request = new StringRequest(Request.Method.POST, Constants.HTTP.BASE_URL,
+                new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                if (!response.equals(null)) {
+                    Log.e("Your Array Response", response);
+                } else {
+                    Log.e("Your Array Response", "Data Null");
+                }
+            }
+
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("error is ", "" + error);
+            }
+        }) {
+
+            //This is for Headers If You Needed
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("Content-Type", "application/json; charset=UTF-8");
+                params.put("token", ACCESS_TOKEN);
+                return params;
+            }
+
+            //Pass Your Parameters here
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("User", UserName);
+                params.put("Pass", PassWord);
+                return params;
+            }
+        };
+        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
+        queue.add(request);*/
     }
 
     private void initServiceInfo()
@@ -264,18 +400,22 @@ public class RequestServiceActivity extends AppCompatActivity {
     {
         if (this.retrofit == null)
         {
+            Gson gson = new GsonBuilder()
+                    .setLenient()
+                    .create();
+
             this.retrofit = new Retrofit.Builder()
                     .baseUrl(Constants.HTTP.BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create(gson))
                     .build();
         }
         return this.retrofit;
     }
 
-    public void requestService(String name, String phone, String date, String serviceId, String time, String info)
+    public void requestService(String token, String name, String phone, String date, String serviceId, String time, String info)
     {
         Api api = getRetrofit().create(Api.class);
-        Call<Request> ServiceData =  api.requestSercive(name, phone,date ,serviceId, time, info);
+        Call<Request> ServiceData =  api.requestSercive(token, name, phone,date ,serviceId, time, info);
         ServiceData.enqueue(new Callback<Request>() {
             @Override
             public void onResponse(Call<Request> call, Response<Request> response) {

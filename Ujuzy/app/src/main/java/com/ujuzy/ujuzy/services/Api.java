@@ -32,17 +32,29 @@ public interface Api
     @GET("services")
     Call<Service> getServices();
 
-    @GET("/services")
-    Call<ResponseBody> getPosts();
+    @GET("users/profile")
+    Call<User> getUserInfo(
+            @Header("Authorization") String token);
+
+    @GET("users/get-role")
+    Call<User> getUserRole(
+            @Header("Authorization") String token);
+
+    @GET("users/my-services")
+    Call<Service> getCurrentlyLoggedInUserServices(
+            @Header("Authorization") String token);
 
     @GET("services")
     Call<RealmList<ResponseBody>> getResServices();
 
     @GET("services/{service_id}/reviews")
-    Call<Service> getReviewsByServiceId(@Header("Authentication") String token, @Path("service_id") String service_id);
+    Call<Service> getReviewsByServiceId(
+            @Header("Authentication") String token,
+            @Path("service_id") String service_id);
 
     @GET("services")
-    Call<Service> getServicesById(@Query("id") String id);
+    Call<Service> getServicesById(
+            @Query("id") String id);
 
     @FormUrlEncoded
     @POST("token")
@@ -64,6 +76,7 @@ public interface Api
                         @Field("confirm-password") String confirm_password);
 
 
+    @FormUrlEncoded
     @POST("requests")
     Call<Request> requestSercive(
             @Header("Authorization") String token,
