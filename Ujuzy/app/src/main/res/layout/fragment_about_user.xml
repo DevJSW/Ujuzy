@@ -20,6 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:layout_margin="15dp"
+        android:visibility="gone"
         android:orientation="horizontal">
 
         <com.ujuzy.ujuzy.CustomData.AllerFont
@@ -44,6 +45,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="30dp"
+        android:layout_marginTop="15dp"
         android:layout_marginLeft="15dp"
         android:orientation="horizontal">
 
@@ -91,6 +93,32 @@
 
     </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginBottom="15dp"
+            android:orientation="horizontal">
+
+            <com.ujuzy.ujuzy.CustomData.AllerFont
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:textColor="@color/colorPrimary"
+                android:text="Created at:"
+                android:textSize="15dp"/>
+
+            <com.ujuzy.ujuzy.CustomData.AllerFont
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:id="@+id/tvCreated"
+                android:layout_marginLeft="10dp"
+                android:text="----"
+                android:textSize="15dp"/>
+
+        </LinearLayout>
+
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -111,6 +139,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
+        android:id="@+id/tvLogOut"
         android:layout_margin="15dp"
         android:textColor="#f40909"
         android:text="Log out"

@@ -8,17 +8,23 @@
             android:id="@+id/nav_camera"
             android:title="Profile" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_favourite"
             android:title="Favourites" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_about"
             android:title="About us" />
-        <!--<item
-            android:id="@+id/nav_manage"
-            android:title="Settings" />-->
+
         <item
             android:id="@+id/nav_share"
             android:title="Share this app" />
+
+        <item
+            android:id="@+id/nav_rate"
+            android:title="Rate this app" />
+
+        <item
+            android:id="@+id/nav_help"
+            android:title="Help" />
 
     </group>
 

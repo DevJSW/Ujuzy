@@ -72,6 +72,7 @@ public class RealmAllServiceAdapter extends RecyclerView.Adapter<RealmAllService
             {
                 Intent openRead = new Intent(view.getContext(), NewServiceActivity.class);
                 openRead.putExtra("service_url", servicesList.get(position).getImage());
+                openRead.putExtra("service_id", servicesList.get(position).getId());
                 openRead.putExtra("service_name", servicesList.get(position).getServiceName());
                 openRead.putExtra("service_detail", servicesList.get(position).getServiceDetails());
                 openRead.putExtra("service_category", servicesList.get(position).getCategory());

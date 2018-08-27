@@ -6,21 +6,37 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.ujuzy.ujuzy.R;
 import com.ujuzy.ujuzy.Realm.RealmAllServiceAdapter;
 import com.ujuzy.ujuzy.Realm.RealmHelper;
 import com.ujuzy.ujuzy.Realm.RealmService;
 import com.ujuzy.ujuzy.Realm.RealmServiceAdapter;
+import com.ujuzy.ujuzy.Realm.RealmToken;
+import com.ujuzy.ujuzy.Realm.RealmTokenHelper;
+import com.ujuzy.ujuzy.Realm.RealmUser;
+import com.ujuzy.ujuzy.Realm.RealmUserHelper;
 import com.ujuzy.ujuzy.Realm.RealmUserService;
 import com.ujuzy.ujuzy.Realm.RealmUserServiceAdapter;
 import com.ujuzy.ujuzy.Realm.RealmUserServicesHelper;
 import com.ujuzy.ujuzy.activities.EditProfileActivity;
+import com.ujuzy.ujuzy.activities.MainActivity;
+import com.ujuzy.ujuzy.activities.UserProfileActivity;
+import com.ujuzy.ujuzy.activities.WebViewActivity;
 import com.ujuzy.ujuzy.adapters.CountryAdapter;
 import com.ujuzy.ujuzy.adapters.SeeAllAdapter;
 import com.ujuzy.ujuzy.adapters.ServiceAdapter;
@@ -29,7 +45,18 @@ import com.ujuzy.ujuzy.model.Datum;
 import com.ujuzy.ujuzy.model.Service;
 import com.ujuzy.ujuzy.services.Api;
 
+import org.jboss.aerogear.android.authorization.AuthorizationManager;
+import org.jboss.aerogear.android.authorization.AuthzModule;
+import org.jboss.aerogear.android.authorization.oauth2.OAuth2AuthorizationConfiguration;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
@@ -47,19 +74,23 @@ public class UserServicesFragment extends Fragment {
     String serviceId = "";
     String userId = "";
     String firstName = "";
+    private String webview_url = "https://ujuzy.com/services/create";
     private CountryAdapter countryAdapter;
     private RecyclerView serviceListRv;
     private static String BASE_URL = "https://api.ujuzy.com/";
+    private String USER_SERVICES_JSON_URL = "https://api.ujuzy.com/users/my-services";
     ArrayList<RealmUserService> results;
     private RealmAllServiceAdapter serviceAdapter;
     private ProgressBar progressBar;
     private TextView noService, editTv;
+    private Button createBt;
 
     private Realm realm;
     private RealmChangeListener realmChangeListener;
-    private RealmUserServiceAdapter serviceRealmAdapter;
+    private RealmAllServiceAdapter serviceRealmAdapter;
 
     private Retrofit retrofit;
+    private RequestQueue requestQueue;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,6 +102,7 @@ public class UserServicesFragment extends Fragment {
         progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
         noService = (TextView) v.findViewById(R.id.noService);
         editTv = (TextView) v.findViewById(R.id.tvEdit);
+        createBt = (Button) v.findViewById(R.id.createServiceBt);
 
         Bundle bundle2 = this.getArguments();
         if (bundle2 != null) {
@@ -88,17 +120,149 @@ public class UserServicesFragment extends Fragment {
 
         noService.setVisibility(View.VISIBLE);
         //initRealm();
+        initUserServices();
+        //getServicesFromRealm();
+
+        initRealm();
+        initCreateBt();
 
         return v;
     }
 
-    private void getServicesFromRealm()
+    private void initCreateBt() {
+        createBt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent webView = new Intent(getActivity(), WebViewActivity.class);
+                webView.putExtra("webview_url", webview_url);
+                startActivity(webView);
+            }
+        });
+    }
+
+    private void initRealm()
+    {
+        realm = Realm.getDefaultInstance();
+        final RealmHelper helper = new RealmHelper(realm);
+
+        RealmUser realmUser = realm.where(RealmUser.class).findFirst();
+
+        //QUERY/FILTER REALM DATABASE
+        helper.filterRealmDatabase("user_id", realmUser.getId());
+
+        //CHECK IF DATABASE IS EMPTY
+        if (helper.refreshDatabase().size() < 1 || helper.refreshDatabase().size() == 0)
+        {
+            noService.setVisibility(View.VISIBLE);
+            createBt.setVisibility(View.VISIBLE);
+            noService.setText("You have no services posted yet!");
+        } else {
+            noService.setVisibility(View.GONE);
+            createBt.setVisibility(View.GONE);
+        }
+
+
+        serviceRealmAdapter = new RealmAllServiceAdapter(getActivity(), helper.refreshDatabase());
+
+        //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+        final LinearLayoutManager serviceLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        serviceListRv.setLayoutManager(serviceLayoutManager);
+        serviceListRv.setAdapter(serviceRealmAdapter);
+
+        //HANDLE DATA CHANGE FOR REFRESH
+        realmChangeListener = new RealmChangeListener()
+        {
+            @Override
+            public void onChange(Object o) {
+                //REFRESH
+                serviceRealmAdapter = new RealmAllServiceAdapter(getActivity(), helper.refreshDatabase());
+                serviceListRv.setAdapter(serviceRealmAdapter);
+            }
+        };
+
+        //ADD CHANGE LIST TO REALM
+        realm.addChangeListener(realmChangeListener);
+    }
+
+
+    private void initUserServices()
+    {
+
+        try {
+
+            final AuthzModule authzModule = AuthorizationManager
+                    .config("KeyCloakAuthz", OAuth2AuthorizationConfiguration.class)
+                    .setBaseURL(new URL(Constants.HTTP.AUTH_BASE_URL))
+                    .setAuthzEndpoint("/auth/realms/ujuzy/protocol/openid-connect/auth")
+                    .setAccessTokenEndpoint("/auth/realms/ujuzy/protocol/openid-connect/token")
+                    .setAccountId("account")
+                    .setClientId("account")
+                    .setRedirectURL("https://ujuzy.com")
+                    .setScopes(Arrays.asList("openid"))
+                    .addAdditionalAuthorizationParam((Pair.create("grant_type", "password")))
+                    .asModule();
+
+            authzModule.requestAccess(getActivity(), new org.jboss.aerogear.android.core.Callback<String>() {
+                @Override
+                public void onSuccess(final String data) {
+
+                    StringRequest stringRequest = new StringRequest(Request.Method.GET, USER_SERVICES_JSON_URL, new com.android.volley.Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response)
+                        {
+
+                            try {
+
+                                JSONObject jsonObject = new JSONObject(response);
+
+
+                            } catch (JSONException e) {
+                                //e.printStackTrace();
+                            }
+
+                        }
+                    }, new com.android.volley.Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+                        }
+                    }) {
+
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+
+                            Map<String,String> params = new HashMap<String, String>();
+                            params.put("Authorization","Bearer "+ data);
+                            params.put("Content-Type","application/json");
+                            params.put("Accept","application/json");
+                            return params;
+                        }
+                    };
+
+                    requestQueue = Volley.newRequestQueue(getActivity());
+                    requestQueue.add(stringRequest);
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    //Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
+
+
+        } catch (MalformedURLException e) {
+            // e.printStackTrace();
+        }
+
+
+    }
+
+   /* private void getServicesFromRealm()
     {
         realm = Realm.getDefaultInstance();
         final RealmUserServicesHelper helper = new RealmUserServicesHelper(realm);
 
         //RETRIEVE
-        //helper.filterRealmDatabase("user_role", "Professional");
         helper.retreiveFromDB();
 
         //CHECK IF DATABASE IS EMPTY
@@ -130,13 +294,15 @@ public class UserServicesFragment extends Fragment {
         //ADD CHANGE LIST TO REALM
         realm.addChangeListener(realmChangeListener);
     }
-
+*/
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        /*realm.removeChangeListener(realmChangeListener);
-        realm.close();*/
+        if (realmChangeListener != null)
+        realm.removeChangeListener(realmChangeListener);
+        //if (realm != null)
+        //realm.close();
     }
 
 }

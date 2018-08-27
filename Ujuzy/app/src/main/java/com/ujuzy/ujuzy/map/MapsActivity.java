@@ -203,7 +203,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         geocoder = new Geocoder(this, Locale.getDefault());
 
         // create class object
-        gps = new GPSTracker(MapsActivity.this);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            gps = new GPSTracker(MapsActivity.this);
+        }
         // check if GPS enabled
         if(gps.canGetLocation()){
             latitude = gps.getLatitude();

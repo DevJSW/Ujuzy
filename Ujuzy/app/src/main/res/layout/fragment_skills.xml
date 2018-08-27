@@ -34,7 +34,7 @@
             android:textSize="17dp"
             android:gravity="center_horizontal"
             android:layout_margin="80dp"
-            android:text="No skills posted yet"
+            android:text="Other services under this service posted will appear here"
             android:id="@+id/noService"/>
 
         </RelativeLayout>

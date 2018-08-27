@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -13,9 +14,12 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Pair;
+import android.view.SubMenu;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -46,13 +50,17 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.ujuzy.ujuzy.CustomData.CustomTypefaceSpan;
 import com.ujuzy.ujuzy.R;
 import com.ujuzy.ujuzy.Realm.RealmHelper;
 import com.ujuzy.ujuzy.Realm.RealmService;
 import com.ujuzy.ujuzy.Realm.RealmServiceAdapter;
 import com.ujuzy.ujuzy.Realm.RealmToken;
 import com.ujuzy.ujuzy.Realm.RealmTokenHelper;
+import com.ujuzy.ujuzy.Realm.RealmUser;
+import com.ujuzy.ujuzy.Realm.RealmUserHelper;
 import com.ujuzy.ujuzy.SqliteDatabase.ServicesDatabase;
+import com.ujuzy.ujuzy.Utils.JWTUtilis;
 import com.ujuzy.ujuzy.adapters.CountryAdapter;
 import com.ujuzy.ujuzy.adapters.ServiceAdapter;
 import com.ujuzy.ujuzy.map.MapsActivity;
@@ -98,6 +106,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener
 {
+
+    private String token = "";
     private static String TAG = "MainActivity.this";
     private String webview_url = "https://ujuzy.com/services/create";
     private Toolbar toolbar;
@@ -108,8 +118,11 @@ public class MainActivity extends AppCompatActivity
 
     private RelativeLayout searchRely;
 
+    NavigationView navigationView;
+
     //json volley
     private final String JSON_URL = "https://api.ujuzy.com/services";
+    private final String USER_PROFILE_JSON_URL = "https://api.ujuzy.com/users/profile";
     private JsonArrayRequest request;
     private RequestQueue requestQueue;
     private List<Datum> serviceList;
@@ -122,7 +135,7 @@ public class MainActivity extends AppCompatActivity
     private RecyclerView companyServicesListRv;
     ArrayList<Datum> results;
     ArrayList<RealmService> reamResults;
-    private TextView tvSeeAllProf, tvSeeAllComp, noService, noServiceCo;
+    private TextView tvSeeAllProf, tvSeeAllComp, noService, noServiceCo, terms, usernameTv, useremailTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -139,8 +152,9 @@ public class MainActivity extends AppCompatActivity
         if (NetworkChecker.isNetworkAvailable(getApplicationContext()))  // it will take more than ti
         {
             noService.setVisibility(View.GONE);
-            getServicesFromApi();
-            volleyJsonRequest();
+           // getServicesFromApi();
+            //volleyJsonRequest();
+            getServices();
 
         } else {
             //FETCH SERVICES FROM DATABASE
@@ -151,16 +165,66 @@ public class MainActivity extends AppCompatActivity
         initSeeAll();
         initSearch();
         initHorizScrollMenu();
+        initNavigationCustomixation();
+        initTerms();
 
+    }
+
+    private void initTerms() {
+        terms = (TextView) findViewById(R.id.terms);
+        terms.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://ujuzy.com/terms"));
+                startActivity(browserIntent);
+            }
+        });
+    }
+
+    private void initNavigationCustomixation() {
+
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        View hView = navigationView.getHeaderView(0);
+
+        usernameTv = hView.findViewById(R.id.tv_user_name);
+        useremailTv = hView.findViewById(R.id.tv_user_email);
+
+        realm = Realm.getDefaultInstance();
+        RealmUser user = realm.where(RealmUser.class).findFirst();
+        if (user != null) {
+            usernameTv.setText(user.getFirstname() + " " + user.getLastname());
+            useremailTv.setText(user.getEmail());
+        }
+
+        navigationView.setNavigationItemSelectedListener(this);
+
+        Menu m = navigationView.getMenu();
+        for (int i=0;i<m.size();i++) {
+            MenuItem mi = m.getItem(i);
+            applyFontToMenuItem(mi);
+
+            //for applying a font to subMenu ...
+            SubMenu subMenu = mi.getSubMenu();
+            if (subMenu != null && subMenu.size() > 0) {
+                for (int j = 0; j < subMenu.size(); j++) {
+                    MenuItem subMenuItem = subMenu.getItem(j);
+                    applyFontToMenuItem(subMenuItem);
+                }
+            }
+        }
+    }
+
+    private void applyFontToMenuItem(MenuItem item) {
+        Typeface font = Typeface.createFromAsset(getAssets(), "fonts/Aller_Rg.ttf");
+        SpannableString mNewTitle = new SpannableString(item.getTitle());
+        mNewTitle.setSpan(new CustomTypefaceSpan("" , font), 0 , mNewTitle.length(),  Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+        item.setTitle(mNewTitle);
     }
 
     private Retrofit getRetrofit()
     {
         if (this.retrofit == null)
         {
-            /*Gson gson = new GsonBuilder()
-                    .setLenient()
-                    .create();*/
 
             this.retrofit = new Retrofit.Builder()
                     .baseUrl(Constants.HTTP.SERVICES_ENDPOINT)
@@ -227,6 +291,38 @@ public class MainActivity extends AppCompatActivity
 
                         JSONArray skillList = serviceObj.getJSONArray("skill_list");
 
+                      /*  Datum datum = new Datum();
+                        datum.setId(serviceObj.getString("id"));
+                        datum.setServiceName(serviceObj.getString("service_name"));
+                        datum.setServiceDetails(serviceObj.getString("service_details"));
+                        datum.setCost(serviceObj.getString("cost"));
+                        *//*datum.setCreatedBy(serviceObj.getString("created_by"));
+                        datum.setCreatedBy(serviceUserObj.getString());
+                        datum.setCategory(serviceObj.getString("category"));
+                        datum.setCreated_at(serviceObj.getString("created_at"));
+                        datum.setImage(serviceImgObj.getString("thumb"));
+
+                        datum.setUser_role(serviceUserObj.getString("user_role"));
+                        datum.setUser_thumb(serviceUserObj.getString("profile_pic"));
+                        datum.setFirst_name(serviceUserObj.getString("firstname"));
+                        datum.setLast_name(serviceUserObj.getString("lastname"));
+                        datum.setUser_id(serviceUserObj.getString("id"));
+
+                        datum.setCity(serviceLocationObj.getString("city"));
+
+                        datum.setService_duration_days(serviceDurationObj.getString("days"));
+                        datum.setService_duration_hours(serviceDurationObj.getString("hours"));*//*
+
+                        serviceList.add(datum);
+
+                        servicesListRv = (RecyclerView) findViewById(R.id.service_list);
+                        serviceAdapter = new ServiceAdapter(getApplicationContext(), results);
+
+                        //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+                        final LinearLayoutManager serviceLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+                        servicesListRv.setLayoutManager(serviceLayoutManager);
+                        servicesListRv.setAdapter(serviceAdapter);
+*/
                         // ASSIGN DATA TO REALM DATABASE SERVICE
 
                         RealmService realmService = new  RealmService();
@@ -837,7 +933,7 @@ public class MainActivity extends AppCompatActivity
             {
                 try {
 
-                    AuthzModule authzModule = AuthorizationManager
+                    final AuthzModule authzModule = AuthorizationManager
                             .config("KeyCloakAuthz", OAuth2AuthorizationConfiguration.class)
                             .setBaseURL(new URL(Constants.HTTP.AUTH_BASE_URL))
                             .setAuthzEndpoint("/auth/realms/ujuzy/protocol/openid-connect/auth")
@@ -857,16 +953,47 @@ public class MainActivity extends AppCompatActivity
                             RealmToken token = new RealmToken();
                             token.setToken(data);
 
-                            StringRequest stringRequest = new StringRequest(Request.Method.POST, JSON_URL, new com.android.volley.Response.Listener<String>() {
+                            StringRequest stringRequest = new StringRequest(Request.Method.GET, USER_PROFILE_JSON_URL, new com.android.volley.Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response)
                                 {
-                                    Toast.makeText(MainActivity.this, response.toString(),Toast.LENGTH_LONG).show();
+
+                                    try {
+                                        JSONObject jsonObject = new JSONObject(response);
+
+                                        RealmUser realmService = new  RealmUser();
+                                        realmService.setId(jsonObject.getString("id"));
+                                        realmService.setFirstname(jsonObject.getString("firstname"));
+                                        realmService.setLastname(jsonObject.getString("lastname"));
+                                        realmService.setGender(jsonObject.getString("gender"));
+                                        realmService.setEmail(jsonObject.getString("email"));
+                                        realmService.setCreated_at(jsonObject.getString("created_at"));
+                                        realmService.setPhone(jsonObject.getString("phone_number"));
+                                        //realmService.setVerified(jsonObject.getString("phone_number"));
+
+                                        JSONObject jsonUserRole = new JSONObject(response).getJSONObject("user_role");
+                                        realmService.setUserRole(jsonUserRole.getString("role_name"));
+
+                                        JSONObject jsonUserProfilePic = new JSONObject(response).getJSONObject("profile_pic");
+                                        realmService.setProfilePic(jsonUserProfilePic.getString("thumb"));
+
+                                        //SAVE
+                                        realm = Realm.getDefaultInstance();
+                                        RealmUserHelper helper = new RealmUserHelper(realm);
+                                        helper.save(realmService);
+
+
+                                    } catch (JSONException e) {
+                                        //e.printStackTrace();
+                                    }
+
                                 }
                             }, new com.android.volley.Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    Toast.makeText(MainActivity.this, error.toString(),Toast.LENGTH_LONG).show();
+
+                                    authzModule.deleteAccount();
+
                                 }
                             }) {
                                 /*@Override
@@ -885,8 +1012,9 @@ public class MainActivity extends AppCompatActivity
                                 @Override
                                 public Map<String, String> getHeaders() throws AuthFailureError {
                                     Map<String,String> params = new HashMap<String, String>();
-                                    params.put("Authorization",data);
-                                    params.put("Content-Type","application/x-www-form-urlencoded");
+                                    params.put("Authorization","Bearer "+ data);
+                                    params.put("Content-Type","application/json");
+                                    params.put("Accept","application/json");
                                     return params;
                                 }
                             };
@@ -898,20 +1026,22 @@ public class MainActivity extends AppCompatActivity
                             RealmTokenHelper helper = new RealmTokenHelper(realm);
                             helper.save(token);
 
-                            startActivity(new Intent(MainActivity.this, UserProfileActivity.class));
+                            Intent filterPlumbers = new Intent(MainActivity.this, UserProfileActivity.class);
+                            filterPlumbers.putExtra("auth_token", data);
+                            startActivity(filterPlumbers);
 
                         }
 
                         @Override
                         public void onFailure(Exception e) {
-                            System.err.println("Error!!");
-                            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                            //Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                            authzModule.deleteAccount();
                         }
                     });
 
 
                 } catch (MalformedURLException e) {
-                    e.printStackTrace();
+                   // e.printStackTrace();
                 }
                 //startActivity(new Intent(UserProfileActivity.this, LoginActivity.class));
 
@@ -919,7 +1049,7 @@ public class MainActivity extends AppCompatActivity
 
                 try {
 
-                    AuthzModule authzModule = AuthorizationManager
+                    final AuthzModule authzModule = AuthorizationManager
                             .config("KeyCloakAuthz", OAuth2AuthorizationConfiguration.class)
                             .setBaseURL(new URL(Constants.HTTP.AUTH_BASE_URL))
                             .setAuthzEndpoint("/auth/realms/ujuzy/protocol/openid-connect/auth")
@@ -931,6 +1061,7 @@ public class MainActivity extends AppCompatActivity
                             .addAdditionalAuthorizationParam((Pair.create("grant_type", "password")))
                             .asModule();
 
+
                     authzModule.requestAccess(this, new org.jboss.aerogear.android.core.Callback<String>() {
                         @Override
                         public void onSuccess(final String data) {
@@ -939,38 +1070,70 @@ public class MainActivity extends AppCompatActivity
                             RealmToken token = new RealmToken();
                             token.setToken(data);
 
-                            StringRequest stringRequest = new StringRequest(Request.Method.POST, JSON_URL, new com.android.volley.Response.Listener<String>() {
+                            StringRequest stringRequest = new StringRequest(Request.Method.GET, USER_PROFILE_JSON_URL, new com.android.volley.Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response) {
 
-                                    Toast.makeText(MainActivity.this, response.toString(),Toast.LENGTH_LONG).show();
+                                    try {
+                                        JSONObject jsonObject = new JSONObject(response);
+
+                                        RealmUser realmService = new  RealmUser();
+                                        realmService.setId(jsonObject.getString("id"));
+                                        realmService.setFirstname(jsonObject.getString("firstname"));
+                                        realmService.setLastname(jsonObject.getString("lastname"));
+                                        realmService.setGender(jsonObject.getString("gender"));
+                                        realmService.setEmail(jsonObject.getString("email"));
+                                        realmService.setCreated_at(jsonObject.getString("created_at"));
+                                        realmService.setPhone(jsonObject.getString("phone_number"));
+                                        //realmService.setVerified(jsonObject.getString("phone_number"));
+
+                                        JSONObject jsonUserRole = new JSONObject(response).getJSONObject("user_role");
+                                        realmService.setUserRole(jsonUserRole.getString("role_name"));
+
+                                        JSONObject jsonUserProfilePic = new JSONObject(response).getJSONObject("profile_pic");
+                                        realmService.setProfilePic(jsonUserProfilePic.getString("thumb"));
+
+                                        //SAVE
+                                        realm = Realm.getDefaultInstance();
+                                        RealmUserHelper helper = new RealmUserHelper(realm);
+                                        helper.save(realmService);
+
+
+                                    } catch (JSONException e) {
+                                       // e.printStackTrace();
+                                    }
+
                                 }
                             }, new com.android.volley.Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    Toast.makeText(MainActivity.this, error.toString(),Toast.LENGTH_LONG).show();
+
+                                    authzModule.deleteAccount();
+                                    /*if (error.toString().equals("com.android.volley.AuthFailureError"))
+                                    {
+                                        authzModule.deleteAccount();
+                                    } else {
+                                        Toast.makeText(MainActivity.this, error.toString(),Toast.LENGTH_LONG).show();
+                                    }*/
+
                                 }
                             }) {
                                 /*@Override
                                 protected Map<String,String> getParams(){
                                     Map<String,String> params = new HashMap<String, String>();
-                                    params.put("name",userAccount.getUsername());
-                                    params.put("phone_number",userAccount.getPassword());
-                                    params.put("date", Uri.encode(comment));
-                                    params.put("service_id",String.valueOf(postId));
-                                    params.put("time",String.valueOf(blogId));
-                                    params.put("request_info",String.valueOf(blogId));
+                                    params.put("Authorization","Bearer "+ data);
 
                                     return params;
-                                }
+                                }*/
 
                                 @Override
                                 public Map<String, String> getHeaders() throws AuthFailureError {
                                     Map<String,String> params = new HashMap<String, String>();
-                                    params.put("Authorization",data);
-                                    params.put("Content-Type","application/x-www-form-urlencoded");
+                                    params.put("Authorization","Bearer "+ data);
+                                    params.put("Content-Type","application/json");
+                                    params.put("Accept","application/json");
                                     return params;
-                                }*/
+                                }
                             };
 
                             requestQueue = Volley.newRequestQueue(MainActivity.this);
@@ -980,50 +1143,53 @@ public class MainActivity extends AppCompatActivity
                             RealmTokenHelper helper = new RealmTokenHelper(realm);
                             helper.save(token);
 
-                            startActivity(new Intent(MainActivity.this, UserProfileActivity.class));
+                            Intent filterPlumbers = new Intent(MainActivity.this, UserProfileActivity.class);
+                            filterPlumbers.putExtra("auth_token", data);
+                            startActivity(filterPlumbers);
 
                         }
 
                         @Override
                         public void onFailure(Exception e) {
-                            System.err.println("Error!!");
-                            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                           // Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     });
 
 
                 } catch (MalformedURLException e) {
-                    e.printStackTrace();
+                    //e.printStackTrace();
                 }
 
 
             }
 
             // Handle the camera action   //
-        } else if (id == R.id.nav_gallery)
+        } else if (id == R.id.nav_favourite)
         {
             startActivity(new Intent(MainActivity.this, FavouriteActivity.class));
 
-        } else if (id == R.id.nav_slideshow)
+        } else if (id == R.id.nav_about)
         {
 
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://ujuzy.com"));
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://ujuzy.com/professional"));
             startActivity(browserIntent);
 
-        } /*else if (id == R.id.nav_manage)
+        } else if (id == R.id.nav_help)
         {
-           *//* Intent webView = new Intent(MainActivity.this, Webview2Activity.class);
-            webView.putExtra("webview_url", webview_url_login);
-            webView.putExtra("page_title", "Sign in");               
-            startActivity(webView);*//*
-            startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://ujuzy.com/help"));
+            startActivity(browserIntent);
 
-        }*/ else if (id == R.id.nav_share)
+        }  else if (id == R.id.nav_rate)
+        {
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.ujuzy.ujuzy"));
+            startActivity(browserIntent);
+
+        } else if (id == R.id.nav_share)
         {
             Intent myIntent = new Intent(Intent.ACTION_SEND);
             myIntent.setType("text/plain");
             String shareBody ="Ujuzy App";
-            String shareSub = "Download Ujuzy app TODAY!";
+            String shareSub = "Hi, this is an invitation to download Ujuzy app  https://play.google.com/store/apps/details?id=com.ujuzy.ujuzy";
             myIntent.putExtra(Intent.EXTRA_SUBJECT,shareBody);
             myIntent.putExtra(Intent.EXTRA_TEXT,shareSub);
             startActivity(Intent.createChooser(myIntent,"Share this app"));
@@ -1035,41 +1201,6 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    /*public static void postNewComment(Context context, final UserAccount userAccount, final String comment, final int blogId, final int postId){
-        RequestQueue queue = Volley.newRequestQueue(context);
-        StringRequest sr = new StringRequest(Request.Method.POST,Constants.HTTP.BASE_URL, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        }){
-            @Override
-            protected Map<String,String> getParams(){
-                Map<String,String> params = new HashMap<String, String>();
-                params.put("user",userAccount.getUsername());
-                params.put("pass",userAccount.getPassword());
-                params.put("comment", Uri.encode(comment));
-                params.put("comment_post_ID",String.valueOf(postId));
-                params.put("blogId",String.valueOf(blogId));
-
-                return params;
-            }
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String,String> params = new HashMap<String, String>();
-                params.put("Authorization",token);
-                params.put("Content-Type","application/x-www-form-urlencoded");
-                return params;
-            }
-        };
-        queue.add(sr);
-    }*/
 
     @Override
     protected void onDestroy() {

@@ -25,11 +25,26 @@
         android:layout_height="wrap_content"
         android:textSize="17dp"
         android:gravity="center_horizontal"
-        android:layout_margin="80dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginRight="80dp"
+        android:layout_marginBottom="18dp"
         android:text="No Services posted yet"
         android:id="@+id/noService"/>
 
-
+    <com.ujuzy.ujuzy.CustomData.AllerButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_bg"
+        android:id="@+id/createServiceBt"
+        android:padding="10dp"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"
+        android:textSize="15dp"
+        android:textColor="#fff"
+        android:layout_below="@+id/noService"
+        android:textAllCaps="false"
+        android:text="Create a service"/>
 
 
 </RelativeLayout>

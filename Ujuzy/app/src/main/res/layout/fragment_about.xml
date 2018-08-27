@@ -16,89 +16,283 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
+            android:layout_marginTop="10dp"
             android:orientation="vertical">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#eae8e8"
+                android:layout_marginBottom="15dp"
+                android:orientation="vertical">
 
-            <Spinner
-                android:id="@+id/spinner_details"
-                android:layout_width="match_parent"
-                android:layout_weight="1"
-                android:layout_height="75dp"
-                />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#e2e1e1"/>
-            <Spinner
-                android:id="@+id/spinner_createdby"
-                android:layout_width="match_parent"
-                android:layout_weight="1"
-                android:layout_height="75dp"
-                />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#e2e1e1"/>
-            <Spinner
-                android:id="@+id/spinner_dutation"
-                android:layout_width="match_parent"
-                android:layout_weight="1"
-                android:layout_height="75dp"
-                />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#e2e1e1"/>
-            <Spinner
-                android:id="@+id/spinner_category"
-                android:layout_width="match_parent"
-                android:layout_weight="1"
-                android:layout_height="75dp"
-                />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#e2e1e1"/>
+                <com.ujuzy.ujuzy.CustomData.AllerBoldFont
+                    android:id="@id/expandable_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:text="Service Details:"
+                    android:textSize="16sp"
+                    android:textColor="#666666" />
 
-            <Spinner
-                android:id="@+id/spinner_travel"
-                android:layout_width="match_parent"
-                android:layout_weight="1"
-                android:layout_height="75dp"
-                />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#e2e1e1"/>
+                <com.ms.square.android.expandabletextview.ExpandableTextView
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/tv_service_ex"
+                    android:layout_width="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_height="wrap_content"
+                    expandableTextView:maxCollapsedLines="2"
+                    expandableTextView:animDuration="200">
 
-            <Spinner
-                android:id="@+id/spinner_createdat"
-                android:layout_width="match_parent"
-                android:layout_weight="1"
-                android:layout_height="75dp"
-                />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#e2e1e1"/>
+                    <com.ujuzy.ujuzy.CustomData.AllerFont
+                        android:id="@id/expandable_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:paddingTop="5dp"
+                        android:textSize="16sp"
+                        android:textColor="#666666" />
+                    <ImageButton
+                        android:id="@id/expand_collapse"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="15dp"
+                        android:layout_gravity="right|bottom"
+                        android:background="@android:color/transparent"/>
+                </com.ms.square.android.expandabletextview.ExpandableTextView>
 
-            <Spinner
-                android:id="@+id/spinner_cost"
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_weight="1"
-                android:layout_height="75dp"
-                />
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#e2e1e1"/>
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="vertical"
+                android:background="@drawable/button_bg_dialogs">
+
+                <com.ujuzy.ujuzy.CustomData.AllerBoldFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_service_name"
+                    android:text="More info"
+                    android:textColor="#666666"
+                    android:textSize="17dp"
+                    android:layout_margin="13dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_marginRight="13dp"
+                    android:layout_marginLeft="13dp"
+                    android:orientation="horizontal">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="5dp"
+                        app:civ_border_color="#fff"
+                        app:civ_border_width="1dp"
+                        android:id="@+id/iv_avatar"
+                        android:src="@drawable/placeholder_image"/>
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:layout_margin="2dp">
+
+                        <com.ujuzy.ujuzy.CustomData.AllerFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="13dp"
+                            android:id="@+id/by"
+                            android:textColor="#666666"
+                            android:text="Service provided by:"/>
+
+                        <com.ujuzy.ujuzy.CustomData.AllerBoldFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/by"
+                            android:id="@+id/tv_user_name"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="15dp"
+                            android:text="Sender Name"/>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#fff"
+                    android:layout_margin="15dp"/>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <com.ujuzy.ujuzy.CustomData.AllerBoldFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Category"
+                        android:textColor="#666666"
+                        android:id="@+id/total"
+                        android:textSize="17dp"
+                        android:layout_marginLeft="15dp"/>
+                    <com.ujuzy.ujuzy.CustomData.AllerFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="This is the category this service is associated with."
+                        android:layout_below="@+id/total"
+                        android:layout_toLeftOf="@+id/tv_service_category"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginTop="3dp"
+                        android:textSize="14dp"
+                        android:layout_marginLeft="15dp"/>
+
+                    <com.ujuzy.ujuzy.CustomData.AllerBoldFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ksh 60,000"
+                        android:textColor="#666666"
+                        android:layout_alignParentRight="true"
+                        android:id="@+id/tv_service_category"
+                        android:textSize="17dp"
+                        android:layout_marginRight="15dp"/>
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#fff"
+                    android:layout_margin="15dp"/>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <com.ujuzy.ujuzy.CustomData.AllerBoldFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Service Duration"
+                        android:textColor="#666666"
+                        android:id="@+id/duration"
+                        android:textSize="17dp"
+                        android:layout_marginLeft="15dp"/>
+                    <com.ujuzy.ujuzy.CustomData.AllerFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="The required time taken to complete this service."
+                        android:layout_below="@+id/duration"
+                        android:layout_toLeftOf="@+id/tv_service_duration"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginTop="3dp"
+                        android:textSize="14dp"
+                        android:layout_marginLeft="15dp"/>
+
+                    <com.ujuzy.ujuzy.CustomData.AllerBoldFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ksh 60,000"
+                        android:layout_alignParentRight="true"
+                        android:id="@+id/tv_service_duration"
+                        android:textSize="17dp"
+                        android:layout_marginRight="15dp"/>
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#fff"
+                    android:layout_margin="15dp"/>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+                    <com.ujuzy.ujuzy.CustomData.AllerBoldFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Offer Cost"
+                        android:textColor="#666666"
+                        android:id="@+id/cost"
+                        android:textSize="17dp"
+                        android:layout_marginLeft="15dp"/>
+                    <com.ujuzy.ujuzy.CustomData.AllerFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="The quoted fees includes any applicable exchange rate."
+                        android:layout_below="@+id/cost"
+                        android:layout_toLeftOf="@+id/tv_service_cost"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginTop="3dp"
+                        android:textSize="14dp"
+                        android:layout_marginLeft="15dp"/>
+
+                    <com.ujuzy.ujuzy.CustomData.AllerBoldFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ksh 60,000"
+                        android:textColor="#666666"
+                        android:layout_alignParentRight="true"
+                        android:id="@+id/tv_service_cost"
+                        android:textSize="17dp"
+                        android:layout_marginRight="15dp"/>
+                </RelativeLayout>
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#fff"
+                    android:layout_margin="15dp"/>
+
+                <com.ujuzy.ujuzy.CustomData.AllerBoldFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cancellation Policy"
+                    android:textColor="#666666"
+                    android:id="@+id/cancellation"
+                    android:textSize="17dp"
+                    android:layout_marginLeft="15dp"/>
+                <com.ujuzy.ujuzy.CustomData.AllerFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Get a full refund if you cancel within 24 hours of purchase."
+                    android:layout_toLeftOf="@+id/tv_service_cost"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginBottom="15dp"
+                    android:textSize="14dp"
+                    android:layout_marginLeft="15dp"/>
+
+                <com.ujuzy.ujuzy.CustomData.AllerButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_bg"
+                    android:textColor="#fff"
+                    android:id="@+id/bookService"
+                    android:textSize="15dp"
+                    android:layout_margin="15dp"
+                    android:layout_gravity="center_horizontal"
+                    android:textAllCaps="false"
+                    android:padding="5dp"
+                    android:text="Request this service"/>
+
+            </LinearLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="220dp"
                 android:id="@+id/bottomRely"
                 android:layout_marginBottom="20dp"
-                android:visibility="gone"
                 android:layout_marginTop="30dp"
                 android:background="#eaeaea"
                 android:orientation="vertical">
@@ -116,6 +310,7 @@
                     android:layout_centerInParent="true"
                     android:id="@+id/noService"
                     android:textSize="15dp"
+                    android:layout_margin="40dp"
                     android:visibility="gone"
                     android:text="No services"/>
 
@@ -132,7 +327,7 @@
                         android:layout_marginTop="12dp"
                         android:textSize="14dp"
                         android:layout_marginBottom="8dp"
-                        android:text="Similar services in your area"/>
+                        android:text="Similar services"/>
 
                     <com.ujuzy.ujuzy.CustomData.AllerFont
                         android:layout_width="wrap_content"
@@ -144,7 +339,7 @@
                         android:textSize="14dp"
                         android:id="@+id/seeAllProf"
                         android:layout_marginBottom="8dp"
-                        android:text=" >>"/>
+                        android:text=" >"/>
 
                 </RelativeLayout>
 

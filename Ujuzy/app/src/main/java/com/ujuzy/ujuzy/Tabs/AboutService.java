@@ -12,16 +12,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.ujuzy.ujuzy.R;
 import com.ujuzy.ujuzy.Realm.RealmAllServiceAdapter;
 import com.ujuzy.ujuzy.Realm.RealmHelper;
 import com.ujuzy.ujuzy.Realm.RealmServiceAdapter;
 import com.ujuzy.ujuzy.Realm.RealmSuggestedServiceAdapter;
+import com.ujuzy.ujuzy.activities.NewServiceActivity;
 import com.ujuzy.ujuzy.activities.ProfileActivity;
+import com.ujuzy.ujuzy.activities.RequestServiceActivity;
 import com.ujuzy.ujuzy.map.MapsActivity;
 
 import java.util.ArrayList;
@@ -39,6 +43,7 @@ public class AboutService extends Fragment {
 
     String service_id = "";
     String service_details = "";
+    String service_name = "";
     String service_creator = "";
     String service_created_at = "";
     String service_cost= "";
@@ -48,11 +53,12 @@ public class AboutService extends Fragment {
     String service_hours= "";
     String service_add_info= "";
     String service_duration = "";
+    String no_of_personnel = "";
    // String service_created_at = "";
 
     String first_name = "";
     String last_name = "";
-    //String profile_pic = "";
+    String profile_pic = "";
     String user_role = "";
 
     List<String> serviceDetails;
@@ -74,10 +80,11 @@ public class AboutService extends Fragment {
     private RealmChangeListener realmChangeListener;
     private RealmSuggestedServiceAdapter serviceRealmAdapter;
 
-    private TextView noService;
+    private TextView noService, duration, categery, cost, name;
+    private Button bookServiceBt;
 
     private RecyclerView servicesListRv;
-    private DropdownTextView serviceExpandableTv;
+    private ExpandableTextView serviceExpTv, serviceCostExpandableTv, serviceDurationExpandableTv, serviceCategoryExpandableTv;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -85,18 +92,14 @@ public class AboutService extends Fragment {
         // Inflate the layout for this fragment
         final View v = inflater.inflate(R.layout.fragment_about, container, false);
 
-
-        spinner_details = (Spinner) v.findViewById(R.id.spinner_details);
-        spinner_cost = (Spinner) v.findViewById(R.id.spinner_cost);
-        spinner_travel = (Spinner) v.findViewById(R.id.spinner_travel);
-        spinner_category = (Spinner) v.findViewById(R.id.spinner_category);
-        spinner_duration = (Spinner) v.findViewById(R.id.spinner_dutation);
-        spinner_createdby = (Spinner) v.findViewById(R.id.spinner_createdby);
-        spinner_createdat = (Spinner) v.findViewById(R.id.spinner_createdat);
-        spinner_cost = (Spinner) v.findViewById(R.id.spinner_cost);
-
         noService = (TextView) v.findViewById(R.id.noService);
+        duration = (TextView) v.findViewById(R.id.tv_service_duration);
+        categery = (TextView) v.findViewById(R.id.tv_service_category);
+        cost = (TextView) v.findViewById(R.id.tv_service_cost);
+        name = (TextView) v.findViewById(R.id.tv_user_name);
         servicesListRv = (RecyclerView) v.findViewById(R.id.service_list);
+        serviceExpTv = (ExpandableTextView) v.findViewById(R.id.tv_service_ex);
+        bookServiceBt = (Button) v.findViewById(R.id.bookService);
 
 
        /* rlLocation = (RelativeLayout) v.findViewById(R.id.rl_location);
@@ -106,26 +109,59 @@ public class AboutService extends Fragment {
         initUserInfo();
         initServiceInfo();
        // initMenu();
-        initTabs();
         initSimilarServClose();
+        initExpandableTv();
+        initBookService();
 
         return v;
     }
 
+    private void initBookService() {
+        bookServiceBt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent requestActivity = new Intent(getActivity(), RequestServiceActivity.class);
+                requestActivity.putExtra("service_id", service_id);
+                requestActivity.putExtra("first_name", first_name);
+                requestActivity.putExtra("last_name", last_name);
+                requestActivity.putExtra("service_cost", service_cost);
+                requestActivity.putExtra("service_name", service_name);
+                requestActivity.putExtra("no_of_personnel", no_of_personnel);
+                requestActivity.putExtra("profile_pic", profile_pic);
+                startActivity(requestActivity);
+            }
+        });
+    }
+
+    private void initExpandableTv() {
+        serviceExpTv.setText(service_details);
+        cost.setText(service_cost);
+        categery.setText(service_category);
+        duration.setText(service_duration);
+        name.setText(first_name + " " + last_name);
+        /*serviceCostExpandableTv.setText(service_cost);
+        serviceDurationExpandableTv.setText(service_duration);
+        serviceCategoryExpandableTv.setText(service_category);*/
+    }
+
     private void initSimilarServClose()
     {
+
+        noService.setVisibility(View.VISIBLE);
+        noService.setText("No similar " + service_category + " services near you!");
+
         realm = Realm.getDefaultInstance();
         final RealmHelper helper = new RealmHelper(realm);
 
         //QUERY/FILTER REALM DATABASE
-        helper.filterRealmDatabase("category", service_category);
+        /*helper.filterRealmDatabase("category", service_category);
 
         //CHECK IF DATABASE IS EMPTY
         if (helper.refreshDatabase().size() < 1 || helper.refreshDatabase().size() == 0)
         {
 
             noService.setVisibility(View.VISIBLE);
-            noService.setText("Oh no 😌😞 this is embarrassing but no " + service_category + " services near you!");
+            noService.setText("No similar " + service_category + " services near you!");
 
         } else {
 
@@ -152,36 +188,7 @@ public class AboutService extends Fragment {
         };
 
         //ADD CHANGE LIST TO REALM
-        realm.addChangeListener(realmChangeListener);
-    }
-
-    private void initTabs()
-    {
-        initServiceDetailsTabs();
-        if (service_creator != null)
-        initCreatedby();
-        if (service_creator == null)
-        spinner_createdby.setVisibility(View.GONE);
-        if (service_category != null)
-        initCategory();
-        if (service_category == null)
-        spinner_category.setVisibility(View.GONE);
-        if (service_travel != null)
-        initTravel();
-        if (service_travel == null)
-        spinner_travel.setVisibility(View.GONE);
-        if (service_created_at != null)
-        initCreatedAt();
-        if (service_created_at == null)
-        spinner_createdat.setVisibility(View.GONE);
-        if (service_cost != null)
-        initOfferCost();
-        if (service_cost == null)
-            spinner_cost.setVisibility(View.GONE);
-        if (service_duration != null)
-        initServiceDuration();
-        if (service_duration == null)
-            spinner_duration.setVisibility(View.GONE);
+        realm.addChangeListener(realmChangeListener);*/
     }
 
     private void initServiceDuration() {
@@ -510,6 +517,9 @@ public class AboutService extends Fragment {
             service_cost = bundle2.getString("serviceCost", null);
 
             service_category = bundle2.getString("serviceCategory", null);
+            no_of_personnel = bundle2.getString("no_of_personnel", null);
+            profile_pic = bundle2.getString("profile_pic", null);
+            service_name = bundle2.getString("serviceName", null);
             service_travel = bundle2.getString("serviceTravel", null);
             service_days = bundle2.getString("serviceDays", null);
             service_hours = bundle2.getString("serviceHours", null);

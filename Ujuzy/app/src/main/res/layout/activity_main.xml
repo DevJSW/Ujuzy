@@ -23,4 +23,36 @@
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/activity_main_drawer" />
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+       android:visibility="gone"
+
+        android:id="@+id/footer">
+
+        <!--<ImageView
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:padding="5dp"
+            android:id="@+id/settings"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/settings_grey"/>-->
+
+        <com.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:textColor="@color/font_black"
+            android:textSize="14dp"
+            android:id="@+id/terms"
+            android:layout_centerInParent="true"
+            android:text="Terms of Use"/>
+
+    </RelativeLayout>
+
+
+
 </android.support.v4.widget.DrawerLayout>
+

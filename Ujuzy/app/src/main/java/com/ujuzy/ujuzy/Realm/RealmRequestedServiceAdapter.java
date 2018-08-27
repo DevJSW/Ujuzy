@@ -17,38 +17,35 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.ujuzy.ujuzy.R;
 import com.ujuzy.ujuzy.activities.NewServiceActivity;
-import com.ujuzy.ujuzy.activities.ServiceActivity;
-import com.ujuzy.ujuzy.adapters.ServiceAdapter;
-import com.ujuzy.ujuzy.model.Datum;
 
 import java.util.ArrayList;
 
 import io.realm.Realm;
 
-public class RealmServiceAdapter extends RecyclerView.Adapter<RealmServiceAdapter.ServicesViewHolder>
+public class RealmRequestedServiceAdapter extends RecyclerView.Adapter<RealmRequestedServiceAdapter.ServicesViewHolder>
 {
 
-    private ArrayList<RealmService> servicesList;
+    private ArrayList<RealmRequestedService> servicesList;
     private Context context;
 
-    public RealmServiceAdapter(Context context, ArrayList<RealmService> servicesList)
+    public RealmRequestedServiceAdapter(Context context, ArrayList<RealmRequestedService> servicesList)
     {
         this.servicesList = servicesList;
         this.context = context;
     }
 
     @Override
-    public RealmServiceAdapter.ServicesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RealmRequestedServiceAdapter.ServicesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View view = layoutInflater.inflate(R.layout.service_grid, parent,false);
+        View view = layoutInflater.inflate(R.layout.service_row2, parent,false);
 
-        return new RealmServiceAdapter.ServicesViewHolder(view);
+        return new RealmRequestedServiceAdapter.ServicesViewHolder(view);
 
     }
 
     @Override
-    public void onBindViewHolder(final RealmServiceAdapter.ServicesViewHolder holder, final int position) {
+    public void onBindViewHolder(final RealmRequestedServiceAdapter.ServicesViewHolder holder, final int position) {
 
         holder.serviceName.setText(servicesList.get(position).getServiceName());
         holder.serviceDetails.setText(servicesList.get(position).getServiceDetails());

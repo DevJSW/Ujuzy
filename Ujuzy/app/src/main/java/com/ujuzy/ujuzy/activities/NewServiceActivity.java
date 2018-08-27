@@ -396,6 +396,7 @@ public class NewServiceActivity extends AppCompatActivity
                     bundle.putString("serviceId", serviceId);
                     bundle.putString("serviceDetails", serviceDetails);
                     bundle.putString("serviceCreatedBy", serviceCreatedBy);
+                    bundle.putString("serviceName", serviceName);
                     bundle.putString("serviceCreatedAt", serviceCreatedAt);
                     bundle.putString("serviceCost", serviceCost);
                     bundle.putString("serviceTravel", serviceTravel);
@@ -403,6 +404,7 @@ public class NewServiceActivity extends AppCompatActivity
                     bundle.putString("serviceDays", serviceDays);
                     bundle.putString("serviceHours", serviceHours);
                     bundle.putString("serviceAddInfo", serviceAddInfo);
+                    bundle.putString("no_of_personnel", no_of_personnel);
 
                     bundle.putString("first_name", first_name);
                     bundle.putString("last_name", last_name);

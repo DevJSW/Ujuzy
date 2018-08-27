@@ -163,7 +163,7 @@ public class SkillsFragment extends Fragment
     {
 
         noService.setVisibility(View.VISIBLE);
-        noService.setText("No Skills posted yet!");
+        noService.setText("Other services under this service posted will appear here");
     }
 
     @Override

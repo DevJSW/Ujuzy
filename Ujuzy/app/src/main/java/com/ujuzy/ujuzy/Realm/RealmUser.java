@@ -14,12 +14,14 @@ public class RealmUser extends RealmObject
     private String profilePic;
     private String userRole;
     private String bio;
+    private String gender;
+    private String created_at;
 
     public RealmUser() {
 
     }
 
-    public RealmUser(String id, String firstname, String lastname, String email, String phone, Object entityName, String profilePic, String userRole, String bio) {
+    public RealmUser(String id, String firstname, String lastname, String email, String phone, Object entityName, String profilePic, String userRole, String bio, String gender, String created_at) {
         this.id = id;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -28,6 +30,8 @@ public class RealmUser extends RealmObject
         this.profilePic = profilePic;
         this.userRole = userRole;
         this.bio = bio;
+        this.gender = gender;
+        this.created_at = created_at;
     }
 
 
@@ -95,5 +99,21 @@ public class RealmUser extends RealmObject
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
     }
 }

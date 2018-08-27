@@ -42,18 +42,25 @@ import com.ujuzy.ujuzy.Realm.RealmFavourite;
 import com.ujuzy.ujuzy.Realm.RealmFavouriteHelper;
 import com.ujuzy.ujuzy.Realm.RealmToken;
 import com.ujuzy.ujuzy.Realm.RealmTokenHelper;
+import com.ujuzy.ujuzy.Realm.RealmUser;
+import com.ujuzy.ujuzy.Realm.RealmUserHelper;
 import com.ujuzy.ujuzy.map.MapsActivity;
 import com.ujuzy.ujuzy.model.Constants;
+import com.ujuzy.ujuzy.model.Datum;
 import com.ujuzy.ujuzy.model.Request;
+import com.ujuzy.ujuzy.model.Service;
 import com.ujuzy.ujuzy.model.SignUp;
 import com.ujuzy.ujuzy.services.Api;
 
 import org.jboss.aerogear.android.authorization.AuthorizationManager;
 import org.jboss.aerogear.android.authorization.AuthzModule;
 import org.jboss.aerogear.android.authorization.oauth2.OAuth2AuthorizationConfiguration;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -77,6 +84,11 @@ public class RequestServiceActivity extends AppCompatActivity {
     String last_name = "";
     String profile_pic = "";
     String no_of_personnel = "";
+    String date = "";
+    String time = "";
+    String request_input = "";
+    String name = "";
+    String phone = "";
 
     private TextView serviceNameTv, userFullName, noOfPersonnel, serviceCostTv;
     private ImageView userAvatar, backBtnIv;
@@ -88,7 +100,7 @@ public class RequestServiceActivity extends AppCompatActivity {
 
 
     //json volley
-    private final String JSON_URL = "https://api.ujuzy.com/requests";
+    private final String REQUEST_SERVICE_JSON_URL = "https://api.ujuzy.com/requests";
     private JsonArrayRequest request;
     private RequestQueue requestQueue;
 
@@ -96,13 +108,6 @@ public class RequestServiceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_request_service);
-        initWindows();
-        initServiceInfo();
-        initBackBtn();
-        initConfirmBtn();
-    }
-
-    private void initConfirmBtn() {
 
         confirmBtn = (Button) findViewById(R.id.btn_request);
         inputDateEt = (EditText) findViewById(R.id.inputDateTxt);
@@ -111,242 +116,125 @@ public class RequestServiceActivity extends AppCompatActivity {
         inputPhone = (EditText) findViewById(R.id.inputPhoneTxt);
         inputName = (EditText) findViewById(R.id.inputNameTxt);
 
-        final String date = inputDateEt.getText().toString();
-        final String request = inputRequestEt.getText().toString();
-        final String time = inputTimeEt.getText().toString();
-        final String phone = inputPhone.getText().toString();
-        final String name = inputName.getText().toString();
+        initWindows();
+        initServiceInfo();
+        initBackBtn();
+        initConfirmBtn();
+    }
+
+    private void initConfirmBtn() {
 
         confirmBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                /*if (TextUtils.isEmpty(date)) {
-                    inputDateEt.setError("Enter time and date most suitable for you");
-                } else */if (!TextUtils.isEmpty(request)){
-                    inputRequestEt.setError("Describe your request!");
-                } else {
-
-                    realm = Realm.getDefaultInstance();
-                    final RealmTokenHelper helper = new RealmTokenHelper(realm);
-
-                    //RETRIEVE
-                    helper.retreiveFromDB();
-
-                    //CHECK IF DATABASE IS EMPTY
-                    if (helper.refreshDatabase().size() == 0)
-                    {
-                        try {
-
-                            AuthzModule authzModule = AuthorizationManager
-                                    .config("KeyCloakAuthz", OAuth2AuthorizationConfiguration.class)
-                                    .setBaseURL(new URL(Constants.HTTP.AUTH_BASE_URL))
-                                    .setAuthzEndpoint("/auth/realms/ujuzy/protocol/openid-connect/auth")
-                                    .setAccessTokenEndpoint("/auth/realms/ujuzy/protocol/openid-connect/token")
-                                    .setAccountId("account")
-                                    .setClientId("account")
-                                    .setRedirectURL("https://ujuzy.com")
-                                    .setScopes(Arrays.asList("openid"))
-                                    .addAdditionalAuthorizationParam((Pair.create("grant_type", "password")))
-                                    .asModule();
-
-                            authzModule.requestAccess(RequestServiceActivity.this, new org.jboss.aerogear.android.core.Callback<String>() {
-                                @Override
-                                public void onSuccess(final String data) {
-
-                                    //SAVE TOKEN TO REALM DATABASE
-                                    RealmToken token = new RealmToken();
-                                    token.setToken(data);
-
-                                    realm = Realm.getDefaultInstance();
-                                    RealmTokenHelper helper = new RealmTokenHelper(realm);
-                                    helper.save(token);
-
-                                    //requestService(data, name, phone, date, serviceId, time, request);
-                                    StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.POST, JSON_URL, new com.android.volley.Response.Listener<String>() {
-                                        @Override
-                                        public void onResponse(String response) {
-
-
-                                        }
-                                    }, new com.android.volley.Response.ErrorListener() {
-                                        @Override
-                                        public void onErrorResponse(VolleyError error) {
-
-                                        }
-                                    }) {
-                                        @Override
-                                        protected Map<String,String> getParams(){
-                                            Map<String,String> params = new HashMap<String, String>();
-                                            params.put("name",name);
-                                            params.put("phone_number",phone);
-                                            params.put("date", date);
-                                            params.put("service_id",serviceId);
-                                            params.put("time",time);
-                                            params.put("request_info",request);
-
-                                            return params;
-                                        }
-
-                                        @Override
-                                        public Map<String, String> getHeaders() throws AuthFailureError {
-                                            Map<String,String> params = new HashMap<String, String>();
-                                            params.put("Authorization",data);
-                                            params.put("Content-Type","application/x-www-form-urlencoded");
-                                            return params;
-                                        }
-                                    };
-
-                                    requestQueue = Volley.newRequestQueue(RequestServiceActivity.this);
-                                    requestQueue.add(stringRequest);
-                                }
-
-                                @Override
-                                public void onFailure(Exception e) {
-                                    System.err.println("Error!!");
-                                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                                }
-                            });
-
-
-                        } catch (MalformedURLException e) {
-                            e.printStackTrace();
-                        }
-
-                        //startActivity(new Intent(UserProfileActivity.this, LoginActivity.class));
-
-                    } else {
-
-                        try {
-
-                            AuthzModule authzModule = AuthorizationManager
-                                    .config("KeyCloakAuthz", OAuth2AuthorizationConfiguration.class)
-                                    .setBaseURL(new URL(Constants.HTTP.AUTH_BASE_URL))
-                                    .setAuthzEndpoint("/auth/realms/ujuzy/protocol/openid-connect/auth")
-                                    .setAccessTokenEndpoint("/auth/realms/ujuzy/protocol/openid-connect/token")
-                                    .setAccountId("account")
-                                    .setClientId("account")
-                                    .setRedirectURL("https://ujuzy.com")
-                                    .setScopes(Arrays.asList("openid"))
-                                    .addAdditionalAuthorizationParam((Pair.create("grant_type", "password")))
-                                    .asModule();  // send token to backend database.
-
-                            authzModule.requestAccess(RequestServiceActivity.this, new org.jboss.aerogear.android.core.Callback<String>() {
-                                @Override
-                                public void onSuccess(final String data) {
-
-                                    //SAVE TOKEN TO REALM DATABASE
-                                    RealmToken token = new RealmToken();
-                                    token.setToken(data);
-
-                                    realm = Realm.getDefaultInstance();
-                                    RealmTokenHelper helper = new RealmTokenHelper(realm);
-                                    helper.save(token);
-
-                                    //requestService(data, name, phone, date, serviceId, time, request);
-                                    StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.POST, JSON_URL, new com.android.volley.Response.Listener<String>() {
-                                        @Override
-                                        public void onResponse(String response) {
-
-
-                                        }
-                                    }, new com.android.volley.Response.ErrorListener() {
-                                        @Override
-                                        public void onErrorResponse(VolleyError error) {
-
-                                        }
-                                    }) {
-                                        @Override
-                                        protected Map<String,String> getParams(){
-                                            Map<String,String> params = new HashMap<String, String>();
-                                            params.put("name",name);
-                                            params.put("phone_number",phone);
-                                            params.put("date", date);
-                                            params.put("service_id",serviceId);
-                                            params.put("time",time);
-                                            params.put("request_info",request);
-
-                                            return params;
-                                        }
-
-                                        @Override
-                                        public Map<String, String> getHeaders() throws AuthFailureError {
-                                            Map<String,String> params = new HashMap<String, String>();
-                                            params.put("Authorization",data);
-                                            params.put("Content-Type","application/x-www-form-urlencoded");
-                                            return params;
-                                        }
-                                    };
-
-                                    requestQueue = Volley.newRequestQueue(RequestServiceActivity.this);
-                                    requestQueue.add(stringRequest);
-
-                                    postUsingVolley();
-
-
-                                }
-
-                                @Override
-                                public void onFailure(Exception e) {
-                                    System.err.println("Error!!");
-                                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                                }
-                            });
-
-
-                        } catch (MalformedURLException e) {
-                            e.printStackTrace();
-                        }
-
-                    }
-
-                }
+                startRequest();
 
             }
         });
     }
 
-    private void postUsingVolley()
-    {
+    private void startRequest() {
 
-       /* StringRequest request = new StringRequest(Request.Method.POST, Constants.HTTP.BASE_URL,
-                new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                if (!response.equals(null)) {
-                    Log.e("Your Array Response", response);
-                } else {
-                    Log.e("Your Array Response", "Data Null");
-                }
-            }
+        date = inputDateEt.getText().toString();
+        request_input = inputRequestEt.getText().toString();
+        time = inputTimeEt.getText().toString();
+        phone = inputPhone.getText().toString();
+        name = inputName.getText().toString();
 
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("error is ", "" + error);
-            }
-        }) {
+        if (TextUtils.isEmpty(date)) {
+            inputDateEt.setError("Enter time and date most suitable for you");
+        } else if (TextUtils.isEmpty(request_input)){
+            inputRequestEt.setError("Describe your request!");
+        } else {
 
-            //This is for Headers If You Needed
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("Content-Type", "application/json; charset=UTF-8");
-                params.put("token", ACCESS_TOKEN);
-                return params;
-            }
+            realm = Realm.getDefaultInstance();
+            final RealmTokenHelper helper = new RealmTokenHelper(realm);
 
-            //Pass Your Parameters here
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<String, String>();
-                params.put("User", UserName);
-                params.put("Pass", PassWord);
-                return params;
+            try {
+
+                final AuthzModule authzModule = AuthorizationManager
+                        .config("KeyCloakAuthz", OAuth2AuthorizationConfiguration.class)
+                        .setBaseURL(new URL(Constants.HTTP.AUTH_BASE_URL))
+                        .setAuthzEndpoint("/auth/realms/ujuzy/protocol/openid-connect/auth")
+                        .setAccessTokenEndpoint("/auth/realms/ujuzy/protocol/openid-connect/token")
+                        .setAccountId("account")
+                        .setClientId("account")
+                        .setRedirectURL("https://ujuzy.com")
+                        .setScopes(Arrays.asList("openid"))
+                        .addAdditionalAuthorizationParam((Pair.create("grant_type", "password")))
+                        .asModule();
+
+                authzModule.requestAccess(RequestServiceActivity.this, new org.jboss.aerogear.android.core.Callback<String>() {
+                    @Override
+                    public void onSuccess(final String data) {
+
+                        //SAVE TOKEN TO REALM DATABASE
+                        RealmToken token = new RealmToken();
+                        token.setToken(data);
+
+                        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.POST, REQUEST_SERVICE_JSON_URL, new com.android.volley.Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response)
+                            {
+                                Toast.makeText(RequestServiceActivity.this, response.toString(), Toast.LENGTH_LONG).show();
+                            }
+                        }, new com.android.volley.Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+
+                                Toast.makeText(RequestServiceActivity.this, error.toString(), Toast.LENGTH_LONG).show();
+                                authzModule.deleteAccount();
+
+                            }
+                        }) {
+                            @Override
+                            protected Map<String,String> getParams(){
+                                Map<String,String> params = new HashMap<String, String>();
+                                params.put("name",name);
+                                params.put("phone_number",phone);
+                                params.put("date", date);
+                                params.put("service_id",serviceId);
+                                params.put("time", time);
+                                params.put("request_info", request_input);
+
+                                return params;
+                            }
+
+                            @Override
+                            public Map<String, String> getHeaders() throws AuthFailureError {
+                                Map<String,String> headers = new HashMap<String, String>();
+                                headers.put("Authorization","Bearer "+ data);
+                                headers.put("Content-Type","application/json");
+                                headers.put("Accept","application/json");
+                                return headers;
+                            }
+                        };
+
+                        requestQueue = Volley.newRequestQueue(RequestServiceActivity.this);
+                        requestQueue.add(stringRequest);
+
+                        realm = Realm.getDefaultInstance();
+                        RealmTokenHelper helper = new RealmTokenHelper(realm);
+                        helper.save(token);
+
+
+
+                    }
+
+                    @Override
+                    public void onFailure(Exception e) {
+                        //Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        authzModule.deleteAccount();
+                    }
+                });
+
+
+            } catch (MalformedURLException e) {
+                // e.printStackTrace();
             }
-        };
-        RequestQueue queue = Volley.newRequestQueue(getApplicationContext());
-        queue.add(request);*/
+        }
     }
+
 
     private void initServiceInfo()
     {
@@ -419,6 +307,7 @@ public class RequestServiceActivity extends AppCompatActivity {
         ServiceData.enqueue(new Callback<Request>() {
             @Override
             public void onResponse(Call<Request> call, Response<Request> response) {
+
                 Request serviceResult = response.body();
                 Toast.makeText(RequestServiceActivity.this, (CharSequence) serviceResult, Toast.LENGTH_LONG).show();
             }

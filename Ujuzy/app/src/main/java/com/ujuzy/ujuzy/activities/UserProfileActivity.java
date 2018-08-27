@@ -1,7 +1,10 @@
 package com.ujuzy.ujuzy.activities;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -26,6 +29,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,14 +52,18 @@ import com.ujuzy.ujuzy.Realm.RealmHelper;
 import com.ujuzy.ujuzy.Realm.RealmService;
 import com.ujuzy.ujuzy.Realm.RealmToken;
 import com.ujuzy.ujuzy.Realm.RealmTokenHelper;
+import com.ujuzy.ujuzy.Realm.RealmUser;
+import com.ujuzy.ujuzy.Realm.RealmUserHelper;
 import com.ujuzy.ujuzy.Realm.RealmUserServiceAdapter;
 import com.ujuzy.ujuzy.Tabs.AboutUserFragment;
+import com.ujuzy.ujuzy.Tabs.JobsFragment;
 import com.ujuzy.ujuzy.Tabs.ReviewsFragment;
 import com.ujuzy.ujuzy.Tabs.ServicesFragment;
 import com.ujuzy.ujuzy.Tabs.UserRequestedServiceFragment;
 import com.ujuzy.ujuzy.Tabs.UserServicesFragment;
 import com.ujuzy.ujuzy.adapters.Service2Adapter;
 import com.ujuzy.ujuzy.adapters.ServiceAdapter;
+import com.ujuzy.ujuzy.map.MapsActivity;
 import com.ujuzy.ujuzy.model.Constants;
 import com.ujuzy.ujuzy.model.Datum;
 import com.ujuzy.ujuzy.model.Service;
@@ -87,9 +95,11 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
+    private final String UPGRADE_PROFILE_JSON_URL = "https://api.ujuzy.com/users/change-role";
 
     String service_id = "";
     String user_id = "";
+    String token = "";
 
     String first_name = "";
     String last_name = "";
@@ -101,6 +111,7 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private TextView firstNameTv, lastNameTv, userRoleTv, noService;
     private ImageView profilePicIv, backBtn;
+    private Button upgradeBtn;
 
     private Service2Adapter userServiceAdapter;
     private Realm realm;
@@ -124,6 +135,7 @@ public class UserProfileActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        upgradeBtn = (Button) findViewById(R.id.upgradeBtn);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
 
@@ -133,98 +145,207 @@ public class UserProfileActivity extends AppCompatActivity {
         initUserInfo();
         initBackBtn();
        // initRetrofit();
-        getUserProfileUsingVolley();
        // initRealm();
+        initUpgrade();
 
     }
 
-    private void getUserProfileUsingVolley() {
-
-        /*StringRequest stringRequest = new StringRequest(Request.Method.POST, JSON_URL, new com.android.volley.Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-
-
-            }
-        }, new com.android.volley.Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        }) {
-            @Override
-            protected Map<String,String> getParams(){
-                Map<String,String> params = new HashMap<String, String>();
-                params.put("name",userAccount.getUsername());
-                params.put("phone_number",userAccount.getPassword());
-                params.put("date", Uri.encode(comment));
-                params.put("service_id",String.valueOf(postId));
-                params.put("time",String.valueOf(blogId));
-                params.put("request_info",String.valueOf(blogId));
-
-                return params;
-            }
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String,String> params = new HashMap<String, String>();
-                params.put("Authorization",token);
-                params.put("Content-Type","application/x-www-form-urlencoded");
-                return params;
-            }
-        };
-
-        requestQueue = Volley.newRequestQueue(UserProfileActivity.this);
-        requestQueue.add(stringRequest);
-*/
-    }
-
-    private Retrofit getRetrofit()
+    private void initUpgrade()
     {
-        if (this.retrofit == null)
-        {
-            Gson gson = new GsonBuilder()
-                    .setLenient()
-                    .create();
-
-            this.retrofit = new Retrofit.Builder()
-                    .baseUrl(Constants.HTTP.SERVICES_ENDPOINT)
-                    .addConverterFactory(GsonConverterFactory.create(gson))
-                    .build();
-        }
-        return this.retrofit;
-    }
-
-   /* private void initRetrofit()
-    {
-        Api api = getRetrofit().create(Api.class);
-        Call<User> ServiceData =  api.getUserInfo();
-        ServiceData.enqueue(new Callback<User>() {
+        upgradeBtn.setOnClickListener(new View.OnClickListener() {  
             @Override
-            public void onResponse(Call<User> call, Response<User> response) {
-
-                User user = response.body();
-
-
-                    *//**
-                     * displaying results on a recyclerview
-                     *//*
-                    //viewData();
-            }
-
-            @Override
-            public void onFailure(Call<User> call, Throwable t) {
-
+            public void onClick(View view) {
+                initDialog();
             }
         });
     }
-*/
-    private void viewData()
-    {
-        //ADD RESPONSE TO ADAPTER
-        userServiceAdapter = new Service2Adapter(getApplicationContext(), results);
+
+    private void initDialog() {
+        Context context = UserProfileActivity.this;
+
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.upgrade_dialog);
+        dialog.setCancelable(true);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.show();
+
+        TextView openProfessional = (TextView) dialog.findViewById(R.id.options_professional);
+        openProfessional.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view) {
+                try {
+
+                    final AuthzModule authzModule = AuthorizationManager
+                            .config("KeyCloakAuthz", OAuth2AuthorizationConfiguration.class)
+                            .setBaseURL(new URL(Constants.HTTP.AUTH_BASE_URL))
+                            .setAuthzEndpoint("/auth/realms/ujuzy/protocol/openid-connect/auth")
+                            .setAccessTokenEndpoint("/auth/realms/ujuzy/protocol/openid-connect/token")
+                            .setAccountId("account")
+                            .setClientId("account")
+                            .setRedirectURL("https://ujuzy.com")
+                            .setScopes(Arrays.asList("openid"))
+                            .addAdditionalAuthorizationParam((Pair.create("grant_type", "password")))
+                            .asModule();
+
+                    authzModule.requestAccess(UserProfileActivity.this, new org.jboss.aerogear.android.core.Callback<String>() {
+                        @Override
+                        public void onSuccess(final String data) {
+
+                            //SAVE TOKEN TO REALM DATABASE
+                            RealmToken token = new RealmToken();
+                            token.setToken(data);
+
+                            StringRequest stringRequest = new StringRequest(Request.Method.POST, UPGRADE_PROFILE_JSON_URL, new com.android.volley.Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response)
+                                {
+                                    Toast.makeText(UserProfileActivity.this, "Account updated successfully", Toast.LENGTH_LONG).show();
+                                }
+                            }, new com.android.volley.Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+
+                                    Toast.makeText(UserProfileActivity.this, error.toString(), Toast.LENGTH_LONG).show();
+
+                                }
+                            }) {
+                                @Override
+                                protected Map<String,String> getParams(){
+                                    Map<String,String> params = new HashMap<String, String>();
+                                    params.put("new_role","Professional");
+                                    params.put("reg_type","");
+                                    params.put("back_url", "");
+                                    params.put("front_url","");
+
+                                    return params;
+                                }
+
+                                @Override
+                                public Map<String, String> getHeaders() throws AuthFailureError {
+                                    Map<String,String> params = new HashMap<String, String>();
+                                    params.put("Authorization","Bearer "+ data);
+                                    params.put("Content-Type","application/json");
+                                    params.put("Accept","application/json");
+                                    return params;
+                                }
+                            };
+
+                            requestQueue = Volley.newRequestQueue(UserProfileActivity.this);
+                            requestQueue.add(stringRequest);
+
+                            realm = Realm.getDefaultInstance();
+                            RealmTokenHelper helper = new RealmTokenHelper(realm);
+                            helper.save(token);
+
+
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+                            //Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                            //authzModule.deleteAccount();
+                        }
+                    });
+
+
+                } catch (MalformedURLException e) {
+                    // e.printStackTrace();
+                }
+                dialog.dismiss();
+            }
+        });
+
+        TextView openCompany = (TextView) dialog.findViewById(R.id.options_company);
+        openCompany.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view) {
+                try {
+
+                    final AuthzModule authzModule = AuthorizationManager
+                            .config("KeyCloakAuthz", OAuth2AuthorizationConfiguration.class)
+                            .setBaseURL(new URL(Constants.HTTP.AUTH_BASE_URL))
+                            .setAuthzEndpoint("/auth/realms/ujuzy/protocol/openid-connect/auth")
+                            .setAccessTokenEndpoint("/auth/realms/ujuzy/protocol/openid-connect/token")
+                            .setAccountId("account")
+                            .setClientId("account")
+                            .setRedirectURL("https://ujuzy.com")
+                            .setScopes(Arrays.asList("openid"))
+                            .addAdditionalAuthorizationParam((Pair.create("grant_type", "password")))
+                            .asModule();
+
+                    authzModule.requestAccess(UserProfileActivity.this, new org.jboss.aerogear.android.core.Callback<String>() {
+                        @Override
+                        public void onSuccess(final String data) {
+
+                            //SAVE TOKEN TO REALM DATABASE
+                            RealmToken token = new RealmToken();
+                            token.setToken(data);
+
+                            StringRequest stringRequest = new StringRequest(Request.Method.POST, UPGRADE_PROFILE_JSON_URL, new com.android.volley.Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response)
+                                {
+                                    Toast.makeText(UserProfileActivity.this, "Account updated successfully", Toast.LENGTH_LONG).show();
+                                }
+                            }, new com.android.volley.Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+
+                                    Toast.makeText(UserProfileActivity.this, error.toString(), Toast.LENGTH_LONG).show();
+
+                                }
+                            }) {
+                                @Override
+                                protected Map<String,String> getParams(){
+                                    Map<String,String> params = new HashMap<String, String>();
+                                    params.put("new_role","Company");
+                                    params.put("reg_type","");
+                                    params.put("back_url", "");
+                                    params.put("front_url","");
+
+                                    return params;
+                                }
+
+                                @Override
+                                public Map<String, String> getHeaders() throws AuthFailureError {
+                                    Map<String,String> params = new HashMap<String, String>();
+                                    params.put("Authorization","Bearer "+ data);
+                                    params.put("Content-Type","application/json");
+                                    params.put("Accept","application/json");
+                                    return params;
+                                }
+                            };
+
+                            requestQueue = Volley.newRequestQueue(UserProfileActivity.this);
+                            requestQueue.add(stringRequest);
+
+                            realm = Realm.getDefaultInstance();
+                            RealmTokenHelper helper = new RealmTokenHelper(realm);
+                            helper.save(token);
+
+
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+                            //Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                            //authzModule.deleteAccount();
+                        }
+                    });
+
+
+                } catch (MalformedURLException e) {
+                    // e.printStackTrace();
+                }
+                dialog.dismiss();
+            }
+        });
 
     }
+
 
     @Override
     protected void onResume() {
@@ -272,8 +393,6 @@ public class UserProfileActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Exception e) {
-                        System.err.println("Error!!");
-                        Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                         finish();
                     }
                 });
@@ -302,11 +421,11 @@ public class UserProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void initUserInfo()
-    {
+    private void initUserInfo() {
 
         service_id = getIntent().getStringExtra("service_id");
         user_id = getIntent().getStringExtra("user_id");
+        token = getIntent().getStringExtra("auth_token");
 
         first_name = getIntent().getStringExtra("first_name");
         last_name = getIntent().getStringExtra("last_name");
@@ -318,27 +437,33 @@ public class UserProfileActivity extends AppCompatActivity {
         userRoleTv = (TextView) findViewById(R.id.tv_user_role);
         profilePicIv = (ImageView) findViewById(R.id.user_avator);
 
-        firstNameTv.setText(first_name);
-        lastNameTv.setText(last_name);
-        userRoleTv.setText(user_role);
+        realm = Realm.getDefaultInstance();
+        RealmUser realmUser = realm.where(RealmUser.class).findFirst();
+        if (realmUser != null) {
+            if (realmUser.getFirstname() != null)
+                firstNameTv.setText(realmUser.getFirstname());
+            if (realmUser.getLastname() != null)
+                lastNameTv.setText(realmUser.getLastname());
+            if (realmUser.getUserRole() != null)
+            userRoleTv.setText(realmUser.getUserRole());
 
-        if (profile_pic != null)
-        {
+            if (realmUser.getProfilePic() != null) {
 
-            Glide.with(getApplicationContext())
-                    .load(profile_pic).asBitmap()
-                    .placeholder(R.drawable.if_profile_white)
-                    .diskCacheStrategy(DiskCacheStrategy.RESULT)
-                    .centerCrop()
-                    .into(new BitmapImageViewTarget(profilePicIv) {
-                        @Override
-                        protected void setResource(Bitmap resource) {
-                            RoundedBitmapDrawable circularBitmapDrawable =
-                                    RoundedBitmapDrawableFactory.create(getApplicationContext().getResources(), resource);
-                            circularBitmapDrawable.setCircular(true);
-                            profilePicIv.setImageDrawable(circularBitmapDrawable);
-                        }
-                    });
+                Glide.with(getApplicationContext())
+                        .load(realmUser.getProfilePic()).asBitmap()
+                        .placeholder(R.drawable.if_profile_white)
+                        .diskCacheStrategy(DiskCacheStrategy.RESULT)
+                        .centerCrop()
+                        .into(new BitmapImageViewTarget(profilePicIv) {
+                            @Override
+                            protected void setResource(Bitmap resource) {
+                                RoundedBitmapDrawable circularBitmapDrawable =
+                                        RoundedBitmapDrawableFactory.create(getApplicationContext().getResources(), resource);
+                                circularBitmapDrawable.setCircular(true);
+                                profilePicIv.setImageDrawable(circularBitmapDrawable);
+                            }
+                        });
+            }
         }
     }
 
@@ -433,6 +558,9 @@ public class UserProfileActivity extends AppCompatActivity {
             switch (position) {
                 case 0:
                     AboutUserFragment tab1 = new AboutUserFragment ();
+                    Bundle bundle1 = new Bundle();
+                    bundle1.putString("auth_token", token);
+                    tab1.setArguments(bundle1);
                     return tab1;
                 case 1:
                     UserServicesFragment tab2 = new UserServicesFragment ();
@@ -448,7 +576,7 @@ public class UserProfileActivity extends AppCompatActivity {
                     UserRequestedServiceFragment tab4 = new UserRequestedServiceFragment ();
                     return tab4;
                 case 3:
-                    ReviewsFragment tab3 = new ReviewsFragment ();
+                    JobsFragment tab3 = new JobsFragment ();
                     Bundle bundle3 = new Bundle();
                     bundle3.putString("serviceId", service_id);
                     bundle3.putString("userId", user_id);
@@ -467,6 +595,11 @@ public class UserProfileActivity extends AppCompatActivity {
 
     }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (realm != null)
+            realm.close();
+    }
 
 }

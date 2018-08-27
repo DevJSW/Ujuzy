@@ -18,6 +18,7 @@
             android:layout_height="wrap_content"
             android:textSize="18dp"
             android:id="@+id/options_map"
+            android:visibility="gone"
             android:textColor="@color/font_black"
             android:text="View service on map"/>
 
@@ -43,6 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
             android:textSize="18dp"
             android:id="@+id/options_profile"
             android:textColor="@color/font_black"
@@ -52,6 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
+            android:visibility="gone"
             android:textSize="18dp"
             android:id="@+id/options_report"
             android:textColor="@color/font_black"
@@ -62,6 +65,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:textSize="18dp"
+            android:visibility="gone"
             android:id="@+id/options_request"
             android:textColor="@color/colorPrimary"
             android:text="Request for this service"/>

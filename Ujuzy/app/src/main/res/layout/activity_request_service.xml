@@ -31,6 +31,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="20dp"
                 android:layout_margin="15dp"
+                android:textColor="@color/font_black_light"
                 android:layout_marginRight="15dp"
                 android:text="Please indicate available dates suitable for you."/>
 
@@ -122,6 +123,7 @@
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
+
                     <com.ujuzy.ujuzy.CustomData.AllerBoldFont
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -129,6 +131,7 @@
                         android:id="@+id/total"
                         android:textSize="17dp"
                         android:layout_marginLeft="15dp"/>
+
                     <com.ujuzy.ujuzy.CustomData.AllerFont
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -163,6 +166,7 @@
                     android:id="@+id/cancellation"
                     android:textSize="17dp"
                     android:layout_marginLeft="15dp"/>
+
                 <com.ujuzy.ujuzy.CustomData.AllerFont
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
