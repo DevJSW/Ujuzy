@@ -1,21 +1,13 @@
 package com.ujuzy.ujuzy.activities;
 
-import android.app.Dialog;
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Typeface;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.view.Window;
@@ -38,26 +30,20 @@ import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.ujuzy.ujuzy.R;
-import com.ujuzy.ujuzy.Realm.RealmFavourite;
-import com.ujuzy.ujuzy.Realm.RealmFavouriteHelper;
 import com.ujuzy.ujuzy.Realm.RealmToken;
 import com.ujuzy.ujuzy.Realm.RealmTokenHelper;
 import com.ujuzy.ujuzy.Realm.RealmUser;
-import com.ujuzy.ujuzy.Realm.RealmUserHelper;
-import com.ujuzy.ujuzy.map.MapsActivity;
 import com.ujuzy.ujuzy.model.Constants;
 import com.ujuzy.ujuzy.model.Datum;
 import com.ujuzy.ujuzy.model.Request;
 import com.ujuzy.ujuzy.model.Service;
-import com.ujuzy.ujuzy.model.SignUp;
 import com.ujuzy.ujuzy.services.Api;
 
 import org.jboss.aerogear.android.authorization.AuthorizationManager;
 import org.jboss.aerogear.android.authorization.AuthzModule;
 import org.jboss.aerogear.android.authorization.oauth2.OAuth2AuthorizationConfiguration;
-import org.json.JSONException;
-import org.json.JSONObject;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -66,14 +52,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.realm.Realm;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Response;
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.Header;
-
-import static io.realm.SyncCredentials.IdentityProvider.ACCESS_TOKEN;
 
 public class RequestServiceActivity extends AppCompatActivity {
 
@@ -88,6 +73,7 @@ public class RequestServiceActivity extends AppCompatActivity {
     String time = "";
     String request_input = "";
     String name = "";
+    String info = "";
     String phone = "";
 
     private TextView serviceNameTv, userFullName, noOfPersonnel, serviceCostTv;
@@ -120,6 +106,92 @@ public class RequestServiceActivity extends AppCompatActivity {
         initServiceInfo();
         initBackBtn();
         initConfirmBtn();
+    }
+
+    private Retrofit getRetrofit()
+    {
+
+        //GET TOKEN FROM REALM
+        realm = Realm.getDefaultInstance();
+        RealmToken realmToken = realm.where(RealmToken.class).findFirst();
+        String token = realmToken.getToken().toString();
+
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+
+        httpClient.addInterceptor(new Interceptor() {
+            @Override
+            public Response intercept(Chain chain) throws IOException {
+                okhttp3.Request request = chain.request()
+                        .newBuilder()
+                        .addHeader("Authorization","Bearer "+ token)
+                        .addHeader("Content-Type","application/json")
+                        .addHeader("Accept","application/json")
+                        .build();
+                return chain.proceed(request);
+            }
+        });
+
+        if (this.retrofit == null)
+        {
+            Gson gson = new GsonBuilder()
+                    .setLenient()
+                    .create();
+
+            this.retrofit = new Retrofit.Builder()
+                    .baseUrl(Constants.HTTP.BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .client(httpClient.build())
+                    .build();
+        }
+        return this.retrofit;
+    }
+
+    private void initRetrofit() {
+
+       /* //GET TOKEN FROM REALM
+        realm = Realm.getDefaultInstance();
+        RealmToken realmToken = realm.where(RealmToken.class).findFirst();
+
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+
+        httpClient.addInterceptor(new Interceptor() {
+            @Override
+            public Response intercept(Chain chain) throws IOException {
+                okhttp3.Request request = chain.request()
+                        .newBuilder()
+                        .addHeader("Authorization","Bearer "+ realmToken.getToken())
+                        .addHeader("Content-Type","application/json")
+                        .addHeader("Accept","application/json")
+                        .build();
+                return chain.proceed(request);
+            }
+        });
+
+        Retrofit retrofit = new Retrofit
+                .Builder()
+                .addConverterFactory(GsonConverterFactory.create())
+                .baseUrl(Constants.HTTP.BASE_URL)
+                .client(httpClient.build())
+                .build();*/
+
+        Api api = getRetrofit().create(Api.class);
+        Call<Request> ServiceData =  api.requestSercive(name, phone,date ,serviceId, time, request_input);
+        ServiceData.enqueue(new Callback<Request>() {
+            @Override
+            public void onResponse(Call<Request> call, retrofit2.Response<Request> response) {
+
+                Request resp = response.body();
+
+            }
+
+            @Override
+            public void onFailure(Call<Request> call, Throwable t) {
+
+
+                Toast.makeText(RequestServiceActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+
+            }
+        });
     }
 
     private void initConfirmBtn() {
@@ -172,7 +244,9 @@ public class RequestServiceActivity extends AppCompatActivity {
                         RealmToken token = new RealmToken();
                         token.setToken(data);
 
-                        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.POST, REQUEST_SERVICE_JSON_URL, new com.android.volley.Response.Listener<String>() {
+                        initRetrofit();
+
+                        /*StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.POST, REQUEST_SERVICE_JSON_URL, new com.android.volley.Response.Listener<String>() {
                             @Override
                             public void onResponse(String response)
                             {
@@ -216,7 +290,7 @@ public class RequestServiceActivity extends AppCompatActivity {
                         realm = Realm.getDefaultInstance();
                         RealmTokenHelper helper = new RealmTokenHelper(realm);
                         helper.save(token);
-
+*/
 
 
                     }
@@ -244,6 +318,7 @@ public class RequestServiceActivity extends AppCompatActivity {
         userFullName = (TextView) findViewById(R.id.tv_user_name);
         noOfPersonnel = (TextView) findViewById(R.id.tv_service_no_personnel);
         serviceCostTv = (TextView) findViewById(R.id.tv_service_cost);
+        serviceNameTv = (TextView) findViewById(R.id.tv_service_name);
 
         serviceId = getIntent().getStringExtra("service_id");
         serviceName = getIntent().getStringExtra("service_name");
@@ -255,7 +330,6 @@ public class RequestServiceActivity extends AppCompatActivity {
         last_name = getIntent().getStringExtra("last_name");
         profile_pic = getIntent().getStringExtra("profile_pic");
 
-        serviceNameTv = (TextView) findViewById(R.id.tv_service_name);
 
         serviceNameTv.setText(serviceName);
         if (no_of_personnel != null)
@@ -282,43 +356,6 @@ public class RequestServiceActivity extends AppCompatActivity {
                     }
                 });
 
-    }
-
-    private Retrofit getRetrofit()
-    {
-        if (this.retrofit == null)
-        {
-            Gson gson = new GsonBuilder()
-                    .setLenient()
-                    .create();
-
-            this.retrofit = new Retrofit.Builder()
-                    .baseUrl(Constants.HTTP.BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create(gson))
-                    .build();
-        }
-        return this.retrofit;
-    }
-
-    public void requestService(String token, String name, String phone, String date, String serviceId, String time, String info)
-    {
-        Api api = getRetrofit().create(Api.class);
-        Call<Request> ServiceData =  api.requestSercive(token, name, phone,date ,serviceId, time, info);
-        ServiceData.enqueue(new Callback<Request>() {
-            @Override
-            public void onResponse(Call<Request> call, Response<Request> response) {
-
-                Request serviceResult = response.body();
-                Toast.makeText(RequestServiceActivity.this, (CharSequence) serviceResult, Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onFailure(Call<Request> call, Throwable t) {
-
-                Toast.makeText(RequestServiceActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-
-            }
-        });
     }
 
     private void initWindows()

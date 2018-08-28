@@ -291,38 +291,6 @@ public class MainActivity extends AppCompatActivity
 
                         JSONArray skillList = serviceObj.getJSONArray("skill_list");
 
-                      /*  Datum datum = new Datum();
-                        datum.setId(serviceObj.getString("id"));
-                        datum.setServiceName(serviceObj.getString("service_name"));
-                        datum.setServiceDetails(serviceObj.getString("service_details"));
-                        datum.setCost(serviceObj.getString("cost"));
-                        *//*datum.setCreatedBy(serviceObj.getString("created_by"));
-                        datum.setCreatedBy(serviceUserObj.getString());
-                        datum.setCategory(serviceObj.getString("category"));
-                        datum.setCreated_at(serviceObj.getString("created_at"));
-                        datum.setImage(serviceImgObj.getString("thumb"));
-
-                        datum.setUser_role(serviceUserObj.getString("user_role"));
-                        datum.setUser_thumb(serviceUserObj.getString("profile_pic"));
-                        datum.setFirst_name(serviceUserObj.getString("firstname"));
-                        datum.setLast_name(serviceUserObj.getString("lastname"));
-                        datum.setUser_id(serviceUserObj.getString("id"));
-
-                        datum.setCity(serviceLocationObj.getString("city"));
-
-                        datum.setService_duration_days(serviceDurationObj.getString("days"));
-                        datum.setService_duration_hours(serviceDurationObj.getString("hours"));*//*
-
-                        serviceList.add(datum);
-
-                        servicesListRv = (RecyclerView) findViewById(R.id.service_list);
-                        serviceAdapter = new ServiceAdapter(getApplicationContext(), results);
-
-                        //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
-                        final LinearLayoutManager serviceLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
-                        servicesListRv.setLayoutManager(serviceLayoutManager);
-                        servicesListRv.setAdapter(serviceAdapter);
-*/
                         // ASSIGN DATA TO REALM DATABASE SERVICE
 
                         RealmService realmService = new  RealmService();

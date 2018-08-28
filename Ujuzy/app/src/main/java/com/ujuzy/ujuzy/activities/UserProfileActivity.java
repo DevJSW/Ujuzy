@@ -215,9 +215,9 @@ public class UserProfileActivity extends AppCompatActivity {
                                 protected Map<String,String> getParams(){
                                     Map<String,String> params = new HashMap<String, String>();
                                     params.put("new_role","Professional");
-                                    params.put("reg_type","");
+                                    /*params.put("reg_type","");
                                     params.put("back_url", "");
-                                    params.put("front_url","");
+                                    params.put("front_url","");*/
 
                                     return params;
                                 }

@@ -21,6 +21,8 @@ import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.ujuzy.ujuzy.R;
 import com.ujuzy.ujuzy.Realm.RealmAllServiceAdapter;
 import com.ujuzy.ujuzy.Realm.RealmHelper;
@@ -35,6 +37,7 @@ import com.ujuzy.ujuzy.Realm.RealmUserServiceAdapter;
 import com.ujuzy.ujuzy.Realm.RealmUserServicesHelper;
 import com.ujuzy.ujuzy.activities.EditProfileActivity;
 import com.ujuzy.ujuzy.activities.MainActivity;
+import com.ujuzy.ujuzy.activities.RequestServiceActivity;
 import com.ujuzy.ujuzy.activities.UserProfileActivity;
 import com.ujuzy.ujuzy.activities.WebViewActivity;
 import com.ujuzy.ujuzy.adapters.CountryAdapter;
@@ -51,6 +54,7 @@ import org.jboss.aerogear.android.authorization.oauth2.OAuth2AuthorizationConfig
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -60,6 +64,8 @@ import java.util.Map;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -125,9 +131,71 @@ public class UserServicesFragment extends Fragment {
 
         initRealm();
         initCreateBt();
+        initRealm();
 
         return v;
     }
+
+    private Retrofit getRetrofit()
+    {
+
+        //GET TOKEN FROM REALM
+        realm = Realm.getDefaultInstance();
+        RealmToken realmToken = realm.where(RealmToken.class).findFirst();
+        String token = realmToken.getToken().toString();
+
+        OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
+
+        httpClient.addInterceptor(new Interceptor() {
+            @Override
+            public okhttp3.Response intercept(Chain chain) throws IOException {
+                okhttp3.Request request = chain.request()
+                        .newBuilder()
+                        .addHeader("Authorization","Bearer "+ token)
+                        .addHeader("Content-Type","application/json")
+                        .addHeader("Accept","application/json")
+                        .build();
+                return chain.proceed(request);
+            }
+        });
+
+        if (this.retrofit == null)
+        {
+            Gson gson = new GsonBuilder()
+                    .setLenient()
+                    .create();
+
+            this.retrofit = new Retrofit.Builder()
+                    .baseUrl(Constants.HTTP.BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create(gson))
+                    .client(httpClient.build())
+                    .build();
+        }
+        return this.retrofit;
+    }
+
+    private void initRetrofit() {
+
+        Api api = getRetrofit().create(Api.class);
+        Call<Service> ServiceData =  api.getUserServices();
+        ServiceData.enqueue(new Callback<Service>() {
+            @Override
+            public void onResponse(Call<Service> call, retrofit2.Response<Service> response) {
+
+                Service resp = response.body();
+
+            }
+
+            @Override
+            public void onFailure(Call<Service> call, Throwable t) {
+
+
+                Toast.makeText(getActivity(), t.getMessage(), Toast.LENGTH_LONG).show();
+
+            }
+        });
+    }
+
 
     private void initCreateBt() {
         createBt.setOnClickListener(new View.OnClickListener() {
@@ -224,7 +292,7 @@ public class UserServicesFragment extends Fragment {
                     }, new com.android.volley.Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-
+                            initRetrofit();
                         }
                     }) {
 
@@ -245,7 +313,6 @@ public class UserServicesFragment extends Fragment {
 
                 @Override
                 public void onFailure(Exception e) {
-                    //Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                 }
             });
 

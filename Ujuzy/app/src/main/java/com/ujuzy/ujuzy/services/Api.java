@@ -32,6 +32,9 @@ public interface Api
     @GET("services")
     Call<Service> getServices();
 
+    @GET("users/my-services")
+    Call<Service> getUserServices();
+
     @GET("users/profile")
     Call<User> getUserInfo(
             @Header("Authorization") String token);
@@ -79,7 +82,6 @@ public interface Api
     @FormUrlEncoded
     @POST("requests")
     Call<Request> requestSercive(
-            @Header("Authorization") String token,
             @Field("name") String name,
             @Field("phone_number") String phone_number,
             @Field("date") String email,
