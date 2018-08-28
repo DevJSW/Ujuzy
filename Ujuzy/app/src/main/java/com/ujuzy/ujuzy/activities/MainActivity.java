@@ -927,6 +927,7 @@ public class MainActivity extends AppCompatActivity
                                 {
 
                                     try {
+
                                         JSONObject jsonObject = new JSONObject(response);
 
                                         RealmUser realmService = new  RealmUser();
@@ -941,13 +942,12 @@ public class MainActivity extends AppCompatActivity
 
                                         JSONObject jsonUserRole = new JSONObject(response).getJSONObject("user_role");
                                         realmService.setUserRole(jsonUserRole.getString("role_name"));
-
                                         JSONObject jsonUserProfilePic = new JSONObject(response).getJSONObject("profile_pic");
                                         realmService.setProfilePic(jsonUserProfilePic.getString("thumb"));
 
                                         //SAVE
                                         realm = Realm.getDefaultInstance();
-                                        RealmUserHelper helper = new RealmUserHelper(realm);
+                                        RealmUserHelper helper = new RealmUserHelper(realm);                                                                                         
                                         helper.save(realmService);
 
 
@@ -964,18 +964,6 @@ public class MainActivity extends AppCompatActivity
 
                                 }
                             }) {
-                                /*@Override
-                                protected Map<String,String> getParams(){
-                                    Map<String,String> params = new HashMap<String, String>();
-                                    params.put("name",userAccount.getUsername());
-                                    params.put("phone_number",userAccount.getPassword());
-                                    params.put("date", Uri.encode(comment));
-                                    params.put("service_id",String.valueOf(postId));
-                                    params.put("time",String.valueOf(blogId));
-                                    params.put("request_info",String.valueOf(blogId));
-
-                                    return params;
-                                }*/
 
                                 @Override
                                 public Map<String, String> getHeaders() throws AuthFailureError {
@@ -1011,7 +999,7 @@ public class MainActivity extends AppCompatActivity
                 } catch (MalformedURLException e) {
                    // e.printStackTrace();
                 }
-                //startActivity(new Intent(UserProfileActivity.this, LoginActivity.class));
+                // startActivity(new Intent(UserProfileActivity.this, LoginActivity.class));
 
             } else {
 

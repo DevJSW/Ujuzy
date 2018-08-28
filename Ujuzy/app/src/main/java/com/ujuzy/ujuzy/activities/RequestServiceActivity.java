@@ -244,9 +244,7 @@ public class RequestServiceActivity extends AppCompatActivity {
                         RealmToken token = new RealmToken();
                         token.setToken(data);
 
-                        initRetrofit();
-
-                        /*StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.POST, REQUEST_SERVICE_JSON_URL, new com.android.volley.Response.Listener<String>() {
+                        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.POST, REQUEST_SERVICE_JSON_URL, new com.android.volley.Response.Listener<String>() {
                             @Override
                             public void onResponse(String response)
                             {
@@ -290,7 +288,6 @@ public class RequestServiceActivity extends AppCompatActivity {
                         realm = Realm.getDefaultInstance();
                         RealmTokenHelper helper = new RealmTokenHelper(realm);
                         helper.save(token);
-*/
 
 
                     }
@@ -298,6 +295,7 @@ public class RequestServiceActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Exception e) {
                         //Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                        initRetrofit();
                         authzModule.deleteAccount();
                     }
                 });
