@@ -279,7 +279,7 @@
                     android:background="@drawable/button_bg"
                     android:textColor="#fff"
                     android:id="@+id/bookService"
-                    android:textSize="15dp"
+                    android:textSize="17dp"
                     android:layout_margin="15dp"
                     android:layout_gravity="center_horizontal"
                     android:textAllCaps="false"

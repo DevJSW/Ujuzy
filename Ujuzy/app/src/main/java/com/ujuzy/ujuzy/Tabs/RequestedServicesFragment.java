@@ -12,9 +12,13 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ujuzy.ujuzy.R;
@@ -24,11 +28,13 @@ import com.ujuzy.ujuzy.Realm.RealmToken;
 import com.ujuzy.ujuzy.Realm.RealmUser;
 import com.ujuzy.ujuzy.adapters.CountryAdapter;
 import com.ujuzy.ujuzy.adapters.SeeAllAdapter;
+import com.ujuzy.ujuzy.model.Constants;
 import com.ujuzy.ujuzy.model.Datum;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -46,7 +52,6 @@ public class RequestedServicesFragment extends Fragment {
     String firstName = "";
     private CountryAdapter countryAdapter;
     private RecyclerView serviceListRv;
-    private String USER_REQUESTS_SERVICES_JSON_URL = "https://api.ujuzy.com/requests";
     ArrayList<Datum> results;
     private SeeAllAdapter serviceAdapter;
     private ProgressBar progressBar;
@@ -88,44 +93,58 @@ public class RequestedServicesFragment extends Fragment {
     }
 
     private void loadRequestsVolley() {
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, USER_REQUESTS_SERVICES_JSON_URL, new com.android.volley.Response.Listener<String>() {
-            @Override
-            public void onResponse(String response)
-            {
 
-                try {
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
+                Constants.HTTP.USER_REQUESTS_SERVICES_JSON_URL, new JSONObject(),
+                new com.android.volley.Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
 
-                    JSONObject jsonObject = new JSONObject(response);
-
-
-                } catch (JSONException e) {
-                    //e.printStackTrace();
-                }
-
-            }
-        }, new com.android.volley.Response.ErrorListener() {
+                    }
+                }, new com.android.volley.Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
+                // As of f605da3 the following should work
+                NetworkResponse response = error.networkResponse;
+                if (error instanceof ServerError && response != null) {
+                    try {
+                        String res = new String(response.data,
+                                HttpHeaderParser.parseCharset(response.headers, "utf-8"));
+                        // Now you can use any deserializer to make sense of data
+                        JSONObject obj = new JSONObject(res);
+                    } catch (UnsupportedEncodingException e1) {
+                        // Couldn't properly decode data to string
+                        e1.printStackTrace();
+                    } catch (JSONException e2) {
+                        // returned data is not JSONObject?
+                        e2.printStackTrace();
+                    }
+                }
             }
+
         }) {
 
+            /**
+             * Passing some request headers
+             * */
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
 
                 realm = Realm.getDefaultInstance();
                 RealmToken token = realm.where(RealmToken.class).findFirst();
 
-                Map<String,String> params = new HashMap<String, String>();
-                params.put("Authorization","Bearer "+ token);
-                params.put("Content-Type","application/json");
-                params.put("Accept","application/json");
-                return params;
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("Authorization","Bearer "+ token.toString());
+                headers.put("Content-Type", "application/json; charset=utf-8");
+                headers.put("Accept","application/json");
+                return headers;
             }
+
         };
 
+        // Adding request to request queue
         requestQueue = Volley.newRequestQueue(getActivity());
-        requestQueue.add(stringRequest);
+        requestQueue.add(jsonObjReq);
     }
 
     private void initRealm()

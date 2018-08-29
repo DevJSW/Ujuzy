@@ -19,6 +19,7 @@ import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
@@ -273,6 +274,45 @@ public class UserServicesFragment extends Fragment {
             authzModule.requestAccess(getActivity(), new org.jboss.aerogear.android.core.Callback<String>() {
                 @Override
                 public void onSuccess(final String data) {
+
+                    Map<String, String> params= new HashMap<String, String>();
+                    params.put("new_role","company");
+
+                    JsonObjectRequest jsonObjReq = new JsonObjectRequest(com.android.volley.Request.Method.POST,
+                            Constants.HTTP.UPGRADE_PROFILE_JSON_URL, new JSONObject(params),
+                            new com.android.volley.Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+
+
+                                }
+                            }, new com.android.volley.Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_LONG).show();
+                        }
+
+                    }) {
+
+                        /**
+                         * Passing some request headers
+                         * */
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+
+                            HashMap<String, String> headers = new HashMap<String, String>();
+                            headers.put("Authorization","Bearer "+ data);
+                            headers.put("Content-Type", "application/json; charset=utf-8");
+                            headers.put("Accept","application/json");
+                            return headers;
+                        }
+
+                    };
+
+                    // Adding request to request queue
+                    requestQueue = Volley.newRequestQueue(getActivity());
+                    requestQueue.add(jsonObjReq);
+
 
                     StringRequest stringRequest = new StringRequest(Request.Method.GET, USER_SERVICES_JSON_URL, new com.android.volley.Response.Listener<String>() {
                         @Override

@@ -8,6 +8,7 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.view.Window;
@@ -19,9 +20,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.RequestQueue;
+import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
@@ -42,8 +48,11 @@ import com.ujuzy.ujuzy.services.Api;
 import org.jboss.aerogear.android.authorization.AuthorizationManager;
 import org.jboss.aerogear.android.authorization.AuthzModule;
 import org.jboss.aerogear.android.authorization.oauth2.OAuth2AuthorizationConfiguration;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -86,7 +95,6 @@ public class RequestServiceActivity extends AppCompatActivity {
 
 
     //json volley
-    private final String REQUEST_SERVICE_JSON_URL = "https://api.ujuzy.com/requests";
     private JsonArrayRequest request;
     private RequestQueue requestQueue;
 
@@ -127,6 +135,7 @@ public class RequestServiceActivity extends AppCompatActivity {
                         .addHeader("Content-Type","application/json")
                         .addHeader("Accept","application/json")
                         .build();
+
                 return chain.proceed(request);
             }
         });
@@ -187,7 +196,6 @@ public class RequestServiceActivity extends AppCompatActivity {
             @Override
             public void onFailure(Call<Request> call, Throwable t) {
 
-
                 Toast.makeText(RequestServiceActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
 
             }
@@ -244,51 +252,55 @@ public class RequestServiceActivity extends AppCompatActivity {
                         RealmToken token = new RealmToken();
                         token.setToken(data);
 
-                        StringRequest stringRequest = new StringRequest(com.android.volley.Request.Method.POST, REQUEST_SERVICE_JSON_URL, new com.android.volley.Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response)
-                            {
-                                Toast.makeText(RequestServiceActivity.this, response.toString(), Toast.LENGTH_LONG).show();
-                            }
-                        }, new com.android.volley.Response.ErrorListener() {
+                        //initRetrofit();
+
+                        Map<String, String> params= new HashMap<String, String>();
+                        params.put("name",name);
+                        params.put("phone_number",phone);
+                        params.put("date", date);
+                        params.put("service_id",serviceId);
+                        params.put("time", time);
+                        params.put("request_info", request_input);
+
+                        JsonObjectRequest jsonObjReq = new JsonObjectRequest(com.android.volley.Request.Method.POST,
+                                Constants.HTTP.REQUEST_SERVICE_JSON_URL, new JSONObject(params),
+                                new com.android.volley.Response.Listener<JSONObject>() {
+                                    @Override
+                                    public void onResponse(JSONObject response) {
+
+                                        Toast.makeText(RequestServiceActivity.this, "Request sent successfully", Toast.LENGTH_LONG).show();
+
+                                    }
+                                }, new com.android.volley.Response.ErrorListener() {
                             @Override
                             public void onErrorResponse(VolleyError error) {
-
                                 Toast.makeText(RequestServiceActivity.this, error.toString(), Toast.LENGTH_LONG).show();
-                                authzModule.deleteAccount();
-
                             }
+
                         }) {
-                            @Override
-                            protected Map<String,String> getParams(){
-                                Map<String,String> params = new HashMap<String, String>();
-                                params.put("name",name);
-                                params.put("phone_number",phone);
-                                params.put("date", date);
-                                params.put("service_id",serviceId);
-                                params.put("time", time);
-                                params.put("request_info", request_input);
 
-                                return params;
-                            }
-
+                            /**
+                             * Passing some request headers
+                             * */
                             @Override
                             public Map<String, String> getHeaders() throws AuthFailureError {
-                                Map<String,String> headers = new HashMap<String, String>();
+
+                                HashMap<String, String> headers = new HashMap<String, String>();
                                 headers.put("Authorization","Bearer "+ data);
-                                headers.put("Content-Type","application/json");
+                                headers.put("Content-Type", "application/json; charset=utf-8");
                                 headers.put("Accept","application/json");
                                 return headers;
                             }
+
                         };
 
+                        // Adding request to request queue
                         requestQueue = Volley.newRequestQueue(RequestServiceActivity.this);
-                        requestQueue.add(stringRequest);
+                        requestQueue.add(jsonObjReq);
 
                         realm = Realm.getDefaultInstance();
                         RealmTokenHelper helper = new RealmTokenHelper(realm);
                         helper.save(token);
-
 
                     }
 

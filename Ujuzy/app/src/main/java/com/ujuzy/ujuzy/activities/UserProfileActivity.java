@@ -95,7 +95,6 @@ public class UserProfileActivity extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
-    private final String UPGRADE_PROFILE_JSON_URL = "https://api.ujuzy.com/users/change-role";
 
     String service_id = "";
     String user_id = "";
@@ -197,43 +196,51 @@ public class UserProfileActivity extends AppCompatActivity {
                             RealmToken token = new RealmToken();
                             token.setToken(data);
 
-                            StringRequest stringRequest = new StringRequest(Request.Method.POST, UPGRADE_PROFILE_JSON_URL, new com.android.volley.Response.Listener<String>() {
-                                @Override
-                                public void onResponse(String response)
-                                {
-                                    Toast.makeText(UserProfileActivity.this, "Account updated successfully", Toast.LENGTH_LONG).show();
-                                }
-                            }, new com.android.volley.Response.ErrorListener() {
+
+                            Map<String, String> params= new HashMap<String, String>();
+                            params.put("new_role","professional");
+
+                            JsonObjectRequest jsonObjReq = new JsonObjectRequest(com.android.volley.Request.Method.POST,
+                                    Constants.HTTP.UPGRADE_PROFILE_JSON_URL, new JSONObject(params),
+                                    new com.android.volley.Response.Listener<JSONObject>() {
+                                        @Override
+                                        public void onResponse(JSONObject response) {
+
+                                            //REFRESH ACTIVITY
+                                            Intent intent = getIntent();
+                                            finish();
+                                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                            startActivity(intent);
+
+                                            Toast.makeText(UserProfileActivity.this, "Your account has been upgraded successfully", Toast.LENGTH_LONG).show();
+
+                                        }
+                                    }, new com.android.volley.Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-
                                     Toast.makeText(UserProfileActivity.this, error.toString(), Toast.LENGTH_LONG).show();
-
                                 }
+
                             }) {
-                                @Override
-                                protected Map<String,String> getParams(){
-                                    Map<String,String> params = new HashMap<String, String>();
-                                    params.put("new_role","Professional");
-                                    /*params.put("reg_type","");
-                                    params.put("back_url", "");
-                                    params.put("front_url","");*/
 
-                                    return params;
-                                }
-
+                                /**
+                                 * Passing some request headers
+                                 * */
                                 @Override
                                 public Map<String, String> getHeaders() throws AuthFailureError {
-                                    Map<String,String> params = new HashMap<String, String>();
-                                    params.put("Authorization","Bearer "+ data);
-                                    params.put("Content-Type","application/json");
-                                    params.put("Accept","application/json");
-                                    return params;
+
+                                    HashMap<String, String> headers = new HashMap<String, String>();
+                                    headers.put("Authorization","Bearer "+ data);
+                                    headers.put("Content-Type", "application/json; charset=utf-8");
+                                    headers.put("Accept","application/json");
+                                    return headers;
                                 }
+
                             };
 
+                            // Adding request to request queue
                             requestQueue = Volley.newRequestQueue(UserProfileActivity.this);
-                            requestQueue.add(stringRequest);
+                            requestQueue.add(jsonObjReq);
 
                             realm = Realm.getDefaultInstance();
                             RealmTokenHelper helper = new RealmTokenHelper(realm);
@@ -284,43 +291,50 @@ public class UserProfileActivity extends AppCompatActivity {
                             RealmToken token = new RealmToken();
                             token.setToken(data);
 
-                            StringRequest stringRequest = new StringRequest(Request.Method.POST, UPGRADE_PROFILE_JSON_URL, new com.android.volley.Response.Listener<String>() {
-                                @Override
-                                public void onResponse(String response)
-                                {
-                                    Toast.makeText(UserProfileActivity.this, "Account updated successfully", Toast.LENGTH_LONG).show();
-                                }
-                            }, new com.android.volley.Response.ErrorListener() {
+                            Map<String, String> params= new HashMap<String, String>();
+                            params.put("new_role","company");
+
+                            JsonObjectRequest jsonObjReq = new JsonObjectRequest(com.android.volley.Request.Method.POST,
+                                    Constants.HTTP.UPGRADE_PROFILE_JSON_URL, new JSONObject(params),
+                                    new com.android.volley.Response.Listener<JSONObject>() {
+                                        @Override
+                                        public void onResponse(JSONObject response) {
+
+                                            //REFRESH ACTIVITY
+                                            Intent intent = getIntent();
+                                            finish();
+                                            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+                                            startActivity(intent);
+
+                                            Toast.makeText(UserProfileActivity.this, "Your account has been upgraded successfully", Toast.LENGTH_LONG).show();
+
+                                        }
+                                    }, new com.android.volley.Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-
                                     Toast.makeText(UserProfileActivity.this, error.toString(), Toast.LENGTH_LONG).show();
-
                                 }
+
                             }) {
-                                @Override
-                                protected Map<String,String> getParams(){
-                                    Map<String,String> params = new HashMap<String, String>();
-                                    params.put("new_role","Company");
-                                    params.put("reg_type","");
-                                    params.put("back_url", "");
-                                    params.put("front_url","");
 
-                                    return params;
-                                }
-
+                                /**
+                                 * Passing some request headers
+                                 * */
                                 @Override
                                 public Map<String, String> getHeaders() throws AuthFailureError {
-                                    Map<String,String> params = new HashMap<String, String>();
-                                    params.put("Authorization","Bearer "+ data);
-                                    params.put("Content-Type","application/json");
-                                    params.put("Accept","application/json");
-                                    return params;
+
+                                    HashMap<String, String> headers = new HashMap<String, String>();
+                                    headers.put("Authorization","Bearer "+ data);
+                                    headers.put("Content-Type", "application/json; charset=utf-8");
+                                    headers.put("Accept","application/json");
+                                    return headers;
                                 }
+
                             };
 
+                            // Adding request to request queue
                             requestQueue = Volley.newRequestQueue(UserProfileActivity.this);
-                            requestQueue.add(stringRequest);
+                            requestQueue.add(jsonObjReq);
 
                             realm = Realm.getDefaultInstance();
                             RealmTokenHelper helper = new RealmTokenHelper(realm);

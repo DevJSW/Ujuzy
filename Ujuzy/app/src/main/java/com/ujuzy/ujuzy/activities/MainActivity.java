@@ -947,7 +947,7 @@ public class MainActivity extends AppCompatActivity
 
                                         //SAVE
                                         realm = Realm.getDefaultInstance();
-                                        RealmUserHelper helper = new RealmUserHelper(realm);                                                                                         
+                                        RealmUserHelper helper = new RealmUserHelper(realm);
                                         helper.save(realmService);
 
 

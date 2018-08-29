@@ -40,7 +40,7 @@
         android:padding="10dp"
         android:layout_centerHorizontal="true"
         android:visibility="gone"
-        android:textSize="15dp"
+        android:textSize="16dp"
         android:textColor="#fff"
         android:layout_below="@+id/noService"
         android:textAllCaps="false"
