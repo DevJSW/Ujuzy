@@ -36,6 +36,7 @@ import com.ujuzy.ujuzy.Realm.RealmUserHelper;
 import com.ujuzy.ujuzy.Realm.RealmUserService;
 import com.ujuzy.ujuzy.Realm.RealmUserServiceAdapter;
 import com.ujuzy.ujuzy.Realm.RealmUserServicesHelper;
+import com.ujuzy.ujuzy.activities.CreateServiceActivity;
 import com.ujuzy.ujuzy.activities.EditProfileActivity;
 import com.ujuzy.ujuzy.activities.MainActivity;
 import com.ujuzy.ujuzy.activities.RequestServiceActivity;
@@ -202,8 +203,8 @@ public class UserServicesFragment extends Fragment {
         createBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent webView = new Intent(getActivity(), WebViewActivity.class);
-                webView.putExtra("webview_url", webview_url);
+                Intent webView = new Intent(getActivity(), CreateServiceActivity.class);
+                //webView.putExtra("webview_url", webview_url);
                 startActivity(webView);
             }
         });

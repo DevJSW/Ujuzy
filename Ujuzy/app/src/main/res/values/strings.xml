@@ -43,4 +43,5 @@
     <string name="title_activity_home">HomeActivity</string>
     <string name="about_ujuzy"><![CDATA[We are a platform that helps households & companies nationwide to find top rated, quality assured local service providers. We help individuals & businesses utilize internet to find experts they want & services they need.]]></string>
     <string name="back"><![CDATA[<< Back]]></string>
+    <string name="attract_details">Attract your customers by providing as much information about your service as possible</string>
 </resources>

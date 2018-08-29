@@ -835,8 +835,8 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                Intent webView = new Intent(MainActivity.this, WebViewActivity.class);
-                webView.putExtra("webview_url", webview_url);
+                Intent webView = new Intent(MainActivity.this, CreateServiceActivity.class);
+                /*webView.putExtra("webview_url", webview_url);*/
                 startActivity(webView);
             }
         });
