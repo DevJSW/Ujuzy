@@ -18,6 +18,7 @@ public class Constants
         public static final String UPGRADE_PROFILE_JSON_URL = "https://api.ujuzy.com/users/change-role";
         public static final String USER_SERVICES_JSON_URL = "https://api.ujuzy.com/users/my-services";
         public static final String USER_REQUESTS_SERVICES_JSON_URL = "https://api.ujuzy.com/requests";
+        public static final String USER_JOB_REQUESTS_SERVICES_JSON_URL = "https://api.ujuzy.com/requests/my-jobs";
     }
 
     public static final class DATABASE
