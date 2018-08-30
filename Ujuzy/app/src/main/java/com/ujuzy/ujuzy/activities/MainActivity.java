@@ -921,7 +921,8 @@ public class MainActivity extends AppCompatActivity
                             RealmToken token = new RealmToken();
                             token.setToken(data);
 
-                            StringRequest stringRequest = new StringRequest(Request.Method.GET, USER_PROFILE_JSON_URL, new com.android.volley.Response.Listener<String>() {
+                            StringRequest stringRequest = new StringRequest(Request.Method.GET, USER_PROFILE_JSON_URL,
+                                    new com.android.volley.Response.Listener<String>() {
                                 @Override
                                 public void onResponse(String response)
                                 {
@@ -1041,7 +1042,7 @@ public class MainActivity extends AppCompatActivity
                                         realmService.setEmail(jsonObject.getString("email"));
                                         realmService.setCreated_at(jsonObject.getString("created_at"));
                                         realmService.setPhone(jsonObject.getString("phone_number"));
-                                        //realmService.setVerified(jsonObject.getString("phone_number"));
+
 
                                         JSONObject jsonUserRole = new JSONObject(response).getJSONObject("user_role");
                                         realmService.setUserRole(jsonUserRole.getString("role_name"));

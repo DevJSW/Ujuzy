@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#fff"
+    app:cardElevation="4dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginRight="5dp"
+        android:orientation="horizontal">
+
+       <ImageView
+           android:layout_width="115dp"
+           android:layout_height="100dp"
+           android:layout_marginRight="4dp"
+           android:scaleType="fitXY"
+           android:id="@+id/iv_avatar"
+           android:src="@drawable/placeholder_image"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="5dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="1dp"
+                android:layout_marginBottom="1dp"
+                android:orientation="horizontal">
+
+                <com.ujuzy.ujuzy.CustomData.AllerBoldFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14dp"
+                    android:ellipsize="end"
+                    android:maxLines="3"
+                    android:text="service name:"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginRight="5dp" />
+
+                <com.ujuzy.ujuzy.CustomData.AllerFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/font_black_light"
+                    android:ellipsize="marquee"
+                    android:layout_marginRight="5dp"
+                    android:id="@+id/tv_service_name"
+                    android:textSize="14dp"
+                    android:layout_marginLeft="1dp"
+                    android:text="service name"
+                    android:singleLine="true" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="1dp"
+                android:layout_marginBottom="1dp"
+                android:orientation="horizontal">
+
+                <com.ujuzy.ujuzy.CustomData.AllerBoldFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14dp"
+                    android:ellipsize="end"
+                    android:maxLines="3"
+                    android:text="Created by:"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginRight="5dp" />
+
+                <com.ujuzy.ujuzy.CustomData.AllerFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/font_black_light"
+                    android:id="@+id/tv_created_by"
+                    android:ellipsize="marquee"
+                    android:layout_marginRight="5dp"
+                    android:textSize="14dp"
+                    android:layout_marginLeft="1dp"
+                    android:text="service name"
+                    android:singleLine="true" />
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="1dp"
+                android:layout_marginBottom="1dp"
+                android:orientation="horizontal">
+
+                <com.ujuzy.ujuzy.CustomData.AllerBoldFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="14dp"
+                    android:ellipsize="end"
+                    android:maxLines="3"
+                    android:text="Created at:"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginRight="5dp" />
+
+                <com.ujuzy.ujuzy.CustomData.AllerFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/font_black_light"
+                    android:id="@+id/tv_created_at"
+                    android:ellipsize="marquee"
+                    android:layout_marginRight="5dp"
+                    android:textSize="14dp"
+                    android:layout_marginLeft="1dp"
+                    android:text="service name"
+                    android:singleLine="true" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#e2e1e1"/>
+</LinearLayout>
+

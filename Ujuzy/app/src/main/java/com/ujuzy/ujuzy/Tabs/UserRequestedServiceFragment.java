@@ -24,8 +24,11 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.ujuzy.ujuzy.R;
 import com.ujuzy.ujuzy.Realm.RealmAllServiceAdapter;
+import com.ujuzy.ujuzy.Realm.RealmHelper;
+import com.ujuzy.ujuzy.Realm.RealmServiceAdapter;
 import com.ujuzy.ujuzy.Realm.RealmToken;
 import com.ujuzy.ujuzy.Realm.RealmUser;
+import com.ujuzy.ujuzy.Realm.RealmUserHelper;
 import com.ujuzy.ujuzy.Realm.RealmUserService;
 import com.ujuzy.ujuzy.Realm.RealmUserServiceAdapter;
 import com.ujuzy.ujuzy.Realm.RealmUserServicesHelper;
@@ -33,6 +36,7 @@ import com.ujuzy.ujuzy.activities.UserProfileActivity;
 import com.ujuzy.ujuzy.adapters.CountryAdapter;
 import com.ujuzy.ujuzy.model.Constants;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -44,6 +48,8 @@ import java.util.Map;
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import retrofit2.Retrofit;
+
+import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -77,6 +83,10 @@ public class UserRequestedServiceFragment extends Fragment {
         serviceListRv = (RecyclerView) v.findViewById(R.id.service_list);
         progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
         noService = (TextView) v.findViewById(R.id.noService);
+
+        serviceListRv = (RecyclerView) v.findViewById(R.id.service_list);
+        progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
+        noService = (TextView) v.findViewById(R.id.noService);
         editTv = (TextView) v.findViewById(R.id.tvEdit);
 
         Bundle bundle2 = this.getArguments();
@@ -96,9 +106,51 @@ public class UserRequestedServiceFragment extends Fragment {
         noService.setVisibility(View.VISIBLE);
 
         initUserRequest();
-        //initRealm();
+        getUserReqServices();
 
         return v;
+    }
+
+    private void getUserReqServices()
+    {
+        realm = Realm.getDefaultInstance();
+        final RealmUserServicesHelper helper = new RealmUserServicesHelper(realm);
+
+        //RETRIEVE
+        helper.retreiveFromDB();
+
+        //CHECK IF DATABASE IS EMPTY
+        if (helper.refreshDatabase().size() < 1 || helper.refreshDatabase().size() == 0)
+        {
+
+            noService.setVisibility(View.VISIBLE);
+
+        } else {
+
+            noService.setVisibility(View.GONE);
+        }
+
+        serviceRealmAdapter = new RealmUserServiceAdapter(getActivity(), helper.refreshDatabase());
+
+        //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+        final LinearLayoutManager serviceLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        serviceListRv.setLayoutManager(serviceLayoutManager);
+        serviceListRv.setAdapter(serviceRealmAdapter);
+
+        //HANDLE DATA CHANGE FOR REFRESH
+        realmChangeListener = new RealmChangeListener()
+        {
+            @Override
+            public void onChange(Object o) {
+                //REFRESH
+                serviceRealmAdapter = new RealmUserServiceAdapter(getActivity(), helper.refreshDatabase());
+                serviceListRv.setAdapter(serviceRealmAdapter);
+            }
+        };
+
+        //ADD CHANGE LIST TO REALM
+        realm = Realm.getDefaultInstance();
+        realm.addChangeListener(realmChangeListener);
     }
 
     private void initUserRequest()
@@ -110,6 +162,44 @@ public class UserRequestedServiceFragment extends Fragment {
                     @Override
                     public void onResponse(JSONObject response) {
 
+                        try {
+
+                            JSONArray serviceData = response.getJSONArray("data");
+
+                            for (int i = 0 ; i < serviceData.length() ; i++) {
+
+                                JSONObject requestObj = serviceData.getJSONObject(i);
+
+                                RealmUserService realmService = new RealmUserService();
+                                realmService.setId(requestObj.getString("id"));
+                                realmService.setName(requestObj.getString("name"));
+                                realmService.setPhone(requestObj.getString("phone_number"));
+                                realmService.setRequest_date(requestObj.getString("date"));
+                                realmService.setRequest_time(requestObj.getString("time"));
+                                realmService.setSeen_status(requestObj.getString("false"));
+                                realmService.setCreated_at(requestObj.getString("created_at"));
+                                realmService.setCreated_by(requestObj.getString("created_by"));
+                                realmService.setUpdated_by(requestObj.getString("updated_by"));
+                                realmService.setSkill_request(requestObj.getString("skill_request"));
+                                realmService.setSpecal_request(requestObj.getString("special_request"));
+
+                                JSONObject serviceObj = new JSONObject(String.valueOf(response)).getJSONObject("service");
+
+                                realmService.setImage(serviceObj.getString("thumb"));
+                                realmService.setServiceName(serviceObj.getString("service_name"));
+                                realmService.setServiceId(serviceObj.getString("service_name"));
+
+                                //SAVE
+                                realm = Realm.getDefaultInstance();
+                                RealmUserServicesHelper helper = new RealmUserServicesHelper(realm);
+                                helper.save(realmService);
+
+                            }
+
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, new com.android.volley.Response.ErrorListener() {
             @Override
@@ -199,8 +289,10 @@ public class UserRequestedServiceFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-       /* realm.removeChangeListener(realmChangeListener);
-        realm.close();*/
+        if (realmChangeListener != null)
+            realm.removeChangeListener(realmChangeListener);
+        if (realm != null)
+            realm.close();
     }
 
 }

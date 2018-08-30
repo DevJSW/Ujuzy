@@ -22,31 +22,31 @@ import java.util.ArrayList;
 
 import io.realm.Realm;
 
-public class RealmUserServiceAdapter extends RecyclerView.Adapter<RealmUserServiceAdapter.ServicesViewHolder>
+public class RealmRequstUserServiceAdapter extends RecyclerView.Adapter<RealmRequstUserServiceAdapter.ServicesViewHolder>
 {
 
     private ArrayList<RealmUserService> servicesList;
     private Context context;
     private Realm realm;
 
-    public RealmUserServiceAdapter(Context context, ArrayList<RealmUserService> servicesList)
+    public RealmRequstUserServiceAdapter(Context context, ArrayList<RealmUserService> servicesList)
     {
         this.servicesList = servicesList;
         this.context = context;
     }
 
     @Override
-    public RealmUserServiceAdapter.ServicesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RealmRequstUserServiceAdapter.ServicesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View view = layoutInflater.inflate(R.layout.request_row, parent,false);
 
-        return new RealmUserServiceAdapter.ServicesViewHolder(view);
+        return new RealmRequstUserServiceAdapter.ServicesViewHolder(view);
 
     }
 
     @Override
-    public void onBindViewHolder(final RealmUserServiceAdapter.ServicesViewHolder holder, final int position) {
+    public void onBindViewHolder(final RealmRequstUserServiceAdapter.ServicesViewHolder holder, final int position) {
 
 
        /* *//**

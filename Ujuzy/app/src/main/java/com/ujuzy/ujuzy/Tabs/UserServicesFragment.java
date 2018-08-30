@@ -131,9 +131,9 @@ public class UserServicesFragment extends Fragment {
         initUserServices();
         //getServicesFromRealm();
 
-        initRealm();
+        //initRealm();
         initCreateBt();
-        initRealm();
+        //initRealm();
 
         return v;
     }
@@ -285,7 +285,6 @@ public class UserServicesFragment extends Fragment {
                                 @Override
                                 public void onResponse(JSONObject response) {
 
-
                                 }
                             }, new com.android.volley.Response.ErrorListener() {
                         @Override
@@ -323,7 +322,6 @@ public class UserServicesFragment extends Fragment {
                             try {
 
                                 JSONObject jsonObject = new JSONObject(response);
-
 
                             } catch (JSONException e) {
                                 //e.printStackTrace();
