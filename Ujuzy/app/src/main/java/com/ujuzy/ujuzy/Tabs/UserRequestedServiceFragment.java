@@ -285,14 +285,4 @@ public class UserRequestedServiceFragment extends Fragment {
         realm.addChangeListener(realmChangeListener);
     }
 
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (realmChangeListener != null)
-            realm.removeChangeListener(realmChangeListener);
-        if (realm != null)
-            realm.close();
-    }
-
 }
