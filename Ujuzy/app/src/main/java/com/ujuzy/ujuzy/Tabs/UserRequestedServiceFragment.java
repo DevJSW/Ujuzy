@@ -283,6 +283,7 @@ public class UserRequestedServiceFragment extends Fragment {
 
         //ADD CHANGE LIST TO REALM
         realm.addChangeListener(realmChangeListener);
+
     }
 
 }
