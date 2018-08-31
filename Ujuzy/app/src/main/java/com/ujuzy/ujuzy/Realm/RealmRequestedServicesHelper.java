@@ -18,7 +18,7 @@ public class RealmRequestedServicesHelper
     }
 
     //WRITE OR SAVE
-    public Boolean save(final RealmUserService service)
+    public Boolean save(final RealmRequestedUserService service)
     {
         if (service == null)
         {
@@ -34,7 +34,7 @@ public class RealmRequestedServicesHelper
 
                     try {
 
-                        RealmUserService realmUser = realm.copyToRealmOrUpdate(service);
+                        RealmRequestedUserService realmUser = realm.copyToRealmOrUpdate(service);
                         saved = true;
 
                     } catch (RealmException e)

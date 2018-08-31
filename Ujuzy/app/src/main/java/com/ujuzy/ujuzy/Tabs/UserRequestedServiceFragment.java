@@ -25,6 +25,9 @@ import com.android.volley.toolbox.Volley;
 import com.ujuzy.ujuzy.R;
 import com.ujuzy.ujuzy.Realm.RealmAllServiceAdapter;
 import com.ujuzy.ujuzy.Realm.RealmHelper;
+import com.ujuzy.ujuzy.Realm.RealmRequestedServiceAdapter;
+import com.ujuzy.ujuzy.Realm.RealmRequestedServicesHelper;
+import com.ujuzy.ujuzy.Realm.RealmRequestedUserService;
 import com.ujuzy.ujuzy.Realm.RealmServiceAdapter;
 import com.ujuzy.ujuzy.Realm.RealmToken;
 import com.ujuzy.ujuzy.Realm.RealmUser;
@@ -69,7 +72,7 @@ public class UserRequestedServiceFragment extends Fragment {
 
     private Realm realm;
     private RealmChangeListener realmChangeListener;
-    private RealmUserServiceAdapter serviceRealmAdapter;
+    private RealmRequestedServiceAdapter serviceRealmAdapter;
     private RequestQueue requestQueue;
 
     private Retrofit retrofit;
@@ -114,7 +117,7 @@ public class UserRequestedServiceFragment extends Fragment {
     private void getUserReqServices()
     {
         realm = Realm.getDefaultInstance();
-        final RealmUserServicesHelper helper = new RealmUserServicesHelper(realm);
+        final RealmRequestedServicesHelper helper = new RealmRequestedServicesHelper(realm);
 
         //RETRIEVE
         helper.retreiveFromDB();
@@ -130,7 +133,7 @@ public class UserRequestedServiceFragment extends Fragment {
             noService.setVisibility(View.GONE);
         }
 
-        serviceRealmAdapter = new RealmUserServiceAdapter(getActivity(), helper.refreshDatabase());
+        serviceRealmAdapter = new RealmRequestedServiceAdapter(getActivity(), helper.refreshDatabase());
 
         //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
         final LinearLayoutManager serviceLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
@@ -143,7 +146,7 @@ public class UserRequestedServiceFragment extends Fragment {
             @Override
             public void onChange(Object o) {
                 //REFRESH
-                serviceRealmAdapter = new RealmUserServiceAdapter(getActivity(), helper.refreshDatabase());
+                serviceRealmAdapter = new RealmRequestedServiceAdapter(getActivity(), helper.refreshDatabase());
                 serviceListRv.setAdapter(serviceRealmAdapter);
             }
         };
@@ -170,7 +173,7 @@ public class UserRequestedServiceFragment extends Fragment {
 
                                 JSONObject requestObj = serviceData.getJSONObject(i);
 
-                                RealmUserService realmService = new RealmUserService();
+                                RealmRequestedUserService realmService = new RealmRequestedUserService();
                                 realmService.setId(requestObj.getString("id"));
                                 realmService.setName(requestObj.getString("name"));
                                 realmService.setPhone(requestObj.getString("phone_number"));
@@ -191,7 +194,7 @@ public class UserRequestedServiceFragment extends Fragment {
 
                                 //SAVE
                                 realm = Realm.getDefaultInstance();
-                                RealmUserServicesHelper helper = new RealmUserServicesHelper(realm);
+                                RealmRequestedServicesHelper helper = new RealmRequestedServicesHelper(realm);
                                 helper.save(realmService);
 
                             }
@@ -244,46 +247,6 @@ public class UserRequestedServiceFragment extends Fragment {
         // Adding request to request queue
         requestQueue = Volley.newRequestQueue(getActivity());
         requestQueue.add(jsonObjReq);
-    }
-
-    private void getServicesFromRealm()
-    {
-        realm = Realm.getDefaultInstance();
-        final RealmUserServicesHelper helper = new RealmUserServicesHelper(realm);
-
-        //RETRIEVE
-        //helper.filterRealmDatabase("user_role", "Professional");
-        helper.retreiveFromDB();
-
-        //CHECK IF DATABASE IS EMPTY
-        if (helper.refreshDatabase().size() < 1 || helper.refreshDatabase().size() == 0)
-        {
-            noService.setVisibility(View.VISIBLE);
-
-        } else {
-            noService.setVisibility(View.GONE);
-        }
-
-
-        serviceRealmAdapter = new RealmUserServiceAdapter(getActivity(), results);
-        final LinearLayoutManager serviceLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        serviceListRv.setLayoutManager(serviceLayoutManager);
-        serviceListRv.setAdapter(serviceRealmAdapter);
-
-        //HANDLE DATA CHANGE FOR REFRESH
-        realmChangeListener = new RealmChangeListener()
-        {
-            @Override
-            public void onChange(Object o) {
-                //REFRESH
-                serviceRealmAdapter = new RealmUserServiceAdapter(getActivity(), helper.refreshDatabase());
-                serviceListRv.setAdapter(serviceAdapter);
-            }
-        };
-
-        //ADD CHANGE LIST TO REALM
-        realm.addChangeListener(realmChangeListener);
-
     }
 
 }

@@ -8,6 +8,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -23,25 +24,35 @@ import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 import com.ujuzy.ujuzy.R;
 import com.ujuzy.ujuzy.Realm.RealmHelper;
 import com.ujuzy.ujuzy.Realm.RealmToken;
+import com.ujuzy.ujuzy.Realm.RealmTokenHelper;
+import com.ujuzy.ujuzy.Realm.RealmUser;
+import com.ujuzy.ujuzy.Realm.RealmUserHelper;
 import com.ujuzy.ujuzy.model.Constants;
-import com.ujuzy.ujuzy.model.Location;
+import com.ujuzy.ujuzy.pojos.location;
 
+import org.jboss.aerogear.android.authorization.AuthorizationManager;
+import org.jboss.aerogear.android.authorization.AuthzModule;
+import org.jboss.aerogear.android.authorization.oauth2.OAuth2AuthorizationConfiguration;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -105,12 +116,12 @@ public class CreateServiceActivity extends AppCompatActivity {
                 service_cost = inputServiceCost.getText().toString();
 
                 List<Uri> images = new ArrayList<>();
-                images.add(resultUri);
+                images.add(mImageUri);
 
-                Location location = new Location();
-                location.setLat(-1.2838881);
-                location.setLng(36.818703700000015);
-                location.setCity("Koinange Street, Nairobi, Kenya");
+                location loc = new location();
+                loc.setCity("Koinange Street, Nairobi, Kenya");
+                loc.setLat(-1.2838881);
+                loc.setLng(36.818703700000015);
 
                 Map<String, String> params= new HashMap<String, String>();
                 params.put("service_name", service_name);
@@ -118,10 +129,11 @@ public class CreateServiceActivity extends AppCompatActivity {
                 params.put("offer_cost", service_cost);
                 params.put("category", selectedCategory);
                 params.put("billing", selectedBilling);
+                params.put("travel", "false");
                 params.put("no_of_personnel", "1");
                 params.put("published", "true");
                 params.put("images", String.valueOf(images));
-                params.put("location", String.valueOf(location));
+                params.put("location", String.valueOf(loc));
 
                 if (TextUtils.isEmpty(service_name)) {
                     inputServiceName.setError("Enter name of your service");
@@ -131,59 +143,90 @@ public class CreateServiceActivity extends AppCompatActivity {
                     inputServiceCost.setError("Enter cost of your service");
                 } else {
 
-                    JsonObjectRequest jsonObjReq = new JsonObjectRequest(com.android.volley.Request.Method.POST,
-                            Constants.HTTP.REQUEST_SERVICE_JSON_URL, new JSONObject(params),
-                            new com.android.volley.Response.Listener<JSONObject>() {
-                                @Override
-                                public void onResponse(JSONObject response) {
 
-                                    Toast.makeText(CreateServiceActivity.this, "Service created successfully", Toast.LENGTH_LONG).show();
+                    try {
 
-                                }
-                            }, new com.android.volley.Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
+                        final AuthzModule authzModule = AuthorizationManager
+                                .config("KeyCloakAuthz", OAuth2AuthorizationConfiguration.class)
+                                .setBaseURL(new URL(Constants.HTTP.AUTH_BASE_URL))
+                                .setAuthzEndpoint("/auth/realms/ujuzy/protocol/openid-connect/auth")
+                                .setAccessTokenEndpoint("/auth/realms/ujuzy/protocol/openid-connect/token")
+                                .setAccountId("account")
+                                .setClientId("account")
+                                .setRedirectURL("https://ujuzy.com")
+                                .setScopes(Arrays.asList("openid"))
+                                .addAdditionalAuthorizationParam((Pair.create("grant_type", "password")))
+                                .asModule();
 
-                            NetworkResponse response = error.networkResponse;
-                            if (error instanceof ServerError && response != null) {
-                                try {
-                                    String res = new String(response.data,
-                                            HttpHeaderParser.parseCharset(response.headers, "utf-8"));
-                                    // Now you can use any deserializer to make sense of data
-                                    JSONObject obj = new JSONObject(res);
-                                } catch (UnsupportedEncodingException e1) {
-                                    // Couldn't properly decode data to string
-                                    e1.printStackTrace();
-                                } catch (JSONException e2) {
-                                    // returned data is not JSONObject?
-                                    e2.printStackTrace();
-                                }
+
+                        authzModule.requestAccess(CreateServiceActivity.this, new org.jboss.aerogear.android.core.Callback<String>() {
+                            @Override
+                            public void onSuccess(final String data) {
+
+                                JsonObjectRequest jsonObjReq = new JsonObjectRequest(com.android.volley.Request.Method.POST,
+                                        Constants.HTTP.CREATE_SERVICE_JSON_URL, new JSONObject(params),
+                                        new com.android.volley.Response.Listener<JSONObject>() {
+                                            @Override
+                                            public void onResponse(JSONObject response) {
+
+                                                Toast.makeText(CreateServiceActivity.this, "Service created successfully", Toast.LENGTH_LONG).show();
+
+                                            }
+                                        }, new com.android.volley.Response.ErrorListener() {
+                                    @Override
+                                    public void onErrorResponse(VolleyError error) {
+
+                                        NetworkResponse response = error.networkResponse;
+                                        if (error instanceof ServerError && response != null) {
+                                            try {
+                                                String res = new String(response.data,
+                                                        HttpHeaderParser.parseCharset(response.headers, "utf-8"));
+                                                // Now you can use any deserializer to make sense of data
+                                                JSONObject obj = new JSONObject(res);
+                                            } catch (UnsupportedEncodingException e1) {
+                                                // Couldn't properly decode data to string
+                                                e1.printStackTrace();
+                                            } catch (JSONException e2) {
+                                                // returned data is not JSONObject?
+                                                e2.printStackTrace();
+                                            }
+                                        }
+                                    }
+
+                                }) {
+
+                                    /**
+                                     * Passing some request headers
+                                     * */
+                                    @Override
+                                    public Map<String, String> getHeaders() throws AuthFailureError {
+
+                                        HashMap<String, String> headers = new HashMap<String, String>();
+                                        headers.put("Authorization","Bearer "+ data);
+                                        headers.put("Content-Type", "application/json; charset=utf-8");
+                                        headers.put("Accept","application/json");
+                                        return headers;
+                                    }
+
+                                };
+
+                                // Adding request to request queue
+                                requestQueue = Volley.newRequestQueue(CreateServiceActivity.this);
+                                requestQueue.add(jsonObjReq);
+
                             }
-                        }
 
-                    }) {
+                            @Override
+                            public void onFailure(Exception e) {
+                                // Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                            }
+                        });
 
-                        /**
-                         * Passing some request headers
-                         * */
-                        @Override
-                        public Map<String, String> getHeaders() throws AuthFailureError {
 
-                            realm = Realm.getDefaultInstance();
-                            final RealmToken token = new RealmToken();
+                    } catch (MalformedURLException e) {
+                        //e.printStackTrace();
+                    }
 
-                            HashMap<String, String> headers = new HashMap<String, String>();
-                            headers.put("Authorization","Bearer "+ token.toString());
-                            headers.put("Content-Type", "application/json; charset=utf-8");
-                            headers.put("Accept","application/json");
-                            return headers;
-                        }
-
-                    };
-
-                    // Adding request to request queue
-                    requestQueue = Volley.newRequestQueue(CreateServiceActivity.this);
-                    requestQueue.add(jsonObjReq);
 
                 }
 
@@ -285,6 +328,7 @@ public class CreateServiceActivity extends AppCompatActivity {
 
         String[] service_billing_string = new String[]{
                 "Billing Cycle",
+                "One off payment",
                 "Hourly",
                 "Daily",
                 "Monthly"
@@ -380,7 +424,7 @@ public class CreateServiceActivity extends AppCompatActivity {
             CropImage.activity(mImageUri)
                     .setGuidelines(CropImageView.Guidelines.ON)
                     .setCropShape(CropImageView.CropShape.RECTANGLE)
-                    .setAspectRatio(1, 1)
+                    .setAspectRatio(4, 3)
                     .start(CreateServiceActivity.this);
 
         }

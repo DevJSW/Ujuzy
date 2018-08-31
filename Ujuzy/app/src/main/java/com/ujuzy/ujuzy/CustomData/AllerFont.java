@@ -10,7 +10,7 @@ import android.widget.TextView;
 /**
  * Created by John on 29-May-17.
  */
-public class AllerFont extends TextView {
+public class AllerFont extends android.support.v7.widget.AppCompatTextView {
 
 
     public AllerFont(Context context, AttributeSet attrs, int defStyle) {

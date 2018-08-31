@@ -16,9 +16,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
+import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
@@ -27,6 +30,8 @@ import com.google.gson.GsonBuilder;
 import com.ujuzy.ujuzy.R;
 import com.ujuzy.ujuzy.Realm.RealmAllServiceAdapter;
 import com.ujuzy.ujuzy.Realm.RealmHelper;
+import com.ujuzy.ujuzy.Realm.RealmRequestedServiceAdapter;
+import com.ujuzy.ujuzy.Realm.RealmRequestedServicesHelper;
 import com.ujuzy.ujuzy.Realm.RealmService;
 import com.ujuzy.ujuzy.Realm.RealmServiceAdapter;
 import com.ujuzy.ujuzy.Realm.RealmToken;
@@ -53,10 +58,12 @@ import com.ujuzy.ujuzy.services.Api;
 import org.jboss.aerogear.android.authorization.AuthorizationManager;
 import org.jboss.aerogear.android.authorization.AuthzModule;
 import org.jboss.aerogear.android.authorization.oauth2.OAuth2AuthorizationConfiguration;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -83,7 +90,6 @@ public class UserServicesFragment extends Fragment {
     String userId = "";
     String firstName = "";
     private String webview_url = "https://ujuzy.com/services/create";
-    private CountryAdapter countryAdapter;
     private RecyclerView serviceListRv;
     private static String BASE_URL = "https://api.ujuzy.com/";
     private String USER_SERVICES_JSON_URL = "https://api.ujuzy.com/users/my-services";
@@ -95,7 +101,7 @@ public class UserServicesFragment extends Fragment {
 
     private Realm realm;
     private RealmChangeListener realmChangeListener;
-    private RealmAllServiceAdapter serviceRealmAdapter;
+    private RealmUserServiceAdapter serviceRealmAdapter;
 
     private Retrofit retrofit;
     private RequestQueue requestQueue;
@@ -128,8 +134,9 @@ public class UserServicesFragment extends Fragment {
 
         noService.setVisibility(View.VISIBLE);
         //initRealm();
+
         initUserServices();
-        //getServicesFromRealm();
+        getUserServices();
 
         //initRealm();
         initCreateBt();
@@ -210,29 +217,26 @@ public class UserServicesFragment extends Fragment {
         });
     }
 
-    private void initRealm()
+    private void getUserServices()
     {
         realm = Realm.getDefaultInstance();
-        final RealmHelper helper = new RealmHelper(realm);
+        final RealmUserServicesHelper helper = new RealmUserServicesHelper(realm);
 
-        RealmUser realmUser = realm.where(RealmUser.class).findFirst();
-
-        //QUERY/FILTER REALM DATABASE
-        helper.filterRealmDatabase("user_id", realmUser.getId());
+        //RETRIEVE
+        helper.retreiveFromDB();
 
         //CHECK IF DATABASE IS EMPTY
         if (helper.refreshDatabase().size() < 1 || helper.refreshDatabase().size() == 0)
         {
+
             noService.setVisibility(View.VISIBLE);
-            createBt.setVisibility(View.VISIBLE);
-            noService.setText("You have no services posted yet!");
+
         } else {
+
             noService.setVisibility(View.GONE);
-            createBt.setVisibility(View.GONE);
         }
 
-
-        serviceRealmAdapter = new RealmAllServiceAdapter(getActivity(), helper.refreshDatabase());
+        serviceRealmAdapter = new RealmUserServiceAdapter(getActivity(), helper.refreshDatabase());
 
         //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
         final LinearLayoutManager serviceLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
@@ -245,17 +249,142 @@ public class UserServicesFragment extends Fragment {
             @Override
             public void onChange(Object o) {
                 //REFRESH
-                serviceRealmAdapter = new RealmAllServiceAdapter(getActivity(), helper.refreshDatabase());
+                serviceRealmAdapter = new RealmUserServiceAdapter(getActivity(), helper.refreshDatabase());
                 serviceListRv.setAdapter(serviceRealmAdapter);
             }
         };
 
         //ADD CHANGE LIST TO REALM
+        realm = Realm.getDefaultInstance();
         realm.addChangeListener(realmChangeListener);
     }
 
-
     private void initUserServices()
+    {
+
+        try {
+
+            final AuthzModule authzModule = AuthorizationManager
+                    .config("KeyCloakAuthz", OAuth2AuthorizationConfiguration.class)
+                    .setBaseURL(new URL(Constants.HTTP.AUTH_BASE_URL))
+                    .setAuthzEndpoint("/auth/realms/ujuzy/protocol/openid-connect/auth")
+                    .setAccessTokenEndpoint("/auth/realms/ujuzy/protocol/openid-connect/token")
+                    .setAccountId("account")
+                    .setClientId("account")
+                    .setRedirectURL("https://ujuzy.com")
+                    .setScopes(Arrays.asList("openid"))
+                    .addAdditionalAuthorizationParam((Pair.create("grant_type", "password")))
+                    .asModule();
+
+
+            authzModule.requestAccess(getActivity(), new org.jboss.aerogear.android.core.Callback<String>() {
+                @Override
+                public void onSuccess(final String data) {
+
+                    JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
+                            Constants.HTTP.USER_SERVICES_JSON_URL, new JSONObject(),
+                            new com.android.volley.Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+
+                                    try {
+
+                                        JSONArray serviceData = response.getJSONArray("data");
+
+                                        for (int i = 0 ; i < serviceData.length() ; i++) {
+
+                                            JSONObject requestObj = serviceData.getJSONObject(i);
+
+                                            RealmUserService realmService = new RealmUserService();
+                                            realmService.setId(requestObj.getString("id"));
+                                            realmService.setName(requestObj.getString("name"));
+                                            realmService.setPhone(requestObj.getString("phone_number"));
+                                            realmService.setRequest_date(requestObj.getString("date"));
+                                            realmService.setRequest_time(requestObj.getString("time"));
+                                            realmService.setSeen_status(requestObj.getString("false"));
+                                            realmService.setCreated_at(requestObj.getString("created_at"));
+                                            realmService.setCreated_by(requestObj.getString("created_by"));
+                                            realmService.setUpdated_by(requestObj.getString("updated_by"));
+                                            realmService.setSkill_request(requestObj.getString("skill_request"));
+                                            realmService.setSpecal_request(requestObj.getString("special_request"));
+
+                                            JSONObject serviceObj = new JSONObject(String.valueOf(response)).getJSONObject("service");
+
+                                            realmService.setImage(serviceObj.getString("thumb"));
+                                            realmService.setServiceName(serviceObj.getString("service_name"));
+                                            realmService.setServiceId(serviceObj.getString("service_name"));
+
+                                            //SAVE
+                                            realm = Realm.getDefaultInstance();
+                                            RealmUserServicesHelper helper = new RealmUserServicesHelper(realm);
+                                            helper.save(realmService);
+
+                                        }
+
+
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }, new com.android.volley.Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            NetworkResponse response = error.networkResponse;
+                            if (error instanceof ServerError && response != null) {
+                                try {
+                                    String res = new String(response.data,
+                                            HttpHeaderParser.parseCharset(response.headers, "utf-8"));
+                                    // Now you can use any deserializer to make sense of data
+                                    JSONObject obj = new JSONObject(res);
+                                } catch (UnsupportedEncodingException e1) {
+                                    // Couldn't properly decode data to string
+                                    e1.printStackTrace();
+                                } catch (JSONException e2) {
+                                    // returned data is not JSONObject?
+                                    e2.printStackTrace();
+                                }
+                            }
+                        }
+
+                    }) {
+
+                        /**
+                         * Passing some request headers
+                         * */
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+
+                            HashMap<String, String> headers = new HashMap<String, String>();
+                            headers.put("Authorization","Bearer "+ data);
+                            headers.put("Content-Type", "application/json; charset=utf-8");
+                            headers.put("Accept","application/json");
+                            return headers;
+                        }
+
+                    };
+
+                    // Adding request to request queue
+                    requestQueue = Volley.newRequestQueue(getActivity());
+                    requestQueue.add(jsonObjReq);
+
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    // Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
+
+
+        } catch (MalformedURLException e) {
+            //e.printStackTrace();
+        }
+
+
+    }
+
+
+   /* private void initUserServices()
     {
 
         try {
@@ -294,9 +423,9 @@ public class UserServicesFragment extends Fragment {
 
                     }) {
 
-                        /**
+                        *//**
                          * Passing some request headers
-                         * */
+                         * *//*
                         @Override
                         public Map<String, String> getHeaders() throws AuthFailureError {
 
@@ -361,50 +490,13 @@ public class UserServicesFragment extends Fragment {
         }
 
 
-    }
+    }*/
 
-   /* private void getServicesFromRealm()
-    {
-        realm = Realm.getDefaultInstance();
-        final RealmUserServicesHelper helper = new RealmUserServicesHelper(realm);
-
-        //RETRIEVE
-        helper.retreiveFromDB();
-
-        //CHECK IF DATABASE IS EMPTY
-        if (helper.refreshDatabase().size() < 1 || helper.refreshDatabase().size() == 0)
-        {
-            noService.setVisibility(View.VISIBLE);
-
-        } else {
-            noService.setVisibility(View.GONE);
-        }
-
-
-        serviceRealmAdapter = new RealmUserServiceAdapter(getActivity(), results);
-        final LinearLayoutManager serviceLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        serviceListRv.setLayoutManager(serviceLayoutManager);
-        serviceListRv.setAdapter(serviceRealmAdapter);
-
-        //HANDLE DATA CHANGE FOR REFRESH
-        realmChangeListener = new RealmChangeListener()
-        {
-            @Override
-            public void onChange(Object o) {
-                //REFRESH
-                serviceRealmAdapter = new RealmUserServiceAdapter(getActivity(), helper.refreshDatabase());
-                serviceListRv.setAdapter(serviceAdapter);
-            }
-        };
-
-        //ADD CHANGE LIST TO REALM
-        realm.addChangeListener(realmChangeListener);
-    }
-*/
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        realm = Realm.getDefaultInstance();
         if (realmChangeListener != null)
         realm.removeChangeListener(realmChangeListener);
         //if (realm != null)

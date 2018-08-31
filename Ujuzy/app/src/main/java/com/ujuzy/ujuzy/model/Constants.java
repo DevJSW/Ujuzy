@@ -14,6 +14,7 @@ public class Constants
         public static final String TOKEN_ENDPOINT = "https://sso.ujuzy.com/auth/realms/ujuzy/protocol/openid-connect/";
         public static final String REGISTRATION_ENDPOINT = "https://sso.ujuzy.com/auth/realms/ujuzy/clients-registrations/";
         public static final String SERVICES_ENDPOINT = "https://api.ujuzy.com/";
+        public static final String CREATE_SERVICE_JSON_URL = "https://api.ujuzy.com/services";
         public static final String REQUEST_SERVICE_JSON_URL = "https://api.ujuzy.com/requests";
         public static final String UPGRADE_PROFILE_JSON_URL = "https://api.ujuzy.com/users/change-role";
         public static final String USER_SERVICES_JSON_URL = "https://api.ujuzy.com/users/my-services";

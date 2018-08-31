@@ -25,11 +25,11 @@ import io.realm.Realm;
 public class RealmRequstUserServiceAdapter extends RecyclerView.Adapter<RealmRequstUserServiceAdapter.ServicesViewHolder>
 {
 
-    private ArrayList<RealmUserService> servicesList;
+    private ArrayList<RealmRequestedUserService> servicesList;
     private Context context;
     private Realm realm;
 
-    public RealmRequstUserServiceAdapter(Context context, ArrayList<RealmUserService> servicesList)
+    public RealmRequstUserServiceAdapter(Context context, ArrayList<RealmRequestedUserService> servicesList)
     {
         this.servicesList = servicesList;
         this.context = context;

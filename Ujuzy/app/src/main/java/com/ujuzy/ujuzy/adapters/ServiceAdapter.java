@@ -21,7 +21,6 @@ import com.ujuzy.ujuzy.Realm.RealmService;
 import com.ujuzy.ujuzy.activities.NewServiceActivity;
 import com.ujuzy.ujuzy.activities.ServiceActivity;
 import com.ujuzy.ujuzy.model.Datum;
-import com.ujuzy.ujuzy.model.Location;
 
 import java.util.ArrayList;
 
