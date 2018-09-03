@@ -40,6 +40,7 @@ public class RealmUserService extends RealmObject
     private String user_thumb;
     private int no_of_personnel;
     private String created_at;
+    private String Rating;
 
     public RealmUserService(RealmList<RealmSkillList> skillList) {
         this.skillList = skillList;
@@ -48,7 +49,7 @@ public class RealmUserService extends RealmObject
     private RealmList<RealmSkillList> skillList = null;
 
 
-    public RealmUserService(String id, String serviceName, String serviceDetails, String serviceId, String name, String phone, String request_name, String request_time, String seen_status, String updated_by, String skill_request, String specal_request, String service_id, String request_date, String special_date, String cost, String category, Boolean travel, String image, String additional_info, String created_by, String user_role, String first_name, String last_name, String service_duration_days, String service_duration_hours, String user_id, double latitude, double longitude, String city, String user_thumb, int no_of_personnel, String createdBy, String created_at, RealmList<RealmSkillList> skillList) {
+    public RealmUserService(String id, String serviceName, String serviceDetails, String serviceId, String name, String phone, String request_name, String request_time, String seen_status, String updated_by, String skill_request, String specal_request, String service_id, String request_date, String special_date, String cost, String category, Boolean travel, String image, String additional_info, String created_by, String user_role, String first_name, String last_name, String service_duration_days, String service_duration_hours, String user_id, double latitude, double longitude, String city, String user_thumb, int no_of_personnel, String createdBy, String created_at, String rating, RealmList<RealmSkillList> skillList) {
         this.id = id;
         this.serviceName = serviceName;
         this.serviceDetails = serviceDetails;
@@ -83,6 +84,7 @@ public class RealmUserService extends RealmObject
         this.no_of_personnel = no_of_personnel;
         this.createdBy = createdBy;
         this.created_at = created_at;
+        Rating = rating;
         this.skillList = skillList;
     }
 
@@ -371,5 +373,13 @@ public class RealmUserService extends RealmObject
 
     public void setSpecial_date(String special_date) {
         this.special_date = special_date;
+    }
+
+    public String getRating() {
+        return Rating;
+    }
+
+    public void setRating(String rating) {
+        Rating = rating;
     }
 }

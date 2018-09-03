@@ -25,10 +25,10 @@ import io.realm.Realm;
 public class RealmRequestedServiceAdapter extends RecyclerView.Adapter<RealmRequestedServiceAdapter.ServicesViewHolder>
 {
 
-    private ArrayList<RealmRequestedService> servicesList;
+    private ArrayList<RealmRequestedUserService> servicesList;
     private Context context;
 
-    public RealmRequestedServiceAdapter(Context context, ArrayList<RealmRequestedService> servicesList)
+    public RealmRequestedServiceAdapter(Context context, ArrayList<RealmRequestedUserService> servicesList)
     {
         this.servicesList = servicesList;
         this.context = context;
@@ -38,7 +38,7 @@ public class RealmRequestedServiceAdapter extends RecyclerView.Adapter<RealmRequ
     public RealmRequestedServiceAdapter.ServicesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View view = layoutInflater.inflate(R.layout.service_row2, parent,false);
+        View view = layoutInflater.inflate(R.layout.request_row, parent,false);
 
         return new RealmRequestedServiceAdapter.ServicesViewHolder(view);
 
@@ -48,20 +48,8 @@ public class RealmRequestedServiceAdapter extends RecyclerView.Adapter<RealmRequ
     public void onBindViewHolder(final RealmRequestedServiceAdapter.ServicesViewHolder holder, final int position) {
 
         holder.serviceName.setText(servicesList.get(position).getServiceName());
-        holder.serviceDetails.setText(servicesList.get(position).getServiceDetails());
-        holder.costTv.setText("Ksh " + servicesList.get(position).getCost());
-
-        Realm realm = Realm.getDefaultInstance();
-        RealmFavourite favourite = realm.where(RealmFavourite.class).equalTo("id", servicesList.get(position).getId()).findFirst();
-
-        if (favourite != null) {
-            // Exists
-            holder.favIconIv.setImageResource(R.drawable.fav_icon_red);
-
-        } else {
-            // Not exist
-            holder.favIconIv.setImageResource(R.drawable.fav_icon);
-        }
+        holder.serviceCreatedby.setText(servicesList.get(position).getName());
+        holder.serviceCreatedat.setText(servicesList.get(position).getCreated_at());
 
         Glide.with(context)
                 .load(servicesList.get(position).getImage())
@@ -69,17 +57,17 @@ public class RealmRequestedServiceAdapter extends RecyclerView.Adapter<RealmRequ
                 .placeholder(R.drawable.placeholder_image)
                 .diskCacheStrategy(DiskCacheStrategy.RESULT)
                 .fitCenter()
-                .into(new BitmapImageViewTarget(holder.avatar) {
+                .into(new BitmapImageViewTarget(holder.userAvatar) {
                     @Override
                     protected void setResource(Bitmap resource) {
                         RoundedBitmapDrawable circularBitmapDrawable =
                                 RoundedBitmapDrawableFactory.create(context.getResources(), resource);
                         circularBitmapDrawable.setCircular(false);
-                        holder.avatar.setImageDrawable(circularBitmapDrawable);
+                        holder.userAvatar.setImageDrawable(circularBitmapDrawable);
                     }
                 });
 
-        holder.itemView.setOnClickListener(new View.OnClickListener()
+       /* holder.itemView.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
@@ -104,7 +92,7 @@ public class RealmRequestedServiceAdapter extends RecyclerView.Adapter<RealmRequ
                 view.getContext().startActivity(openRead);
             }
         });
-
+*/
 
     }
 
@@ -116,8 +104,8 @@ public class RealmRequestedServiceAdapter extends RecyclerView.Adapter<RealmRequ
     class ServicesViewHolder extends RecyclerView.ViewHolder
     {
         View mView;
-        TextView serviceName, serviceDetails, senderFirstName, senderLastName, senderRole, costTv;
-        ImageView avatar, userAvatar, favIconIv;
+        TextView serviceName, serviceCreatedby, serviceCreatedat;
+        ImageView avatar, userAvatar;
 
         public ServicesViewHolder(View itemView)
         {
@@ -125,13 +113,9 @@ public class RealmRequestedServiceAdapter extends RecyclerView.Adapter<RealmRequ
 
             mView = itemView;
             serviceName = itemView.findViewById(R.id.tv_service_name);
-            costTv = itemView.findViewById(R.id.costTv);
-            senderFirstName = itemView.findViewById(R.id.tv_user_name);
-            senderRole = itemView.findViewById(R.id.tv_user_role);
-            serviceDetails = itemView.findViewById(R.id.tv_service_details);
-            avatar = itemView.findViewById(R.id.iv_avatar);
-            userAvatar = itemView.findViewById(R.id.iv_user_avatar);
-            favIconIv = itemView.findViewById(R.id.favIv);
+            serviceCreatedby = itemView.findViewById(R.id.tv_created_by);
+            serviceCreatedat = itemView.findViewById(R.id.tv_created_at);
+            userAvatar = itemView.findViewById(R.id.iv_avatar);
 
         }
     }

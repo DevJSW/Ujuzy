@@ -9,7 +9,7 @@ import io.realm.exceptions.RealmException;
 public class RealmRequestedServicesHelper
 {
     Realm realm;
-    RealmResults<RealmRequestedService> services;
+    RealmResults<RealmRequestedUserService> services;
     Boolean saved = null;
 
     public RealmRequestedServicesHelper(Realm realm)
@@ -55,15 +55,15 @@ public class RealmRequestedServicesHelper
     //RETRIEVE FROM DB
     public void retreiveFromDB()
     {
-        services = realm.where(RealmRequestedService.class).findAll();
+        services = realm.where(RealmRequestedUserService.class).findAll();
     }
 
     //REFRESH
-    public ArrayList<RealmRequestedService> refreshDatabase()
+    public ArrayList<RealmRequestedUserService> refreshDatabase()
     {
-        ArrayList<RealmRequestedService> latestUser = new ArrayList<>();
+        ArrayList<RealmRequestedUserService> latestUser = new ArrayList<>();
 
-        for (RealmRequestedService realmUser : services)
+        for (RealmRequestedUserService realmUser : services)
         {
             latestUser.add(realmUser);
         }

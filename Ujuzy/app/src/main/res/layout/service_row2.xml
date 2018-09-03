@@ -51,6 +51,8 @@
                     android:layout_height="wrap_content"
                     android:isIndicator="true"
                     android:stepSize="0.1"
+                    android:id="@+id/serviceRating"
+                    android:theme="@style/RatingBar"
                     style="@android:style/Widget.DeviceDefault.Light.RatingBar.Small"
                     />
 
@@ -59,6 +61,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/font_black_light"
                     android:layout_marginRight="5dp"
+                    android:visibility="gone"
                     android:textSize="11dp"
                     android:layout_marginLeft="5dp"
                     android:text="(0)"/>

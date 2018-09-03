@@ -230,10 +230,12 @@ public class UserServicesFragment extends Fragment {
         {
 
             noService.setVisibility(View.VISIBLE);
+            createBt.setVisibility(View.VISIBLE);
 
         } else {
 
             noService.setVisibility(View.GONE);
+            createBt.setVisibility(View.GONE);
         }
 
         serviceRealmAdapter = new RealmUserServiceAdapter(getActivity(), helper.refreshDatabase());
@@ -294,30 +296,39 @@ public class UserServicesFragment extends Fragment {
                                         for (int i = 0 ; i < serviceData.length() ; i++) {
 
                                             JSONObject requestObj = serviceData.getJSONObject(i);
+                                            JSONObject serviceUserObj = serviceData.getJSONObject(i).getJSONObject("created_by");
+                                            JSONObject serviceLocationObj = serviceData.getJSONObject(i).getJSONObject("location");
+                                            JSONObject serviceDurationObj = serviceData.getJSONObject(i).getJSONObject("duration");
 
                                             RealmUserService realmService = new RealmUserService();
                                             realmService.setId(requestObj.getString("id"));
-                                            realmService.setName(requestObj.getString("name"));
-                                            realmService.setPhone(requestObj.getString("phone_number"));
-                                            realmService.setRequest_date(requestObj.getString("date"));
-                                            realmService.setRequest_time(requestObj.getString("time"));
-                                            realmService.setSeen_status(requestObj.getString("false"));
+                                            realmService.setServiceName(requestObj.getString("service_name"));
+                                            realmService.setServiceDetails(requestObj.getString("service_details"));
+                                            realmService.setCost(requestObj.getString("cost"));
+                                            realmService.setCategory(requestObj.getString("category"));
+                                            realmService.setTravel(requestObj.getBoolean("travel"));
                                             realmService.setCreated_at(requestObj.getString("created_at"));
-                                            realmService.setCreated_by(requestObj.getString("created_by"));
-                                            realmService.setUpdated_by(requestObj.getString("updated_by"));
-                                            realmService.setSkill_request(requestObj.getString("skill_request"));
-                                            realmService.setSpecal_request(requestObj.getString("special_request"));
+                                           // realmService.setRating(requestObj .getString("rating"));
 
-                                            JSONObject serviceObj = new JSONObject(String.valueOf(response)).getJSONObject("service");
+                                            //realmService.setUser_role(serviceUserObj.getString("user_role"));
+                                            realmService.setUser_thumb(serviceUserObj.getString("thumb"));
+                                            realmService.setFirst_name(serviceUserObj.getString("firstname"));
+                                            realmService.setLast_name(serviceUserObj.getString("lastname"));
+                                            realmService.setUser_id(serviceUserObj.getString("id"));
 
-                                            realmService.setImage(serviceObj.getString("thumb"));
-                                            realmService.setServiceName(serviceObj.getString("service_name"));
-                                            realmService.setServiceId(serviceObj.getString("service_name"));
+                                            realmService.setCity(serviceLocationObj.getString("city"));
+
+                                            realmService.setService_duration_days(serviceDurationObj.getString("days"));
+                                            realmService.setService_duration_hours(serviceDurationObj.getString("hours"));
+
 
                                             //SAVE
                                             realm = Realm.getDefaultInstance();
                                             RealmUserServicesHelper helper = new RealmUserServicesHelper(realm);
                                             helper.save(realmService);
+
+                                            noService.setVisibility(View.GONE);
+                                            createBt.setVisibility(View.GONE);
 
                                         }
 

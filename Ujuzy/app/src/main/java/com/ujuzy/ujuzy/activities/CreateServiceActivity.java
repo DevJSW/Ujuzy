@@ -1,13 +1,16 @@
 package com.ujuzy.ujuzy.activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
+import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,23 +27,16 @@ import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 import com.ujuzy.ujuzy.R;
-import com.ujuzy.ujuzy.Realm.RealmHelper;
-import com.ujuzy.ujuzy.Realm.RealmToken;
-import com.ujuzy.ujuzy.Realm.RealmTokenHelper;
-import com.ujuzy.ujuzy.Realm.RealmUser;
-import com.ujuzy.ujuzy.Realm.RealmUserHelper;
 import com.ujuzy.ujuzy.model.Constants;
 import com.ujuzy.ujuzy.pojos.location;
 
@@ -50,6 +46,7 @@ import org.jboss.aerogear.android.authorization.oauth2.OAuth2AuthorizationConfig
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -66,6 +63,7 @@ public class CreateServiceActivity extends AppCompatActivity {
     private ImageView backBtn, addImgIv;
     private Uri resultUri = null;
     private Uri mImageUri = null;
+    Bitmap bitmap;
     private static int GALLERY_REQUEST =1;
     private Button createBtn;
 
@@ -115,13 +113,54 @@ public class CreateServiceActivity extends AppCompatActivity {
                 service_details = inputServiceDetails.getText().toString();
                 service_cost = inputServiceCost.getText().toString();
 
-                List<Uri> images = new ArrayList<>();
-                images.add(mImageUri);
+                //converting image to base64 string
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+                byte[] imageBytes = baos.toByteArray();
+                final String imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
 
-                location loc = new location();
-                loc.setCity("Koinange Street, Nairobi, Kenya");
-                loc.setLat(-1.2838881);
-                loc.setLng(36.818703700000015);
+                List<String> images = new ArrayList<>();
+                images.add(imageString);
+
+
+               /* location location = new location();
+                location.setCity("Koinange Street, Nairobi, Kenya");
+                location.setLat(-1.2838881);
+                location.setLng(36.818703700000015);*/
+
+               /* Map<String, String> location = new HashMap<>();
+                location.put("city", "Koinange Street, Nairobi, Kenya");
+                location.put("lat", String.valueOf(-1.2838881));
+                location.put("lng", String.valueOf(36.818703700000015));*/
+
+               /* JSONObject location = new JSONObject();
+                try {
+                    location.put("city", "Koinange Street, Nairobi, Kenya");
+                    location.put("lat", "-1.2838881");
+                    location.put("lng", "36.818703700000015");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }*/
+               /* JSONObject location = new JSONObject();
+                try {
+                            .put("city", "Koinange Street, Nairobi, Kenya")
+                            .put("lat", -1.2838881)
+                            .put("lng", 36.818703700000015);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }*/
+
+
+               /* Map<String, Object> location= new HashMap<String, Object>();
+                location.put("city", "Koinange Street, Nairobi, Kenya");
+                location.put("lat", -1.2838881);
+                location.put("lng", 36.818703700000015);
+*/
+                HashMap location = new HashMap();
+                location.put("city", "Koinange Street, Nairobi, Kenya");
+                location.put("lat", -1.2838881);
+                location.put("lng", 36.818703700000015);
+
 
                 Map<String, String> params= new HashMap<String, String>();
                 params.put("service_name", service_name);
@@ -133,7 +172,13 @@ public class CreateServiceActivity extends AppCompatActivity {
                 params.put("no_of_personnel", "1");
                 params.put("published", "true");
                 params.put("images", String.valueOf(images));
-                params.put("location", String.valueOf(loc));
+                params.put("location", String.valueOf(location));
+
+               /* Map<String, String> location= new HashMap<String, String>();
+                params.put("city", service_name);
+                params.put("lat", String.valueOf(-1.2838881));
+                params.put("lng", String.valueOf(36.818703700000015));*/
+
 
                 if (TextUtils.isEmpty(service_name)) {
                     inputServiceName.setError("Enter name of your service");
@@ -142,7 +187,6 @@ public class CreateServiceActivity extends AppCompatActivity {
                 } else if (TextUtils.isEmpty(service_cost)){
                     inputServiceCost.setError("Enter cost of your service");
                 } else {
-
 
                     try {
 
@@ -433,7 +477,18 @@ public class CreateServiceActivity extends AppCompatActivity {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 resultUri = result.getUri();
-                addImgIv.setImageURI(resultUri);
+                try {
+                    //getting image from gallery
+                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), resultUri);
+
+                    //Setting image to ImageView
+                    addImgIv.setImageBitmap(bitmap);
+                    addImgIv.setImageURI(resultUri);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
             }

@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -52,7 +53,13 @@ public class RealmServiceAdapter extends RecyclerView.Adapter<RealmServiceAdapte
 
         holder.serviceName.setText(servicesList.get(position).getServiceName());
         holder.serviceDetails.setText(servicesList.get(position).getServiceDetails());
-        holder.costTv.setText("Ksh " + servicesList.get(position).getCost());
+        if (servicesList.get(position).getCost() == null || servicesList.get(position).getCost().equals("null")) {
+            holder.costTv.setText("Cost: available on inquiry");
+        } else {
+            holder.costTv.setText("Cost: Ksh " + servicesList.get(position).getCost());
+        }
+
+        holder.serviceRatingBr.setRating(Float.parseFloat(servicesList.get(position).getRating()));
 
         Realm realm = Realm.getDefaultInstance();
         RealmFavourite favourite = realm.where(RealmFavourite.class).equalTo("id", servicesList.get(position).getId()).findFirst();
@@ -104,6 +111,7 @@ public class RealmServiceAdapter extends RecyclerView.Adapter<RealmServiceAdapte
                 openRead.putExtra("service_latitude", servicesList.get(position).getLatitude());
                 openRead.putExtra("service_longitude", servicesList.get(position).getLongitude());
                 openRead.putExtra("service_location", servicesList.get(position).getCity());
+                openRead.putExtra("service_ratings", servicesList.get(position).getRating());
                 view.getContext().startActivity(openRead);
             }
         });
@@ -121,6 +129,7 @@ public class RealmServiceAdapter extends RecyclerView.Adapter<RealmServiceAdapte
         View mView;
         TextView serviceName, serviceDetails, senderFirstName, senderLastName, senderRole, costTv;
         ImageView avatar, userAvatar, favIconIv;
+        RatingBar serviceRatingBr;
 
         public ServicesViewHolder(View itemView)
         {
@@ -135,6 +144,7 @@ public class RealmServiceAdapter extends RecyclerView.Adapter<RealmServiceAdapte
             avatar = itemView.findViewById(R.id.iv_avatar);
             userAvatar = itemView.findViewById(R.id.iv_user_avatar);
             favIconIv = itemView.findViewById(R.id.favIv);
+            serviceRatingBr = itemView.findViewById(R.id.serviceRating);
 
         }
     }

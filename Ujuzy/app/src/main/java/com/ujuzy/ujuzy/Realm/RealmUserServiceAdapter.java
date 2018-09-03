@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -39,7 +40,7 @@ public class RealmUserServiceAdapter extends RecyclerView.Adapter<RealmUserServi
     public RealmUserServiceAdapter.ServicesViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View view = layoutInflater.inflate(R.layout.request_row, parent,false);
+        View view = layoutInflater.inflate(R.layout.service_row2, parent,false);
 
         return new RealmUserServiceAdapter.ServicesViewHolder(view);
 
@@ -49,43 +50,15 @@ public class RealmUserServiceAdapter extends RecyclerView.Adapter<RealmUserServi
     public void onBindViewHolder(final RealmUserServiceAdapter.ServicesViewHolder holder, final int position) {
 
 
-       /* *//**
-         *
-         * ASSIGN DATA TO REALM DATABASE SERVICE
-         *//*
-
-        RealmUserService realmService = new  RealmUserService();
-        realmService.setId(servicesList.get(position).getId());
-        realmService.setServiceName(servicesList.get(position).getServiceName());
-        realmService.setServiceDetails(servicesList.get(position).getServiceDetails());
-        realmService.setCost(servicesList.get(position).getCost().toString());
-        realmService.setCreatedBy(servicesList.get(position).getFirst_name());
-        realmService.setCategory(servicesList.get(position).getCategory());
-        realmService.setTravel(servicesList.get(position).getTravel());
-        //realmService.setImage(servicesList.get(position).getImages().get(0).toString());
-        realmService.setFirst_name(servicesList.get(position).getFirst_name());
-        realmService.setLast_name(servicesList.get(position).getLast_name());
-        realmService.setUser_role(servicesList.get(position).getUser_role());
-       *//* realmService.setLongitude((Double) servicesList.get(position).getLocation().getLng().toString());
-        realmService.setLatitude((Double) servicesList.get(position).getLocation().getLat());*//*
-       *//* realmService.setService_duration_days(servicesList.get(position).getDuration().getDays().toString());
-        realmService.setService_duration_hours(servicesList.get(position).getDuration().getHours().toString());*//*
-       *//* realmService.setNo_of_personnel(servicesList.get(position).getNoOfPersonnel());
-        realmService.setUser_id(servicesList.get(position).getUser().getId());*//*
-        realmService.setUser_thumb(servicesList.get(position).getUser_thumb());
-
-        //SAVE
-        realm = Realm.getDefaultInstance();
-        RealmUserServicesHelper helper = new RealmUserServicesHelper(realm);
-        helper.save(realmService);
-
-
-        *//***************************** END *******************************/
-
-
         holder.serviceName.setText(servicesList.get(position).getServiceName());
-        holder.serviceCreatedby.setText(servicesList.get(position).getCreated_by());
-        holder.serviceCreatedat.setText(servicesList.get(position).getCreated_at());
+        holder.serviceDetails.setText(servicesList.get(position).getServiceDetails());
+        if (servicesList.get(position).getCost() == null || servicesList.get(position).getCost().equals("null")) {
+            holder.costTv.setText("Cost: available on inquiry");
+        } else {
+            holder.costTv.setText("Cost: Ksh " + servicesList.get(position).getCost());
+        }
+      //  holder.serviceRatingBr.setRating(Float.parseFloat(servicesList.get(position).getRating()));
+
 
         Glide.with(context)
                 .load(servicesList.get(position).getImage())
@@ -124,6 +97,7 @@ public class RealmUserServiceAdapter extends RecyclerView.Adapter<RealmUserServi
                 openRead.putExtra("service_latitude", servicesList.get(position).getLatitude());
                 openRead.putExtra("service_longitude", servicesList.get(position).getLongitude());
                 openRead.putExtra("service_location", servicesList.get(position).getCity());
+                openRead.putExtra("service_ratings", servicesList.get(position).getRating());
                 view.getContext().startActivity(openRead);
             }
         });
@@ -137,8 +111,9 @@ public class RealmUserServiceAdapter extends RecyclerView.Adapter<RealmUserServi
     class ServicesViewHolder extends RecyclerView.ViewHolder
     {
         View mView;
-        TextView serviceName, serviceCreatedby, serviceCreatedat;
+        TextView serviceName, serviceDetails, senderFirstName, senderLastName, senderRole, costTv;
         ImageView avatar, userAvatar;
+        RatingBar serviceRatingBr;
 
         public ServicesViewHolder(View itemView)
         {
@@ -146,9 +121,13 @@ public class RealmUserServiceAdapter extends RecyclerView.Adapter<RealmUserServi
 
             mView = itemView;
             serviceName = itemView.findViewById(R.id.tv_service_name);
-            serviceCreatedby = itemView.findViewById(R.id.tv_created_by);
-            serviceCreatedat = itemView.findViewById(R.id.tv_created_at);
-            userAvatar = itemView.findViewById(R.id.iv_avatar);
+            costTv = itemView.findViewById(R.id.costTv);
+            senderFirstName = itemView.findViewById(R.id.tv_user_name);
+            senderRole = itemView.findViewById(R.id.tv_user_role);
+            serviceDetails = itemView.findViewById(R.id.tv_service_details);
+            avatar = itemView.findViewById(R.id.iv_avatar);
+            userAvatar = itemView.findViewById(R.id.iv_user_avatar);
+            serviceRatingBr = itemView.findViewById(R.id.serviceRating);
 
         }
     }

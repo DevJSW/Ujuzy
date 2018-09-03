@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -47,7 +48,12 @@ public class RealmAllServiceAdapter extends RecyclerView.Adapter<RealmAllService
 
         holder.serviceName.setText(servicesList.get(position).getServiceName());
         holder.serviceDetails.setText(servicesList.get(position).getServiceDetails());
-        holder.costTv.setText("Ksh " + servicesList.get(position).getCost());
+        if (servicesList.get(position).getCost() == null || servicesList.get(position).getCost().equals("null")) {
+            holder.costTv.setText("Cost: available on inquiry");
+        } else {
+            holder.costTv.setText("Cost: Ksh " + servicesList.get(position).getCost());
+        }
+        holder.serviceRatingBr.setRating(Float.parseFloat(servicesList.get(position).getRating()));
 
         Glide.with(context)
                 .load(servicesList.get(position).getImage())
@@ -87,6 +93,7 @@ public class RealmAllServiceAdapter extends RecyclerView.Adapter<RealmAllService
                 openRead.putExtra("service_latitude", servicesList.get(position).getLatitude());
                 openRead.putExtra("service_longitude", servicesList.get(position).getLongitude());
                 openRead.putExtra("service_location", servicesList.get(position).getCity());
+                openRead.putExtra("service_ratings", servicesList.get(position).getRating());
                 view.getContext().startActivity(openRead);
             }
         });
@@ -102,6 +109,7 @@ public class RealmAllServiceAdapter extends RecyclerView.Adapter<RealmAllService
         View mView;
         TextView serviceName, serviceDetails, senderFirstName, senderLastName, senderRole, costTv;
         ImageView avatar, userAvatar;
+        RatingBar serviceRatingBr;
 
         public ServicesViewHolder(View itemView)
         {
@@ -115,6 +123,7 @@ public class RealmAllServiceAdapter extends RecyclerView.Adapter<RealmAllService
             serviceDetails = itemView.findViewById(R.id.tv_service_details);
             avatar = itemView.findViewById(R.id.iv_avatar);
             userAvatar = itemView.findViewById(R.id.iv_user_avatar);
+            serviceRatingBr = itemView.findViewById(R.id.serviceRating);
 
         }
     }

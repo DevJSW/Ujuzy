@@ -49,42 +49,8 @@ public class RealmRequstUserServiceAdapter extends RecyclerView.Adapter<RealmReq
     public void onBindViewHolder(final RealmRequstUserServiceAdapter.ServicesViewHolder holder, final int position) {
 
 
-       /* *//**
-         *
-         * ASSIGN DATA TO REALM DATABASE SERVICE
-         *//*
-
-        RealmUserService realmService = new  RealmUserService();
-        realmService.setId(servicesList.get(position).getId());
-        realmService.setServiceName(servicesList.get(position).getServiceName());
-        realmService.setServiceDetails(servicesList.get(position).getServiceDetails());
-        realmService.setCost(servicesList.get(position).getCost().toString());
-        realmService.setCreatedBy(servicesList.get(position).getFirst_name());
-        realmService.setCategory(servicesList.get(position).getCategory());
-        realmService.setTravel(servicesList.get(position).getTravel());
-        //realmService.setImage(servicesList.get(position).getImages().get(0).toString());
-        realmService.setFirst_name(servicesList.get(position).getFirst_name());
-        realmService.setLast_name(servicesList.get(position).getLast_name());
-        realmService.setUser_role(servicesList.get(position).getUser_role());
-       *//* realmService.setLongitude((Double) servicesList.get(position).getLocation().getLng().toString());
-        realmService.setLatitude((Double) servicesList.get(position).getLocation().getLat());*//*
-       *//* realmService.setService_duration_days(servicesList.get(position).getDuration().getDays().toString());
-        realmService.setService_duration_hours(servicesList.get(position).getDuration().getHours().toString());*//*
-       *//* realmService.setNo_of_personnel(servicesList.get(position).getNoOfPersonnel());
-        realmService.setUser_id(servicesList.get(position).getUser().getId());*//*
-        realmService.setUser_thumb(servicesList.get(position).getUser_thumb());
-
-        //SAVE
-        realm = Realm.getDefaultInstance();
-        RealmUserServicesHelper helper = new RealmUserServicesHelper(realm);
-        helper.save(realmService);
-
-
-        *//***************************** END *******************************/
-
-
         holder.serviceName.setText(servicesList.get(position).getServiceName());
-        holder.serviceCreatedby.setText(servicesList.get(position).getCreated_by());
+        holder.serviceCreatedby.setText(servicesList.get(position).getFirst_name() +" " + servicesList.get(position).getLast_name());
         holder.serviceCreatedat.setText(servicesList.get(position).getCreated_at());
 
         Glide.with(context)

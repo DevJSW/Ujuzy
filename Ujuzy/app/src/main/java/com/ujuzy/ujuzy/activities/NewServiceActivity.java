@@ -26,6 +26,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,6 +60,7 @@ public class NewServiceActivity extends AppCompatActivity
     String serviceCreatedBy = "";
     String serviceCreatedAt = "";
     String no_of_personnel = "";
+    String ratings = "";
 
     String serviceCost = "";
     String serviceDays = "";
@@ -89,6 +91,7 @@ public class NewServiceActivity extends AppCompatActivity
     private SliderLayout mDemoSlider;
 
     private ViewPager mViewPager;
+    private RatingBar serviceRatingBr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +102,12 @@ public class NewServiceActivity extends AppCompatActivity
         initTabs();
         initBackBtn();
         initServiceInfo();
+        initRatings();
+    }
+
+    private void initRatings() {
+        serviceRatingBr = (RatingBar) findViewById(R.id.serviceRating);
+        serviceRatingBr.setRating(Float.parseFloat(ratings));
     }
 
     private void initTabs()
@@ -136,6 +145,7 @@ public class NewServiceActivity extends AppCompatActivity
         serviceTravel = getIntent().getStringExtra("service_travel");
         serviceCategory = getIntent().getStringExtra("service_category");
         serviceAddInfo = getIntent().getStringExtra("service_additional_info");
+        ratings = getIntent().getStringExtra("service_ratings");
 
         serviceLatitude = getIntent().getStringExtra("service_latitude");
         serviceLongitude = getIntent().getStringExtra("service_longitude");

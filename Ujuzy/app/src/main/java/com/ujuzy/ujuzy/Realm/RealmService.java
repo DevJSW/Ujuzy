@@ -1,9 +1,5 @@
 package com.ujuzy.ujuzy.Realm;
 
-import com.ujuzy.ujuzy.model.SkillList;
-
-import java.util.List;
-
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -32,6 +28,7 @@ public class RealmService extends RealmObject
     private String user_thumb;
     private int no_of_personnel;
     private String created_at;
+    private String rating;
 
     public RealmService(RealmList<RealmSkillList> skillList) {
         this.skillList = skillList;
@@ -40,7 +37,7 @@ public class RealmService extends RealmObject
     private RealmList<RealmSkillList> skillList = null;
 
 
-    public RealmService(String id, String serviceName, String serviceDetails, String cost, String category, Boolean travel, String image, String additional_info, String created_by, String user_role, String first_name, String last_name, String service_duration_days, String service_duration_hours, String user_id, double latitude, double longitude, String city, String user_thumb, int no_of_personnel, String createdBy, String created_at, RealmList<RealmSkillList> skillList) {
+    public RealmService(String id, String serviceName, String serviceDetails, String cost, String category, Boolean travel, String image, String additional_info, String created_by, String user_role, String first_name, String last_name, String service_duration_days, String service_duration_hours, String user_id, double latitude, double longitude, String city, String user_thumb, int no_of_personnel, String rating, String createdBy, String created_at, RealmList<RealmSkillList> skillList) {
         this.id = id;
         this.serviceName = serviceName;
         this.serviceDetails = serviceDetails;
@@ -61,6 +58,7 @@ public class RealmService extends RealmObject
         this.city = city;
         this.user_thumb = user_thumb;
         this.no_of_personnel = no_of_personnel;
+        this.rating = rating;
         this.createdBy = createdBy;
         this.created_at = created_at;
         this.skillList = skillList;
@@ -255,5 +253,13 @@ public class RealmService extends RealmObject
 
     public void setSkillList(RealmList<RealmSkillList> skillList) {
         this.skillList = skillList;
+    }
+
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
     }
 }

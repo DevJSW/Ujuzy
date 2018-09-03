@@ -233,7 +233,7 @@
                     android:layout_gravity="right"
                     android:layout_margin="15dp"
                     android:layout_marginRight="15dp"
-                    android:background="@drawable/custom_button"
+                    android:background="@drawable/button_bg"
                     android:text="Publish service"
                     android:textColor="#ffff"
                     android:textStyle="bold" />

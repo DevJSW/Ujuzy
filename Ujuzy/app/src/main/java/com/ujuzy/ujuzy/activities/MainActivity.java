@@ -63,6 +63,7 @@ import com.ujuzy.ujuzy.SqliteDatabase.ServicesDatabase;
 import com.ujuzy.ujuzy.Utils.JWTUtilis;
 import com.ujuzy.ujuzy.adapters.CountryAdapter;
 import com.ujuzy.ujuzy.adapters.ServiceAdapter;
+import com.ujuzy.ujuzy.app_intro.SigninOrSkipActivity;
 import com.ujuzy.ujuzy.map.MapsActivity;
 import com.ujuzy.ujuzy.model.Constants;
 import com.ujuzy.ujuzy.model.Datum;
@@ -72,6 +73,7 @@ import com.ujuzy.ujuzy.model.Service;
 import com.ujuzy.ujuzy.model.User;
 import com.ujuzy.ujuzy.services.Api;
 import com.ujuzy.ujuzy.services.NetworkChecker;
+import com.ujuzy.ujuzy.services.PrefManager;
 import com.ujuzy.ujuzy.services.ServiceClient;
 import com.ujuzy.ujuzy.services.ServiceInterface;
 
@@ -81,6 +83,7 @@ import org.jboss.aerogear.android.authorization.oauth2.OAuth2AuthorizationConfig
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -137,11 +140,14 @@ public class MainActivity extends AppCompatActivity
     ArrayList<RealmService> reamResults;
     private TextView tvSeeAllProf, tvSeeAllComp, noService, noServiceCo, terms, usernameTv, useremailTv;
 
+    private PrefManager prefManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
 
+        initSignIn();
         initView();
         initWindow();
         initFab();
@@ -168,6 +174,16 @@ public class MainActivity extends AppCompatActivity
         initNavigationCustomixation();
         initTerms();
 
+    }
+
+    private void initSignIn() {
+        prefManager = new PrefManager(this);
+        if (prefManager.isFirstTimeLaunch())
+        {
+            prefManager.setFirstTimeLaunch(false);
+            startActivity(new Intent(MainActivity.this, SigninOrSkipActivity.class));
+            finish();
+        }
     }
 
     private void initTerms() {
@@ -284,7 +300,6 @@ public class MainActivity extends AppCompatActivity
                     {
 
                         JSONObject serviceObj = jsonArray.getJSONObject(i);
-                        JSONObject serviceImgObj = jsonArray.getJSONObject(i).getJSONObject("images");
                         JSONObject serviceUserObj = jsonArray.getJSONObject(i).getJSONObject("user");
                         JSONObject serviceLocationObj = jsonArray.getJSONObject(i).getJSONObject("location");
                         JSONObject serviceDurationObj = jsonArray.getJSONObject(i).getJSONObject("duration");
@@ -301,7 +316,27 @@ public class MainActivity extends AppCompatActivity
                         realmService.setCreatedBy(serviceObj.getString("created_by"));
                         realmService.setCategory(serviceObj.getString("category"));
                         realmService.setCreated_at(serviceObj.getString("created_at"));
-                        realmService.setImage(serviceImgObj.getString("thumb"));
+                        realmService.setRating(serviceObj.getString("rating"));
+
+                        String img = serviceObj.getString("images");
+
+                        Object json = new JSONTokener(img).nextValue();
+
+                        if (json instanceof JSONObject) {
+
+                            JSONObject serviceImgObj = jsonArray.getJSONObject(i).getJSONObject("images");
+                            realmService.setImage(serviceImgObj.getString("thumb"));
+
+                        } else if (json instanceof JSONArray) {
+
+                            /*JSONArray serviceImgAry = serviceObj.getJSONArray("images");
+
+                            for (int a = 0 ; i < serviceImgAry.length() ; a++)
+                            {
+                                JSONObject serviceImgO = jsonArray.getJSONObject(a);
+                                realmService.setImage(serviceImgO.getString("thumb"));
+                            }*/
+                        }
 
                         realmService.setUser_role(serviceUserObj.getString("user_role"));
                         realmService.setUser_thumb(serviceUserObj.getString("profile_pic"));
@@ -323,7 +358,8 @@ public class MainActivity extends AppCompatActivity
                         RealmHelper helper = new RealmHelper(realm);
                         helper.save(realmService);
 
-
+                        noService.setVisibility(View.GONE);
+                        noServiceCo.setVisibility(View.GONE);
                         /**************************** END ******************************/
 
                     }
@@ -399,8 +435,8 @@ public class MainActivity extends AppCompatActivity
         final RealmHelper helper = new RealmHelper(realm);
 
         //RETRIEVE
-        //helper.filterRealmDatabase("user_role", "Professional");
-        helper.retreiveFromDB();
+        helper.filterRealmDatabase("user_role", "Professional");
+        //helper.retreiveFromDB();
 
         //CHECK IF DATABASE IS EMPTY
         if (helper.refreshDatabase().size() < 1 || helper.refreshDatabase().size() == 0)
@@ -417,6 +453,8 @@ public class MainActivity extends AppCompatActivity
 
         //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
         final LinearLayoutManager serviceLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+        serviceLayoutManager.setReverseLayout(true);
+        serviceLayoutManager.setStackFromEnd(true);
         servicesListRv.setLayoutManager(serviceLayoutManager);
         servicesListRv.setAdapter(serviceReamAdapter);
 
@@ -441,7 +479,7 @@ public class MainActivity extends AppCompatActivity
         final RealmHelper helper = new RealmHelper(realm);
 
         //RETRIEVE
-        helper.filterRealmDatabase("user_role", "company");
+        helper.filterRealmDatabase("user_role", "Company");
 
         //CHECK IF DATABASE IS EMPTY
         if (helper.refreshDatabase().size() < 1 || helper.refreshDatabase().size() == 0)
@@ -459,6 +497,8 @@ public class MainActivity extends AppCompatActivity
 
         //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
         final LinearLayoutManager compServiceLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+        compServiceLayoutManager.setReverseLayout(true);
+        compServiceLayoutManager.setStackFromEnd(true);
         companyServicesListRv.setLayoutManager(compServiceLayoutManager);
         companyServicesListRv.setAdapter(serviceReamAdapter);
 
