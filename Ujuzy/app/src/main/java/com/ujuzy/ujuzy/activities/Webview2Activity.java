@@ -42,6 +42,7 @@ public class Webview2Activity extends AppCompatActivity {
 
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -63,7 +64,7 @@ public class Webview2Activity extends AppCompatActivity {
     private void initToolbarTv()
     {
         toolbaTv = (TextView) findViewById(R.id.toolbarTv);
-        toolbaTv.setText(page_title);
+        toolbaTv.setText("Create Service");
     }
 
     private void initGetExtra()
@@ -128,7 +129,10 @@ public class Webview2Activity extends AppCompatActivity {
                 if (progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
+                
+
             }
+            
 
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
 
@@ -136,10 +140,16 @@ public class Webview2Activity extends AppCompatActivity {
                 //finish();
 
             }
+
         });
 
         myWebView.loadUrl(webview_url);
     }
+
+    private void closePage() {
+    }
+
+
 
     /*@Override
     public void onBackPressed()

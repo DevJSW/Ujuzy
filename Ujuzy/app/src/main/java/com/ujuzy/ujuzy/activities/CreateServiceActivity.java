@@ -69,7 +69,6 @@ public class CreateServiceActivity extends AppCompatActivity {
 
     Spinner spinner_category;
     List<String> serviceCategory;
-
     Spinner spinner_billing;
     List<String> serviceBilling;
 

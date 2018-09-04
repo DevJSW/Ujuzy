@@ -47,6 +47,7 @@ import com.ujuzy.ujuzy.activities.MainActivity;
 import com.ujuzy.ujuzy.activities.RequestServiceActivity;
 import com.ujuzy.ujuzy.activities.UserProfileActivity;
 import com.ujuzy.ujuzy.activities.WebViewActivity;
+import com.ujuzy.ujuzy.activities.Webview2Activity;
 import com.ujuzy.ujuzy.adapters.CountryAdapter;
 import com.ujuzy.ujuzy.adapters.SeeAllAdapter;
 import com.ujuzy.ujuzy.adapters.ServiceAdapter;
@@ -210,8 +211,8 @@ public class UserServicesFragment extends Fragment {
         createBt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent webView = new Intent(getActivity(), CreateServiceActivity.class);
-                //webView.putExtra("webview_url", webview_url);
+                Intent webView = new Intent(getActivity(), Webview2Activity.class);
+                webView.putExtra("webview_url", webview_url);
                 startActivity(webView);
             }
         });

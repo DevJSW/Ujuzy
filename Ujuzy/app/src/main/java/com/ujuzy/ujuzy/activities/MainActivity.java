@@ -875,9 +875,13 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                Intent webView = new Intent(MainActivity.this, CreateServiceActivity.class);
-                /*webView.putExtra("webview_url", webview_url);*/
+                Intent webView = new Intent(MainActivity.this, Webview2Activity.class);
+                webView.putExtra("webview_url", webview_url);
                 startActivity(webView);
+
+                /*Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://ujuzy.com/services/create"));
+                startActivity(browserIntent);*/
+
             }
         });
     }
