@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.ChatroomActivity">
+
+    <include layout="@layout/chat_toolbar"
+        android:id="@+id/mCustomToolbar"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/chat_button"
+        android:padding="5dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp">
+
+        <com.ujuzy.ujuzy.CustomData.AllerEditText
+            android:id="@+id/input_message"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#00ffffff"
+            android:hint="Say something..."
+            android:layout_marginRight="6dp"
+            android:layout_marginLeft="3dp"
+            android:layout_toLeftOf="@+id/sendBtn"
+            android:padding="2dp"
+            android:layout_alignParentBottom="true" />
+
+        <ImageView
+            android:layout_width="29dp"
+            android:layout_height="29dp"
+            android:layout_centerVertical="true"
+            android:id="@+id/sendBtn"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_send"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

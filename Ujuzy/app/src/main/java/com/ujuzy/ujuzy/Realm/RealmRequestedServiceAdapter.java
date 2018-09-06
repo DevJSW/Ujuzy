@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,6 +17,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.ujuzy.ujuzy.R;
+import com.ujuzy.ujuzy.activities.ChatroomActivity;
 import com.ujuzy.ujuzy.activities.NewServiceActivity;
 
 import java.util.ArrayList;
@@ -67,12 +69,12 @@ public class RealmRequestedServiceAdapter extends RecyclerView.Adapter<RealmRequ
                     }
                 });
 
-       /* holder.itemView.setOnClickListener(new View.OnClickListener()
+        holder.connectBtn.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View view)
             {
-                Intent openRead = new Intent(view.getContext(), NewServiceActivity.class);
+                Intent openRead = new Intent(view.getContext(), ChatroomActivity.class);
                 openRead.putExtra("service_url", servicesList.get(position).getImage());
                 openRead.putExtra("service_id", servicesList.get(position).getId());
                 openRead.putExtra("service_name", servicesList.get(position).getServiceName());
@@ -92,7 +94,6 @@ public class RealmRequestedServiceAdapter extends RecyclerView.Adapter<RealmRequ
                 view.getContext().startActivity(openRead);
             }
         });
-*/
 
     }
 
@@ -106,6 +107,7 @@ public class RealmRequestedServiceAdapter extends RecyclerView.Adapter<RealmRequ
         View mView;
         TextView serviceName, serviceCreatedby, serviceCreatedat;
         ImageView avatar, userAvatar;
+        Button connectBtn;
 
         public ServicesViewHolder(View itemView)
         {
@@ -116,6 +118,7 @@ public class RealmRequestedServiceAdapter extends RecyclerView.Adapter<RealmRequ
             serviceCreatedby = itemView.findViewById(R.id.tv_created_by);
             serviceCreatedat = itemView.findViewById(R.id.tv_created_at);
             userAvatar = itemView.findViewById(R.id.iv_avatar);
+            connectBtn = itemView.findViewById(R.id.connectBtn);
 
         }
     }

@@ -135,6 +135,7 @@
             <com.ujuzy.ujuzy.CustomData.AllerButton
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
+                android:id="@+id/connectBtn"
                 android:text="Connect"
                 android:textColor="@color/colorPrimaryDark"
                 android:textSize="14dp"
