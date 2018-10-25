@@ -1,6 +1,10 @@
 package com.ujuzy.ujuzy.ujuzy.BottomSheetFragments;
 
 
+import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.Fragment;
@@ -10,15 +14,18 @@ import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ujuzy.ujuzy.ujuzy.Activities.MapsActivity;
@@ -104,6 +111,198 @@ public class ProfileFragments extends BottomSheetDialogFragment {
                 initDialog();
             }
         });
+    }
+
+    private void initDialog() {
+        Context context = getActivity();
+
+        final Dialog dialog = new Dialog(context);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.upgrade_dialog);
+        dialog.setCancelable(true);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.show();
+
+        TextView openProfessional = (TextView) dialog.findViewById(R.id.options_professional);
+        openProfessional.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view) {
+                try {
+
+                    final AuthzModule authzModule = AuthorizationManager
+                            .config("KeyCloakAuthz", OAuth2AuthorizationConfiguration.class)
+                            .setBaseURL(new URL(Constants.HTTP.AUTH_BASE_URL))
+                            .setAuthzEndpoint("/auth/realms/ujuzy/protocol/openid-connect/auth")
+                            .setAccessTokenEndpoint("/auth/realms/ujuzy/protocol/openid-connect/token")
+                            .setAccountId("account")
+                            .setClientId("account")
+                            .setRedirectURL("https://ujuzy.com")
+                            .setScopes(Arrays.asList("openid"))
+                            .addAdditionalAuthorizationParam((Pair.create("grant_type", "password")))
+                            .asModule();
+
+                    authzModule.requestAccess(getActivity(), new org.jboss.aerogear.android.core.Callback<String>() {
+                        @Override
+                        public void onSuccess(final String data) {
+
+                            //SAVE TOKEN TO REALM DATABASE
+                            RealmToken token = new RealmToken();
+                            token.setToken(data);
+
+
+                            Map<String, String> params= new HashMap<String, String>();
+                            params.put("new_role","professional");
+
+                            JsonObjectRequest jsonObjReq = new JsonObjectRequest(com.android.volley.Request.Method.POST,
+                                    Constants.HTTP.UPGRADE_PROFILE_JSON_URL, new JSONObject(params),
+                                    new com.android.volley.Response.Listener<JSONObject>() {
+                                        @Override
+                                        public void onResponse(JSONObject response) {
+
+                                            //REFRESH ACTIVITY
+
+                                            Toast.makeText(getActivity(), "Your account has been upgraded successfully", Toast.LENGTH_LONG).show();
+
+                                        }
+                                    }, new com.android.volley.Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_LONG).show();
+                                }
+
+                            }) {
+
+                                /**
+                                 * Passing some request headers
+                                 * */
+                                @Override
+                                public Map<String, String> getHeaders() throws AuthFailureError {
+
+                                    HashMap<String, String> headers = new HashMap<String, String>();
+                                    headers.put("Authorization","Bearer "+ data);
+                                    headers.put("Content-Type", "application/json; charset=utf-8");
+                                    headers.put("Accept","application/json");
+                                    return headers;
+                                }
+
+                            };
+
+                            // Adding request to request queue
+                            requestQueue = Volley.newRequestQueue(getActivity());
+                            requestQueue.add(jsonObjReq);
+
+                            realm = Realm.getDefaultInstance();
+                            RealmTokenHelper helper = new RealmTokenHelper(realm);
+                            helper.save(token);
+
+
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+                            //Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                            //authzModule.deleteAccount();
+                        }
+                    });
+
+
+                } catch (MalformedURLException e) {
+                    // e.printStackTrace();
+                }
+                dialog.dismiss();
+            }
+        });
+
+        TextView openCompany = (TextView) dialog.findViewById(R.id.options_company);
+        openCompany.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view) {
+                try {
+
+                    final AuthzModule authzModule = AuthorizationManager
+                            .config("KeyCloakAuthz", OAuth2AuthorizationConfiguration.class)
+                            .setBaseURL(new URL(Constants.HTTP.AUTH_BASE_URL))
+                            .setAuthzEndpoint("/auth/realms/ujuzy/protocol/openid-connect/auth")
+                            .setAccessTokenEndpoint("/auth/realms/ujuzy/protocol/openid-connect/token")
+                            .setAccountId("account")
+                            .setClientId("account")
+                            .setRedirectURL("https://ujuzy.com")
+                            .setScopes(Arrays.asList("openid"))
+                            .addAdditionalAuthorizationParam((Pair.create("grant_type", "password")))
+                            .asModule();
+
+                    authzModule.requestAccess(getActivity(), new org.jboss.aerogear.android.core.Callback<String>() {
+                        @Override
+                        public void onSuccess(final String data) {
+
+                            //SAVE TOKEN TO REALM DATABASE
+                            RealmToken token = new RealmToken();
+                            token.setToken(data);
+
+                            Map<String, String> params= new HashMap<String, String>();
+                            params.put("new_role","company");
+
+                            JsonObjectRequest jsonObjReq = new JsonObjectRequest(com.android.volley.Request.Method.POST,
+                                    Constants.HTTP.UPGRADE_PROFILE_JSON_URL, new JSONObject(params),
+                                    new com.android.volley.Response.Listener<JSONObject>() {
+                                        @Override
+                                        public void onResponse(JSONObject response) {
+
+                                            //REFRESH ACTIVITY
+                                            Toast.makeText(getActivity(), "Your account has been upgraded successfully", Toast.LENGTH_LONG).show();
+
+                                        }
+                                    }, new com.android.volley.Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Toast.makeText(getActivity(), error.toString(), Toast.LENGTH_LONG).show();
+                                }
+
+                            }) {
+
+                                /**
+                                 * Passing some request headers
+                                 * */
+                                @Override
+                                public Map<String, String> getHeaders() throws AuthFailureError {
+
+                                    HashMap<String, String> headers = new HashMap<String, String>();
+                                    headers.put("Authorization","Bearer "+ data);
+                                    headers.put("Content-Type", "application/json; charset=utf-8");
+                                    headers.put("Accept","application/json");
+                                    return headers;
+                                }
+
+                            };
+
+                            // Adding request to request queue
+                            requestQueue = Volley.newRequestQueue(getActivity());
+                            requestQueue.add(jsonObjReq);
+
+                            realm = Realm.getDefaultInstance();
+                            RealmTokenHelper helper = new RealmTokenHelper(realm);
+                            helper.save(token);
+
+
+                        }
+
+                        @Override
+                        public void onFailure(Exception e) {
+                            //Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                            //authzModule.deleteAccount();
+                        }
+                    });
+
+
+                } catch (MalformedURLException e) {
+                    // e.printStackTrace();
+                }
+                dialog.dismiss();
+            }
+        });
+
     }
 
     private void initCancelFragment()
