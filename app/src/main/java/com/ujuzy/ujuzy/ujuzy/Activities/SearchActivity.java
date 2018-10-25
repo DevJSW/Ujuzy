@@ -80,7 +80,6 @@ public class SearchActivity extends AppCompatActivity
     private RealmSearchAdapter serviceRealmAdapter;
     RealmList<RealmServiceImage> serviceImages;
     private static final String GET_URL = "http://ujuzy.com/services/search?q=";
-    private static final String USER_AGENT = "Mozilla/5.0";
     private static HttpURLConnection con;
 
     @Override
@@ -180,8 +179,7 @@ public class SearchActivity extends AppCompatActivity
                 if (searchText.length() > 0) {
                     //search();
                     try {
-                        //sendGET();
-                        sendingGetRequest();
+                        sendGET();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -195,37 +193,6 @@ public class SearchActivity extends AppCompatActivity
 
 
     }
-
-    private String get(String getUrl) throws IOException {
-        URL url = new URL(getUrl);
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestMethod("GET");
-
-        return this.read(con.getInputStream());
-    }
-
-    private String read(InputStream is) throws IOException {
-        BufferedReader in = null;
-        String inputLine;
-        StringBuilder body;
-        try {
-            in = new BufferedReader(new InputStreamReader(is));
-
-            body = new StringBuilder();
-
-            while ((inputLine = in.readLine()) != null) {
-                body.append(inputLine);
-            }
-            in.close();
-
-            return body.toString();
-        } catch(IOException ioe) {
-            throw ioe;
-        } finally {
-            //this.closeQuietly(in);
-        }
-    }
-
 
     private void search()
     {
@@ -296,9 +263,8 @@ public class SearchActivity extends AppCompatActivity
 
     }
 
-   /* private void sendGet() throws Exception {
+    private void sendGet() throws Exception {
 
-        try {
             // Create URL
             String url = "https://api.ujuzy.com/services/search?q=" + searchText;
             URL obj = new URL(url);
@@ -342,12 +308,8 @@ public class SearchActivity extends AppCompatActivity
             requestQueue.add(arrReq);
             // Simulate network access.
             Thread.sleep(2000);
-        } catch (InterruptedException e) {
-
-        }
 
     }
-*/
     // HTTP GET request
     private void sendingGetRequest() throws Exception {
 
