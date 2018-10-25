@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Activities.CreateServiceActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/create_toolbar" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="5dp"
+                android:orientation="vertical">
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerBoldFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="25dp"
+                    android:text="Upload service image"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="17dp" />
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="15dp"
+                    android:text="People are more likely to request your services if they see samples of your work"
+                    android:textColor="@color/font_black_light"
+                    android:textSize="14dp" />
+
+
+                <ImageView
+                    android:id="@+id/addServiceImg"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:layout_margin="15dp"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/img_not_available" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/grey_line" />
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerBoldFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:text="Service Details"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="17dp" />
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="30dp"
+                    android:text="Attract your customers by providing as much information about your service as possible"
+                    android:textColor="@color/font_black_light"
+                    android:textSize="14dp" />
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+
+                    <com.ujuzy.ujuzy.ujuzy.CustomData.AllerEditText
+                        android:id="@+id/inputServiceNameEt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:hint="Whats the name of the service *"
+                        android:inputType="text"
+                        android:maxLines="4"
+                        android:textColor="#121111"
+                        android:textColorHint="#121111"
+                        android:textSize="17dp" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp">
+
+                    <com.ujuzy.ujuzy.ujuzy.CustomData.AllerEditText
+                        android:id="@+id/inputDescServiceEt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:hint="Describe your service *"
+                        android:inputType="text"
+                        android:maxLines="4"
+                        android:textColor="#121111"
+                        android:textColorHint="#121111"
+                        android:textSize="17dp" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <Spinner
+                    android:id="@+id/spinner_category"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="15dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@color/grey_line" />
+
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerBoldFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="15dp"
+                    android:text="Service pricing"
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="17dp" />
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="5dp"
+                    android:text="Set a minimum fee you're comfortable with."
+                    android:textColor="@color/font_black_light"
+                    android:textSize="14dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@color/grey_line" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginBottom="20dp"
+                    >
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_toLeftOf="@+id/spinner_billing"
+                        android:layout_gravity="center_vertical"
+                        android:layout_centerVertical="true"
+                        android:layout_marginTop="5dp">
+
+                        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerEditText
+                            android:id="@+id/inputCostServiceEt"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="5dp"
+                            android:hint="Approximate cost of this service *"
+                            android:inputType="text"
+                            android:maxLines="4"
+                            android:textColor="#121111"
+                            android:textColorHint="#121111"
+                            android:textSize="17dp" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <Spinner
+                        android:id="@+id/spinner_billing"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_centerVertical="true"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="right"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="15dp"
+                        />
+
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="25dp"
+                    android:background="@color/grey_line" />
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.MyButton
+                    android:id="@+id/btn_create"
+                    style="?android:textAppearanceSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:textAllCaps="false"
+                    android:textSize="17dp"
+                    android:padding="10dp"
+                    android:layout_gravity="right"
+                    android:layout_margin="15dp"
+                    android:layout_marginRight="15dp"
+                    android:background="@drawable/button_bg"
+                    android:text="Publish service"
+                    android:textColor="#ffff"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
+
+</RelativeLayout>

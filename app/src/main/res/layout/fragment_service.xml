@@ -1,0 +1,113 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <include layout="@layout/home_toolbar"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/homeView">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/bottomRely"
+            android:layout_below="@id/hsv"
+            android:background="#c6c4c4"
+            android:orientation="vertical">
+
+            <ProgressBar
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:visibility="gone"
+                android:id="@+id/progressBar1"
+                android:layout_centerInParent="true"/>
+
+            <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:id="@+id/noService"
+                android:textSize="15dp"
+                android:layout_marginTop="170dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:visibility="gone"
+                android:text=""/>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:id="@+id/relyy">
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/font_black_light"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="12dp"
+                    android:textSize="17dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="Profession services"/>
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/gridController"
+                    android:layout_marginBottom="10dp"
+                    android:src="@drawable/if_grid"/>
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="10dp"
+                    android:visibility="gone"
+                    android:id="@+id/listController"
+                    android:layout_marginBottom="10dp"
+                    android:src="@drawable/if_list"/>
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:textColor="@color/font_black_light"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="12dp"
+                    android:textSize="14dp"
+                    android:id="@+id/seeAllProf"
+                    android:layout_marginBottom="8dp"
+                    android:text="See all >>"/>
+
+            </RelativeLayout>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/service_list"
+                android:layout_width="match_parent"
+                android:layout_margin="5dp"
+                android:layout_below="@+id/relyy"
+                android:layout_height="wrap_content"
+                >
+
+            </android.support.v7.widget.RecyclerView>
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+</LinearLayout>

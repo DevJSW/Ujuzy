@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#c6c4c4"
+    tools:context=".Activities.SearchActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:background="@color/colorPrimary"
+        android:layout_height="65dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:padding="5dp"
+            android:id="@+id/backBtn"
+            android:layout_marginRight="4dp"
+            android:layout_marginLeft="8dp"
+            android:src="@drawable/backbtn"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_alignParentBottom="true"
+            android:elevation="1dp"
+            android:background="@drawable/search_layout"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp">
+
+            <com.ujuzy.ujuzy.ujuzy.CustomData.AllerEditText
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:id="@+id/searchInput"
+                android:textSize="17dp"
+                android:layout_marginLeft="10dp"
+                android:hint="What are you searching for..."
+                android:layout_toLeftOf="@+id/searchIcon"
+                android:background="@drawable/search_layout"/>
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:scaleType="fitXY"
+                android:layout_margin="10dp"
+                android:id="@+id/searchIcon"
+                android:src="@drawable/search_icon_grey"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"/>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/bottomRely"
+        android:orientation="vertical">
+
+        <ProgressBar
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="20dp"
+            android:id="@+id/progressBar"
+            android:visibility="gone"
+            android:layout_centerInParent="true"/>
+
+        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center_horizontal"
+            android:id="@+id/noService"
+            android:visibility="gone"
+            android:layout_margin="40dp"
+            android:textSize="17dp" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/service_list"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/view1"
+            android:layout_height="match_parent">
+
+
+        </android.support.v7.widget.RecyclerView>
+
+    </RelativeLayout>
+
+</LinearLayout>

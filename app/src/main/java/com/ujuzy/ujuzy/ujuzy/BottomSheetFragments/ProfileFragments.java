@@ -1,0 +1,269 @@
+package com.ujuzy.ujuzy.ujuzy.BottomSheetFragments;
+
+
+import android.os.Bundle;
+import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Pair;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+import com.ujuzy.ujuzy.ujuzy.Activities.MapsActivity;
+import com.ujuzy.ujuzy.ujuzy.R;
+import com.ujuzy.ujuzy.ujuzy.Realm.RealmHelper;
+import com.ujuzy.ujuzy.ujuzy.Realm.RealmService;
+import com.ujuzy.ujuzy.ujuzy.Realm.RealmServiceAdapter;
+import com.ujuzy.ujuzy.ujuzy.Realm.RealmServiceImage;
+import com.ujuzy.ujuzy.ujuzy.Realm.RealmToken;
+import com.ujuzy.ujuzy.ujuzy.Realm.RealmTokenHelper;
+import com.ujuzy.ujuzy.ujuzy.Realm.RealmUser;
+import com.ujuzy.ujuzy.ujuzy.Realm.RealmUserHelper;
+import com.ujuzy.ujuzy.ujuzy.model.Constants;
+
+import org.jboss.aerogear.android.authorization.AuthorizationManager;
+import org.jboss.aerogear.android.authorization.AuthzModule;
+import org.jboss.aerogear.android.authorization.oauth2.OAuth2AuthorizationConfiguration;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
+import io.realm.Realm;
+import io.realm.RealmChangeListener;
+import io.realm.RealmList;
+
+import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
+
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class ProfileFragments extends BottomSheetDialogFragment {
+
+    private Realm realm;
+    private RealmChangeListener realmChangeListener;
+    private RealmServiceAdapter serviceReamAdapter;
+    private RecyclerView servicesListRv, myServicesListRv, companyServicesListRv, searchListRv;
+    private RequestQueue requestQueue;
+    RealmList<RealmServiceImage> serviceImages;
+    String category_title = "";
+    private TextView userName, userPhone, userEmail, createdAt, txtEmail, sheetTitleTv, noFavTv, noServTv, noChatsTv, noJobsTv, tvSeeAllComp, tvSeeAllProf, noService, noMyServices, sheetServiceDetails, sheetServiceAddress, sheetServiceCost, userRole, userFirstName, userLastName;
+    View v;
+    private Button upgradeBtn;
+    private ImageView cancelIv;
+
+    public ProfileFragments() {
+        // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        v = inflater.inflate(R.layout.fragment_profile, container, false);
+
+        servicesListRv = (RecyclerView) v.findViewById(R.id.service_list);
+
+        initAeroGearSignIn();
+        initCancelFragment();
+        initUpgrade();
+        return v;
+    }
+
+    private void initUpgrade()
+    {
+        upgradeBtn = (Button) v.findViewById(R.id.upgradeBtn);
+        upgradeBtn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                initDialog();
+            }
+        });
+    }
+
+    private void initCancelFragment()
+    {
+        cancelIv = (ImageView) v.findViewById(R.id.backBtn);
+        cancelIv.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                /*ProfileFragments profileFragments = new ProfileFragments();
+                getActivity().getSupportFragmentManager();
+                profileFragments.dismiss(getActivity().getSupportFragmentManager(), getActivity().);*/
+            }
+        });
+    }
+
+    private void initAeroGearSignIn() {
+        try {
+
+            final AuthzModule authzModule = AuthorizationManager
+                    .config("KeyCloakAuthz", OAuth2AuthorizationConfiguration.class)
+                    .setBaseURL(new URL(Constants.HTTP.AUTH_BASE_URL))
+                    .setAuthzEndpoint("/auth/realms/ujuzy/protocol/openid-connect/auth")
+                    .setAccessTokenEndpoint("/auth/realms/ujuzy/protocol/openid-connect/token")
+                    .setAccountId("account")
+                    .setClientId("account")
+                    .setRedirectURL("https://ujuzy.com")
+                    .setScopes(Arrays.asList("openid"))
+                    .addAdditionalAuthorizationParam((Pair.create("grant_type", "password")))
+                    .asModule();
+
+            authzModule.requestAccess(getActivity(), new org.jboss.aerogear.android.core.Callback<String>() {
+                @Override
+                public void onSuccess(final String data) {
+
+                    //SAVE TOKEN TO REALM DATABASE
+                    RealmToken token = new RealmToken();
+                    token.setToken(data);
+
+                    StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.HTTP.USER_PROFILE_JSON_URL,
+                            new com.android.volley.Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+
+                                    try {
+
+                                        JSONObject jsonObject = new JSONObject(response);
+
+                                        RealmUser realmService = new RealmUser();
+                                        realmService.setId(jsonObject.getString("id"));
+                                        realmService.setFirstname(jsonObject.getString("firstname"));
+                                        realmService.setLastname(jsonObject.getString("lastname"));
+                                        realmService.setGender(jsonObject.getString("gender"));
+                                        realmService.setEmail(jsonObject.getString("email"));
+                                        realmService.setCreated_at(jsonObject.getString("created_at"));
+                                        realmService.setPhone(jsonObject.getString("phone_number"));
+                                        //realmService.setVerified(jsonObject.getString("phone_number"));
+
+                                        JSONObject jsonUserRole = new JSONObject(response).getJSONObject("user_role");
+                                        realmService.setUserRole(jsonUserRole.getString("role_name"));
+                                        //JSONObject jsonUserProfilePic = new JSONObject(response).getJSONObject("profile_pic");
+                                        //realmService.setProfilePic(jsonUserProfilePic.getString("thumb"));
+
+                                        //SAVE
+                                        realm = Realm.getDefaultInstance();
+                                        RealmUserHelper helper = new RealmUserHelper(realm);
+                                        helper.save(realmService);
+
+                                        initUserInfo();
+
+                                    } catch (JSONException e) {
+                                        //e.printStackTrace();
+                                    }
+
+                                }
+                            }, new com.android.volley.Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+
+                            authzModule.deleteAccount();
+
+                        }
+                    }) {
+
+                        @Override
+                        public Map<String, String> getHeaders() throws AuthFailureError {
+                            Map<String, String> params = new HashMap<String, String>();
+                            params.put("Authorization", "Bearer " + data);
+                            params.put("Content-Type", "application/json");
+                            params.put("Accept", "application/json");
+                            return params;
+                        }
+                    };
+
+                    requestQueue = Volley.newRequestQueue(getActivity());
+                    requestQueue.add(stringRequest);
+
+                    realm = Realm.getDefaultInstance();
+                    RealmTokenHelper helper = new RealmTokenHelper(realm);
+                    helper.save(token);
+
+
+                }
+
+                @Override
+                public void onFailure(Exception e) {
+                    //Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+                    authzModule.deleteAccount();
+                }
+            });
+
+
+        } catch (MalformedURLException e) {
+            // e.printStackTrace();
+        }
+        // startActivity(new Intent(UserProfileActivity.this, LoginActivity.class));
+
+    }
+
+    private void initUserInfo()
+    {
+
+        userName = (TextView) v.findViewById(R.id.tv_user_name);
+        userEmail = (TextView) v.findViewById(R.id.tv_user_email);
+        userPhone = (TextView) v.findViewById(R.id.tv_user_phone);
+        createdAt = (TextView) v.findViewById(R.id.tv_created_at);
+        userRole = (TextView) v.findViewById(R.id.tv_user_role);
+        userFirstName = (TextView) v.findViewById(R.id.tv_user_firstname);
+        userLastName = (TextView) v.findViewById(R.id.tv_user_lastname);
+
+        realm = Realm.getDefaultInstance();
+        RealmUser realmUser = realm.where(RealmUser.class).findFirst();
+        if (realmUser != null) {
+            if (realmUser.getFirstname() != null)
+                userName.setText(realmUser.getFirstname() + " " + realmUser.getLastname());
+            if (realmUser.getEmail() != null)
+                userEmail.setText(realmUser.getEmail());
+            if (realmUser.getPhone() != null)
+                userPhone.setText(realmUser.getPhone());
+            if (realmUser.getCreated_at() != null)
+                createdAt.setText(realmUser.getCreated_at());
+            if (realmUser.getUserRole() != null)
+                userRole.setText(realmUser.getUserRole());
+            if (realmUser.getFirstname() != null)
+                userFirstName.setText(realmUser.getFirstname());
+            if (realmUser.getLastname() != null)
+                userLastName.setText(realmUser.getLastname());
+
+        }
+
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        super.onDestroy();
+        realm = Realm.getDefaultInstance();
+        if (realmChangeListener != null)
+            realm.removeChangeListener(realmChangeListener);
+    }
+
+}

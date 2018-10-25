@@ -1,0 +1,410 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/toolbarheight"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:ndroid="http://schemas.android.com/tools"
+    android:background="@color/colorPrimary"
+    app:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:padding="6dp"
+            android:visibility="gone"
+            android:id="@+id/backBtn"
+            android:src="@drawable/cancel"/>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/backBtn">
+            <HorizontalScrollView
+                android:id="@+id/hsv"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:fillViewport="true"
+                android:measureAllChildren="false"
+                android:scrollbars="none" >
+
+                <LinearLayout
+                    android:id="@+id/innerLay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fitsSystemWindows="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal" >
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/lin_lay_tasks"
+                        android:layout_marginRight="20dp"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="8dp"
+                            android:id="@+id/top_rated"
+                            android:background="@drawable/slider_button_bg2">
+
+                            <ImageView
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="10dp"
+                                android:src="@drawable/star_white"/>
+
+                            <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="15dp"
+                                android:textColor="@color/white"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginRight="11dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:text="Top Rated"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="9dp"
+                            android:id="@+id/elecScrollLl"
+                            android:background="@drawable/slider_button_bg2">
+
+                            <ImageView
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="10dp"
+                                android:src="@drawable/location"/>
+
+                            <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="15dp"
+                                android:textColor="@color/white"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginRight="11dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:text="Near me"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="9dp"
+                            android:id="@+id/profScrollLl"
+                            android:background="@drawable/slider_button_bg2">
+
+                            <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="15dp"
+                                android:textColor="@color/white"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginRight="11dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:text="Professional"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="9dp"
+                            android:id="@+id/companyScrollLl"
+                            android:background="@drawable/slider_button_bg2">
+
+                            <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="15dp"
+                                android:textColor="@color/white"
+                                android:layout_marginLeft="11dp"
+                                android:layout_marginRight="11dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:text="Company"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="9dp"
+                            android:id="@+id/mediaScrollLl"
+                            android:background="@drawable/slider_button_bg2">
+
+                            <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/white"
+                                android:textSize="15dp"
+                                android:layout_marginLeft="11dp"
+                                android:layout_marginRight="11dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:text="Broadcast Media"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="9dp"
+                            android:id="@+id/paintingScrollLl"
+                            android:background="@drawable/slider_button_bg2">
+
+                            <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/white"
+                                android:textSize="15dp"
+                                android:layout_marginLeft="11dp"
+                                android:layout_marginRight="11dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:text="Painting"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="9dp"
+                            android:id="@+id/beautyLiny"
+                            android:background="@drawable/slider_button_bg2">
+
+                            <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/white"
+                                android:textSize="15dp"
+                                android:layout_marginLeft="11dp"
+                                android:layout_marginRight="11dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:text="Beauty &amp; Grooming"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="9dp"
+                            android:id="@+id/weldersScrollLl"
+                            android:background="@drawable/slider_button_bg2">
+
+                            <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/white"
+                                android:textSize="15dp"
+                                android:layout_marginLeft="11dp"
+                                android:layout_marginRight="11dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:text="Welders"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="9dp"
+                            android:id="@+id/securityScrollLl"
+                            android:background="@drawable/slider_button_bg2">
+
+                            <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/white"
+                                android:textSize="15dp"
+                                android:layout_marginLeft="11dp"
+                                android:layout_marginRight="11dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:text="Security"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="9dp"
+                            android:id="@+id/accountingScrollLl"
+                            android:background="@drawable/slider_button_bg2">
+
+                            <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/white"
+                                android:textSize="15dp"
+                                android:layout_marginLeft="11dp"
+                                android:layout_marginRight="11dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:text="Accounting"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="9dp"
+                            android:id="@+id/legalScrollLl"
+                            android:background="@drawable/slider_button_bg2">
+
+                            <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/white"
+                                android:textSize="15dp"
+                                android:layout_marginLeft="11dp"
+                                android:layout_marginRight="11dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:text="Legal"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="9dp"
+                            android:id="@+id/cosmeticsScrollLl"
+                            android:background="@drawable/slider_button_bg2">
+
+                            <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/white"
+                                android:textSize="15dp"
+                                android:layout_marginLeft="11dp"
+                                android:layout_marginRight="11dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:text="Cosmetics"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="9dp"
+                            android:id="@+id/landscapingScrollLl"
+                            android:background="@drawable/slider_button_bg2">
+
+                            <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/white"
+                                android:textSize="15dp"
+                                android:layout_marginLeft="11dp"
+                                android:layout_marginRight="11dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:text="Landscaping"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="9dp"
+                            android:id="@+id/capentrScrollLl"
+                            android:background="@drawable/slider_button_bg2">
+
+                            <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/white"
+                                android:textSize="15dp"
+                                android:layout_marginLeft="11dp"
+                                android:layout_marginRight="11dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:text="Carpentry"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="9dp"
+                            android:id="@+id/plumberScrollLl"
+                            android:background="@drawable/slider_button_bg2">
+
+                            <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/white"
+                                android:textSize="15dp"
+                                android:layout_marginLeft="11dp"
+                                android:layout_marginRight="11dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:text="Plumbing"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="9dp"
+                            android:id="@+id/masonScrollLl"
+                            android:background="@drawable/slider_button_bg2">
+
+                            <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/white"
+                                android:textSize="15dp"
+                                android:layout_marginLeft="11dp"
+                                android:layout_marginRight="11dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:text="Masonry"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="9dp"
+                            android:id="@+id/tailorScrollLl"
+                            android:background="@drawable/slider_button_bg2">
+
+                            <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/white"
+                                android:textSize="15dp"
+                                android:layout_marginLeft="11dp"
+                                android:layout_marginRight="11dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:text="Tailoring"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </HorizontalScrollView>
+        </RelativeLayout>
+
+    </RelativeLayout>
+</android.support.v7.widget.Toolbar>

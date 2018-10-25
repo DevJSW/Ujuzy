@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#fff"
+    android:layout_marginBottom="10dp"
+    app:cardElevation="4dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="12dp">
+        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerBoldFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:textSize="16dp"
+            android:text="service name:"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="10dp"
+            />
+
+        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:lineSpacingExtra="2dp"
+            android:layout_alignParentRight="true"
+            android:textSize="15dp"
+            android:textColor="@color/font_black_light"
+            android:text="Name of service"
+            android:id="@+id/tv_service_name"
+            android:layout_marginRight="10dp"
+            />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginLeft="12dp">
+
+        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerBoldFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:textSize="16dp"
+            android:text="Billing:"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="10dp"
+            />
+
+        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:layout_alignParentRight="true"
+            android:lineSpacingExtra="2dp"
+            android:textSize="15dp"
+            android:textColor="@color/font_black_light"
+            android:text="Cost of service"
+            android:id="@+id/tv_service_billing"
+            android:layout_marginRight="10dp"
+            />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginLeft="12dp">
+
+        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerBoldFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:textSize="16dp"
+            android:text="Offer Cost:"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="10dp"
+            />
+
+        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:lineSpacingExtra="2dp"
+            android:layout_alignParentRight="true"
+            android:textSize="15dp"
+            android:textColor="@color/font_black_light"
+            android:text="Cost of service"
+            android:id="@+id/tv_service_offer_cost"
+            android:layout_marginRight="10dp"
+            />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginLeft="12dp"
+        >
+
+        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerBoldFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:textSize="16dp"
+            android:text="No of Personnel:"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="10dp"
+            />
+
+        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:layout_alignParentRight="true"
+            android:maxLines="1"
+            android:lineSpacingExtra="2dp"
+            android:textSize="15dp"
+            android:textColor="@color/font_black_light"
+            android:text="no of personnel"
+            android:id="@+id/tv_service_no_personnel"
+            android:layout_marginRight="10dp"
+            />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginRight="12dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="12dp">
+
+        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerBoldFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="3"
+            android:textSize="16dp"
+            android:text="Cost:"
+            android:textColor="@color/colorPrimaryDark"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="10dp"
+            />
+
+        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:layout_alignParentRight="true"
+            android:lineSpacingExtra="2dp"
+            android:textSize="15dp"
+            android:textColor="@color/font_black_light"
+            android:text="Cost of service"
+            android:id="@+id/tv_service_cost"
+            android:layout_marginRight="10dp"
+            />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#e2e1e1"/>
+</LinearLayout>
+

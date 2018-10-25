@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+        <!--<item
+            android:id="@+id/nav_home"
+            android:icon="@drawable/if_home_nav"
+            android:title="Services" />
+        <item
+            android:id="@+id/nav_profile"
+            android:icon="@drawable/if_user_profile"
+            android:title="Profile" />
+        -->
+
+        <item
+            android:id="@+id/nav_services"
+            android:icon="@drawable/if_calendar_nav"
+            android:title="My Services" />
+
+        <item
+            android:id="@+id/nav_create_services"
+            android:icon="@drawable/if_calendar_nav"
+            android:title="Create Services" />
+      <!--  <item
+            android:id="@+id/nav_jobs"
+            android:icon="@drawable/if_doc_nav"
+            android:title="My Jobs" />-->
+
+        <!--<item
+            android:id="@+id/nav_chats"
+            android:icon="@drawable/if_chat_nav"
+            android:title="My Chats" />-->
+
+        <item
+            android:id="@+id/nav_fav"
+            android:icon="@drawable/if_fav_nav"
+            android:title="Favourites" />
+
+        <item
+            android:id="@+id/nav_share"
+            android:icon="@drawable/if_chat_nav"
+            android:title="Share this app" />
+
+        <item
+            android:id="@+id/nav_rate"
+            android:icon="@drawable/if_fav_nav"
+            android:title="Rate this app" />
+
+
+</menu>

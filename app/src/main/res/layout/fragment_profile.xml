@@ -1,0 +1,265 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <include layout="@layout/profile_toolbar"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="10dp"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/profileView">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="140dp"
+                    android:layout_height="140dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="10dp"
+                    android:id="@+id/rely"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="140dp"
+                        android:layout_height="140dp"
+                        android:id="@+id/user_avator"
+                        app:civ_border_color="#fff"
+                        app:civ_border_width="1dp"
+                        android:src="@drawable/placeholder_image"
+                        android:layout_gravity="center_horizontal" />
+
+                    <ImageView
+                        android:layout_width="31dp"
+                        android:layout_height="31dp"
+                        android:id="@+id/brainy_badge"
+                        android:layout_alignParentRight="true"
+                        android:layout_alignParentBottom="true"/>
+
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:orientation="horizontal">
+
+                    <com.ujuzy.ujuzy.ujuzy.CustomData.AllerBoldFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:id="@+id/tv_user_firstname"
+                        android:text="---"
+                        android:textColor="@color/font_black_light"
+                        android:textSize="17dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_gravity="center_horizontal"/>
+
+                    <com.ujuzy.ujuzy.ujuzy.CustomData.AllerBoldFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:id="@+id/tv_user_lastname"
+                        android:text="---"
+                        android:textColor="@color/font_black_light"
+                        android:textSize="17dp"
+                        android:layout_gravity="center_horizontal"/>
+
+                </LinearLayout>
+
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerBoldFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_user_role"
+                    android:text="Proffessional"
+                    android:textColor="@color/font_black_light"
+                    android:textSize="15dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_gravity="center_horizontal"/>
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:layout_marginBottom="15dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/button_bg_blue"
+                    android:id="@+id/upgradeBtn"
+                    android:textColor="@color/white"
+                    android:text="Upgrade"
+                    android:layout_alignParentRight="true" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_margin="15dp"
+                    android:background="@color/grey_line"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_margin="15dp"
+                        android:visibility="gone"
+                        android:orientation="horizontal">
+
+                        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:textColor="@color/colorPrimary"
+                            android:text="Name:"
+                            android:textSize="15dp"/>
+
+                        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:id="@+id/tv_user_name"
+                            android:layout_marginLeft="10dp"
+                            android:text="----"
+                            android:textSize="15dp"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginLeft="15dp"
+                        android:orientation="horizontal">
+
+                        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:textColor="@color/colorPrimary"
+                            android:text="Email:"
+                            android:textSize="15dp"/>
+
+                        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:id="@+id/tv_user_email"
+                            android:layout_marginLeft="10dp"
+                            android:text="----"
+                            android:textSize="15dp"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_margin="15dp"
+                        android:orientation="horizontal">
+
+                        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:textColor="@color/colorPrimary"
+                            android:text="Phone:"
+                            android:textSize="15dp"/>
+
+                        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:id="@+id/tv_user_phone"
+                            android:layout_marginLeft="10dp"
+                            android:text="----"
+                            android:textSize="15dp"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginBottom="15dp"
+                        android:orientation="horizontal">
+
+                        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:textColor="@color/colorPrimary"
+                            android:text="Created at:"
+                            android:textSize="15dp"/>
+
+                        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:id="@+id/tv_created_at"
+                            android:layout_marginLeft="10dp"
+                            android:text="----"
+                            android:textSize="15dp"/>
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/grey_line"
+                        android:layout_margin="15dp"/>
+
+                    <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:layout_margin="15dp"
+                        android:id="@+id/tvEdit"
+                        android:textColor="@color/font_black_light"
+                        android:text="Edit Account"
+                        android:textSize="15dp"/>
+
+                    <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:id="@+id/tvLogOut"
+                        android:layout_margin="15dp"
+                        android:textColor="#f40909"
+                        android:text="Log out"
+                        android:textSize="15dp"/>
+
+                    <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="14dp"
+                        android:textColor="@color/font_black_light"
+                        android:layout_alignParentBottom="true"
+                        android:layout_margin="20dp"
+                        android:gravity="center_horizontal"
+                        android:text="Version 1.0"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+        </RelativeLayout>
+
+    </ScrollView>
+
+</LinearLayout>

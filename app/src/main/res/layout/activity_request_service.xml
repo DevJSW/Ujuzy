@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/booking_toolbar"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/colorPrimary"
+        app:layout_scrollFlags="scroll|enterAlways"
+        />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical">
+
+
+            <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:layout_margin="15dp"
+                android:textColor="@color/font_black_light"
+                android:layout_marginRight="15dp"
+                android:text="Please indicate available dates suitable for you."/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:orientation="vertical"
+                android:background="@drawable/button_bg_dialogs">
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_service_name"
+                    android:text="Service Name"
+                    android:textSize="17dp"
+                    android:layout_margin="13dp"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="55dp"
+                    android:layout_marginRight="13dp"
+                    android:layout_marginLeft="13dp"
+                    android:orientation="horizontal">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="5dp"
+                        app:civ_border_color="#fff"
+                        app:civ_border_width="1dp"
+                        android:id="@+id/iv_avatar"
+                        android:src="@drawable/placeholder_image"/>
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:layout_margin="2dp">
+
+                        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="13dp"
+                            android:id="@+id/by"
+                            android:text="Service provided by:"/>
+
+                        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/by"
+                            android:id="@+id/tv_user_name"
+                            android:textColor="@color/colorPrimaryDark"
+                            android:textSize="15dp"
+                            android:text="Sender Name"/>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#fff"
+                    android:layout_margin="15dp"/>
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerBoldFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Expected Persons"
+                    android:textSize="16dp"
+                    android:layout_marginLeft="15dp"/>
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginRight="15dp"
+                    android:text="No of people expected"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#fff"
+                    android:layout_margin="15dp"/>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <com.ujuzy.ujuzy.ujuzy.CustomData.AllerBoldFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Total ( Ksh )"
+                        android:id="@+id/total"
+                        android:textSize="17dp"
+                        android:layout_marginLeft="15dp"/>
+
+                    <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="The quoted fees includes any applicable exchange rate."
+                        android:layout_below="@+id/total"
+                        android:layout_toLeftOf="@+id/tv_service_cost"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginTop="3dp"
+                        android:textSize="14dp"
+                        android:layout_marginLeft="15dp"/>
+
+                    <com.ujuzy.ujuzy.ujuzy.CustomData.AllerBoldFont
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Ksh 60,000"
+                        android:layout_alignParentRight="true"
+                        android:id="@+id/tv_service_cost"
+                        android:textSize="17dp"
+                        android:layout_marginRight="15dp"/>
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#fff"
+                    android:layout_margin="15dp"/>
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerBoldFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cancellation Policy"
+                    android:id="@+id/cancellation"
+                    android:textSize="17dp"
+                    android:layout_marginLeft="15dp"/>
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Either party can terminate service within 24 hours of purchase."
+                    android:layout_toLeftOf="@+id/tv_service_cost"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginBottom="15dp"
+                    android:textSize="14dp"
+                    android:layout_marginLeft="15dp"/>
+
+            </LinearLayout>
+
+            <com.ujuzy.ujuzy.ujuzy.CustomData.AllerBoldFont
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Time Available"
+                android:textSize="17dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginLeft="15dp"/>
+
+            <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Please indiate the date and time most suitable to you."
+                android:layout_toLeftOf="@+id/tv_service_cost"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="3dp"
+                android:textSize="14dp"
+                android:layout_marginLeft="15dp"/>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_margin="15dp"
+                android:layout_marginLeft="15dp">
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerEditText
+                    android:id="@+id/inputNameTxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter contact name"
+                    android:inputType="textPersonName"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColorHint="#121111"
+                    android:textColor="#121111" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_margin="15dp"
+                android:layout_marginLeft="15dp">
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerEditText
+                    android:id="@+id/inputPhoneTxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter Phone"
+                    android:inputType="number"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColorHint="#121111"
+                    android:textColor="#121111" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/time">
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_margin="15dp"
+                    android:layout_marginLeft="15dp">
+
+                    <com.ujuzy.ujuzy.ujuzy.CustomData.AllerEditText
+                        android:id="@+id/inputTimeTxt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Enter Time"
+                        android:editable="false"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColorHint="#121111"
+                        android:textColor="#121111" />
+
+                </android.support.design.widget.TextInputLayout>
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/date">
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:layout_margin="15dp"
+                    android:layout_marginLeft="15dp">
+
+                    <com.ujuzy.ujuzy.ujuzy.CustomData.AllerEditText
+                        android:id="@+id/inputDateTxt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="Enter date"
+                        android:editable="false"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColorHint="#121111"
+                        android:textColor="#121111" />
+
+                </android.support.design.widget.TextInputLayout>
+            </RelativeLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="15dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="15dp">
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerEditText
+                    android:id="@+id/inputRequestTxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Describe your Request"
+                    android:inputType="textEmailAddress"
+                    android:textColorHint="#121111"
+                    android:textColor="#121111" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <com.ujuzy.ujuzy.ujuzy.CustomData.MyButton
+                android:id="@+id/btn_request"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:textAllCaps="false"
+                android:textSize="17dp"
+                android:padding="10dp"
+                android:layout_gravity="right"
+                android:layout_margin="15dp"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/button_bg"
+                android:text="Confirm Booking"
+                android:textColor="#ffff"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

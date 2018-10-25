@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="55dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:layout_alignParentBottom="true"
+    android:layout_gravity="bottom"
+    android:gravity="bottom"
+    app:theme="@style/AppTheme.ActionBar.Transparent">
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="4"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/mapRely"
+            android:layout_weight="1">
+            <ImageView
+                android:layout_width="29dp"
+                android:layout_height="28dp"
+                android:paddingTop="2dp"
+                android:paddingLeft="2dp"
+                android:paddingRight="2dp"
+                android:src="@drawable/map_nav2"
+                android:id="@+id/mapNav"
+                android:layout_centerHorizontal="true"/>
+
+            <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/mapNav"
+                android:textColor="@color/font_black_light"
+                android:gravity="center_horizontal"
+                android:textSize="11dp"
+                android:text="Map"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/serviceRely"
+            android:layout_weight="1">
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:id="@+id/serviceNav"
+                android:src="@drawable/briefcase_nav"
+                android:paddingTop="4dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:layout_centerHorizontal="true"/>
+
+            <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/serviceNav"
+                android:textColor="@color/font_black_light"
+                android:textSize="11dp"
+                android:gravity="center_horizontal"
+                android:text="Services"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/profileRely"
+            android:layout_weight="1">
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/profile_nav"
+                android:id="@+id/profileNav"
+                android:paddingTop="4dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:layout_centerHorizontal="true"/>
+
+            <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/profileNav"
+                android:textColor="@color/font_black_light"
+                android:textSize="11dp"
+                android:gravity="center_horizontal"
+                android:text="Profile"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/jobsRely"
+            android:layout_weight="1">
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/job_nav"
+                android:id="@+id/jobsNav"
+                android:paddingTop="4dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
+                android:layout_centerHorizontal="true"/>
+
+            <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/jobsNav"
+                android:textColor="@color/font_black_light"
+                android:textSize="11dp"
+                android:gravity="center_horizontal"
+                android:text="My Jobs"/>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

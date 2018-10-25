@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="8dp"
+    android:background="@drawable/button_bg_dialogs">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_margin="20dp"
+        android:id="@+id/relly"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+
+        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:id="@+id/options_map"
+            android:visibility="gone"
+            android:textColor="@color/font_black"
+            android:text="View service on map"/>
+
+        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:layout_marginTop="20dp"
+            android:id="@+id/options_share"
+            android:textColor="@color/font_black"
+            android:text="Share this service"/>
+
+        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textSize="18dp"
+            android:id="@+id/options_favourite"
+            android:textColor="@color/font_black"
+            android:text="Add service to favourites"/>
+
+        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"
+            android:textSize="18dp"
+            android:id="@+id/options_profile"
+            android:textColor="@color/font_black"
+            android:text="View account"/>
+
+        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:visibility="gone"
+            android:textSize="18dp"
+            android:id="@+id/options_report"
+            android:textColor="@color/font_black"
+            android:text="Report this service"/>
+
+        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textSize="18dp"
+            android:visibility="gone"
+            android:id="@+id/options_request"
+            android:textColor="@color/colorPrimary"
+            android:text="Request for this service"/>
+
+
+
+    </LinearLayout>
+
+
+
+
+
+</RelativeLayout>

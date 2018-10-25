@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="8dp"
+    android:background="@drawable/button_bg_dialogs">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_margin="20dp"
+        android:id="@+id/relly"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+
+        <com.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:id="@+id/options_professional"
+            android:textColor="@color/font_black"
+            android:text="Professional"/>
+
+        <com.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18dp"
+            android:layout_marginTop="20dp"
+            android:id="@+id/options_company"
+            android:textColor="@color/font_black"
+            android:text="Company"/>
+
+
+
+    </LinearLayout>
+
+
+
+
+
+</RelativeLayout>
