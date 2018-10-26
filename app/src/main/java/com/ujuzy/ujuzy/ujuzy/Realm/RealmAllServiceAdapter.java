@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.ujuzy.ujuzy.ujuzy.Activities.ServiceTabbedActivity;
 import com.ujuzy.ujuzy.ujuzy.R;
 
 import java.util.ArrayList;
@@ -76,7 +75,7 @@ public class RealmAllServiceAdapter extends RecyclerView.Adapter<RealmAllService
             @Override
             public void onClick(View view)
             {
-                Intent openRead = new Intent(view.getContext(), ServiceTabbedActivity.class);
+                /*Intent openRead = new Intent(view.getContext(), ServiceTabbedActivity.class);
                 openRead.putExtra("service_url", servicesList.get(position).getImage());
                 openRead.putExtra("service_id", servicesList.get(position).getId());
                 openRead.putExtra("service_name", servicesList.get(position).getServiceName());
@@ -92,7 +91,7 @@ public class RealmAllServiceAdapter extends RecyclerView.Adapter<RealmAllService
                 openRead.putExtra("user_role", servicesList.get(position).getUser_role());
                 openRead.putExtra("service_location", servicesList.get(position).getCity());
                 openRead.putExtra("service_ratings", servicesList.get(position).getRating());
-                view.getContext().startActivity(openRead);
+                view.getContext().startActivity(openRead);*/
             }
         });
     }

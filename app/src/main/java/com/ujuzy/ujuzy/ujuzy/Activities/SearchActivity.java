@@ -263,7 +263,7 @@ public class SearchActivity extends AppCompatActivity
 
     }
 
-    private void sendGet() throws Exception {
+    /*private void sendGet() throws Exception {
 
             // Create URL
             String url = "https://api.ujuzy.com/services/search?q=" + searchText;
@@ -310,7 +310,7 @@ public class SearchActivity extends AppCompatActivity
             Thread.sleep(2000);
 
     }
-    // HTTP GET request
+*/    // HTTP GET request
     private void sendingGetRequest() throws Exception {
 
         String urlString = GET_URL + searchText;
@@ -320,9 +320,6 @@ public class SearchActivity extends AppCompatActivity
 
         // By default it is GET request
         con.setRequestMethod("GET");
-
-        //add request header
-        con.setRequestProperty("User-Agent", USER_AGENT);
 
         int responseCode = con.getResponseCode();
         System.out.println("Sending get request : "+ url);

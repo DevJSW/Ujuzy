@@ -158,6 +158,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private PrefManager prefManager;
 
     // tags used to attach the fragments
+    String phoneInput = "";
     private static final String TAG_HOME = "home";
     private static final String TAG_SERVICES = "my services";
     private static final String TAG_JOBS = "my jobs";
@@ -199,27 +200,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private String searchText = "";
     String knownName = "";
     CalculateDistanceTime distance_task;
-    String SheetServiceDetailTv = "";
-    String SheetServiceTopicTv = "";
-    String SheetServiceCostTv = "";
-    String SheetServiceAddressTv = "";
-    String SheetServiceIdTv = "";
-    String SheetServiceCategoryTv = "";
-    String SheetServiceProviderTv = "";
-
     Polyline lastPolyline;
     boolean isSecond = false;
-
     ArrayList<LatLng> listPoints;
-
     LinearLayout layoutBottomSheet;
-
     BottomSheetBehavior sheetBehavior;
-
     private Button requestBtn;
-
+    EditText inputPhoneDialog;
     RealmList<RealmServiceImage> serviceImages;
-
     RelativeLayout mapRely, serviceRely, profileRely,jobsRely;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
@@ -238,21 +226,58 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         initWindows();
         initSignIn();
-        //initBottomSheet();
         fetchServicesFromAPI();
-      //  getProfServicesFromDatabase();
         initNavDrawer();
         initNavigationCustomixation();
-        //initUserServices();
         initCalculateDistance();
         getUserLocation(); // <-------------------------------- GET USER LOCATION
         initSearch();
-        /*initProfileInfo();
-        initMyServices();*/
         initHideBottomSheet();
         initBottomNavBar();
         initBottomMapBtn();
+        initPhoneNoCheck();
 
+    }
+
+    private void initPhoneNoCheck()
+    {
+        realm = Realm.getDefaultInstance();
+        RealmUser realmUser = realm.where(RealmUser.class).findFirst();
+        if (realmUser != null)
+        {
+            if (realmUser.getPhone() == null)
+            {
+                // show phone dialog
+                // CHECK IF USER IS LOGGED IN FAST
+                Context context = MapsActivity.this;
+
+                final Dialog dialog = new Dialog(context);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.phone_dialog);
+                dialog.setCancelable(true);
+                //dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                dialog.show();
+
+                inputPhoneDialog = (EditText) dialog.findViewById(R.id.editPhone);
+
+                Button ok = (Button) dialog.findViewById(R.id.okBtn);
+                ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v)
+                    {
+
+                        phoneInput = inputPhoneDialog.getText().toString();
+                        if (phoneInput.length() > 10 && phoneInput != null)
+                        {
+                           // initPhoneConfirmation();
+                        }
+
+                    }
+
+                });
+
+            }
+        }
     }
 
     private void initBottomMapBtn()
@@ -500,51 +525,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             return null;
         }
     }
-
-    /*private void toggleBottomSheetInfo() {
-        requestBtn = (Button) findViewById(R.id.btn_request);
-        sheetServiceDetails = (TextView) findViewById(R.id.sheetServiceDetails);
-        sheetServiceDetails.setText(SheetServiceDetailTv);
-
-        sheetServiceCost = (TextView) findViewById(R.id.sheetServiceCost);
-        if (SheetServiceCostTv == null || SheetServiceCostTv.equals("null")) {
-            sheetServiceCost.setText("Cost: Available on inquiry");
-        } else {
-            sheetServiceCost.setText("Cost: Ksh " + SheetServiceCostTv);
-        }
-
-        sheetServiceAddress = (TextView) findViewById(R.id.sheetServiceAddress);
-        sheetServiceAddress.setText(SheetServiceAddressTv);
-
-        layoutBottomSheet = (LinearLayout) findViewById(R.id.location_bottom_sheet);
-        sheetBehavior = BottomSheetBehavior.from(layoutBottomSheet);
-
-        requestBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                // OPEN REQUEST SERVICE ACTIVITY
-                Intent requestActivity = new Intent(MapsActivity.this, RequestServiceActivity.class);
-                requestActivity.putExtra("service_id", SheetServiceIdTv);
-                requestActivity.putExtra("first_name", SheetServiceProviderTv);
-                requestActivity.putExtra("last_name", "");
-                requestActivity.putExtra("service_cost", SheetServiceCostTv);
-                requestActivity.putExtra("service_name", SheetServiceTopicTv);
-                requestActivity.putExtra("no_of_personnel", 1);
-                requestActivity.putExtra("profile_pic", "");
-                startActivity(requestActivity);
-            }
-        });
-
-        if (sheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
-            sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-            //btnBottomSheet.setText("Close sheet");
-        } else {
-            sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-            //btnBottomSheet.setText("Expand sheet");
-        }
-        sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED); // <------------------- sheet goes down and back up when marker pressed by uer twice
-    }*/
 
 
     private void initServiceMarkers() {
