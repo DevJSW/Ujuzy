@@ -42,15 +42,17 @@ import io.realm.RealmChangeListener;
 
 public class EditProfileActivity extends AppCompatActivity {
 
-    String name = "";
+    String firstName = "";
+    String lastName = "";
     String phone = "";
+    String bio = "";
     private Realm realm;
     private RealmChangeListener realmChangeListener;
     private ImageView editPhoto, back;
     private Uri resultUri = null;
     private Uri mImageUri = null;
     private static int GALLERY_REQUEST =1;
-    private EditText phoneInput, nameInput, bioInput;
+    private EditText phoneInput, firstNameInput, lastNameInput, bioInput;
     private Button saveBtn;
     private RequestQueue requestQueue;
 
@@ -65,11 +67,15 @@ public class EditProfileActivity extends AppCompatActivity {
 
     private void initSaveEdit()
     {
-        name = nameInput.getText().toString();
+        firstName = firstNameInput.getText().toString();
+        lastName = lastNameInput.getText().toString();
         phone = phoneInput.getText().toString();
+        bio = bioInput.getText().toString();
 
-        if (TextUtils.isEmpty(name)) {
-            nameInput.setError("Your name must not be Empty");
+        if (TextUtils.isEmpty(firstName)) {
+            firstNameInput.setError("First name must not be Empty");
+        } else if (TextUtils.isEmpty(lastName)){
+            lastNameInput.setError("Last name must not be Empty!");
         } else if (TextUtils.isEmpty(phone)){
             phoneInput.setError("Your phone must not be Empty!");
         } else {
@@ -102,8 +108,10 @@ public class EditProfileActivity extends AppCompatActivity {
                         //initRetrofit();
 
                         Map<String, String> params= new HashMap<String, String>();
-                        params.put("name",name);
+                        params.put("first_name",firstName);
+                        params.put("last_name",lastName);
                         params.put("phone_number",phone);
+                        params.put("bio",bio);
 
                         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
                                 Constants.HTTP.EDIT_ACCOUNT_JSON_URL, new JSONObject(params),
@@ -166,7 +174,8 @@ public class EditProfileActivity extends AppCompatActivity {
     private void initEditInputs()
     {
         phoneInput = (EditText) findViewById(R.id.editPhone);
-        nameInput = (EditText) findViewById(R.id.editName);
+        firstNameInput = (EditText) findViewById(R.id.editFirstName);
+        lastNameInput = (EditText) findViewById(R.id.editLastName);
         bioInput = (EditText) findViewById(R.id.editBio);
 
         realm = Realm.getDefaultInstance();
@@ -174,7 +183,9 @@ public class EditProfileActivity extends AppCompatActivity {
         if (realmUser != null)
         {
             if (realmUser.getFirstname() != null)
-                nameInput.setText(realmUser.getFirstname() + " " + realmUser.getLastname());
+                firstNameInput.setText(realmUser.getFirstname());
+            if (realmUser.getLastname() != null)
+                lastNameInput.setText(realmUser.getLastname());
             if (realmUser.getPhone() != null)
                 phoneInput.setText(realmUser.getPhone());
             if (realmUser.getBio() != null)

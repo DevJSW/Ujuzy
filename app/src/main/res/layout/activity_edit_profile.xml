@@ -13,86 +13,131 @@
         android:layout_height="?attr/actionBarSize"
         android:background="?attr/colorPrimary" />
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_width="190dp"
-        android:layout_height="190dp"
-        android:layout_gravity="center_horizontal"
-        android:id="@+id/editPhoto"
-        android:layout_margin="30dp"
-        android:src="@drawable/if_profile_white"
-        app:civ_border_color="@color/white"
-        app:civ_border_width="2dp"/>
-
-
-    <android.support.design.widget.TextInputLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="15dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="15dp">
+        android:layout_height="wrap_content">
 
-        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerEditText
-            android:id="@+id/editName"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:focusableInTouchMode="true"
-            android:hint="Edit Name"
-            android:imeOptions="actionUnspecified"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:textColorHint="#121111"
-            android:textColor="#121111" />
+            android:orientation="vertical">
 
-    </android.support.design.widget.TextInputLayout>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="190dp"
+                android:layout_height="190dp"
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/editPhoto"
+                android:layout_margin="30dp"
+                android:src="@drawable/if_profile_white"
+                app:civ_border_color="@color/white"
+                app:civ_border_width="2dp"/>
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="15dp"
-        android:layout_marginLeft="15dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="15dp"
+                android:weightSum="2">
 
-        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerEditText
-            android:id="@+id/editPhone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusableInTouchMode="true"
-            android:hint="Edit Phone"
-            android:imeOptions="actionUnspecified"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:textColorHint="#121111"
-            android:textColor="#121111" />
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:layout_weight="1"
+                    >
 
-    </android.support.design.widget.TextInputLayout>
+                    <com.ujuzy.ujuzy.ujuzy.CustomData.AllerEditText
+                        android:id="@+id/editFirstName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusableInTouchMode="true"
+                        android:hint="First name"
+                        android:imeOptions="actionUnspecified"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColorHint="#121111"
+                        android:textColor="#121111" />
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="15dp"
-        android:layout_marginLeft="15dp">
+                </android.support.design.widget.TextInputLayout>
 
-        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerEditText
-            android:id="@+id/editBio"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusableInTouchMode="true"
-            android:hint="Edit Bio"
-            android:imeOptions="actionUnspecified"
-            android:maxLines="4"
-            android:singleLine="true"
-            android:textColorHint="#121111"
-            android:textColor="#121111" />
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="2dp"
+                    android:layout_weight="1"
+                    >
 
-    </android.support.design.widget.TextInputLayout>
+                    <com.ujuzy.ujuzy.ujuzy.CustomData.AllerEditText
+                        android:id="@+id/editLastName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusableInTouchMode="true"
+                        android:hint="Last name"
+                        android:imeOptions="actionUnspecified"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColorHint="#121111"
+                        android:textColor="#121111" />
 
-    <com.ujuzy.ujuzy.ujuzy.CustomData.MyButton
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_margin="15dp"
-        android:id="@+id/saveBtn"
-        android:textColor="@color/white"
-        android:textSize="14dp"
-        android:text="Save >>"
-        android:background="@drawable/button_bg"/>
+                </android.support.design.widget.TextInputLayout>
+
+            </LinearLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp">
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerEditText
+                    android:id="@+id/editPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusableInTouchMode="true"
+                    android:hint="Phone"
+                    android:imeOptions="actionUnspecified"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColorHint="#121111"
+                    android:textColor="#121111" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp">
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerEditText
+                    android:id="@+id/editBio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusableInTouchMode="true"
+                    android:hint="Bio"
+                    android:imeOptions="actionUnspecified"
+                    android:maxLines="6"
+                    android:singleLine="true"
+                    android:textColorHint="#121111"
+                    android:textColor="#121111" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <com.ujuzy.ujuzy.ujuzy.CustomData.MyButton
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_margin="15dp"
+                android:id="@+id/saveBtn"
+                android:textColor="@color/white"
+                android:textSize="14dp"
+                android:text="Save >>"
+                android:background="@drawable/button_bg"/>
+
+        </LinearLayout>
+    </ScrollView>
+
 
 </LinearLayout>
