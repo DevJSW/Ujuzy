@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -28,6 +29,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.ujuzy.ujuzy.ujuzy.Activities.EditProfileActivity;
 import com.ujuzy.ujuzy.ujuzy.Activities.MapsActivity;
 import com.ujuzy.ujuzy.ujuzy.R;
 import com.ujuzy.ujuzy.ujuzy.Realm.RealmHelper;
@@ -71,6 +73,7 @@ public class ProfileFragments extends BottomSheetDialogFragment {
     private RecyclerView servicesListRv, myServicesListRv, companyServicesListRv, searchListRv;
     private RequestQueue requestQueue;
     RealmList<RealmServiceImage> serviceImages;
+    private TextView editAcc;
     String category_title = "";
     private TextView userName, userPhone, userEmail, createdAt, txtEmail, sheetTitleTv, noFavTv, noServTv, noChatsTv, noJobsTv, tvSeeAllComp, tvSeeAllProf, noService, noMyServices, sheetServiceDetails, sheetServiceAddress, sheetServiceCost, userRole, userFirstName, userLastName;
     View v;
@@ -97,7 +100,20 @@ public class ProfileFragments extends BottomSheetDialogFragment {
         initAeroGearSignIn();
         initCancelFragment();
         initUpgrade();
+        initEditAcc();
         return v;
+    }
+
+    private void initEditAcc()
+    {
+        editAcc = (TextView) v.findViewById(R.id.tvEdit);
+        editAcc.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), EditProfileActivity.class));
+            }
+        });
     }
 
     private void initUpgrade()

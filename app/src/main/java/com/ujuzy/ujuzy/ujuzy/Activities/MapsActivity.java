@@ -199,13 +199,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private String searchText = "";
     String knownName = "";
     CalculateDistanceTime distance_task;
-    String SheetServiceDetailTv = "";
-    String SheetServiceTopicTv = "";
-    String SheetServiceCostTv = "";
-    String SheetServiceAddressTv = "";
-    String SheetServiceIdTv = "";
-    String SheetServiceCategoryTv = "";
-    String SheetServiceProviderTv = "";
+
 
     Polyline lastPolyline;
     boolean isSecond = false;
