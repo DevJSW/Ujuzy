@@ -89,6 +89,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_margin="15dp"
+        android:id="@+id/saveBtn"
         android:textColor="@color/white"
         android:textSize="14dp"
         android:text="Save >>"

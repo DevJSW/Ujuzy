@@ -13,14 +13,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.ramotion.foldingcell.FoldingCell;
 import com.ujuzy.ujuzy.ujuzy.Activities.RequestServiceActivity;
-import com.ujuzy.ujuzy.ujuzy.Activities.ServiceTabbedActivity;
 import com.ujuzy.ujuzy.ujuzy.R;
 
 import java.util.ArrayList;

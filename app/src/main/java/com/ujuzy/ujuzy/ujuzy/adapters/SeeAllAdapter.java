@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.ujuzy.ujuzy.ujuzy.Activities.ServiceTabbedActivity;
 import com.ujuzy.ujuzy.ujuzy.R;
 import com.ujuzy.ujuzy.ujuzy.model.Datum;
 
@@ -80,7 +79,7 @@ public class SeeAllAdapter extends RecyclerView.Adapter<SeeAllAdapter.ServicesVi
             @Override
             public void onClick(View view)
             {
-                Intent openRead = new Intent(view.getContext(), ServiceTabbedActivity.class);
+               /* Intent openRead = new Intent(view.getContext(), ServiceTabbedActivity.class);
                 openRead.putExtra("user_id", servicesList.get(position).getCreatedBy().getId());
                 openRead.putExtra("service_id", servicesList.get(position).getId());
                 openRead.putExtra("service_url", photo);
@@ -98,19 +97,19 @@ public class SeeAllAdapter extends RecyclerView.Adapter<SeeAllAdapter.ServicesVi
                 openRead.putExtra("service_additional_info", servicesList.get(position).getCategory());
                 openRead.putExtra("service_travel", servicesList.get(position).getTravel());
                 openRead.putExtra("user_thumb", servicesList.get(position).getCreatedBy().getThumb());
-                openRead.putExtra("no_of_personnel", servicesList.get(position).getNoOfPersonnel());
+                openRead.putExtra("no_of_personnel", servicesList.get(position).getNoOfPersonnel());*/
 
                 //USER LOCATION
                 //openRead.putExtra("service_latitude", servicesList.get(position).getLocation().getLat().toString());
                 // openRead.putExtra("service_longitude", servicesList.get(position).getLocation().getLon().toString());
 
                 // USER INFORMATION
-                openRead.putExtra("user_id", servicesList.get(position).getUser().getId());
+               /* openRead.putExtra("user_id", servicesList.get(position).getUser().getId());
                 openRead.putExtra("first_name", servicesList.get(position).getUser().getFirstname());
                 openRead.putExtra("last_name", servicesList.get(position).getUser().getLastname());
                 openRead.putExtra("user_role", servicesList.get(position).getUser().getUserRole());
                 openRead.putExtra("profile_pic", servicesList.get(position).getUser().getProfilePic());
-                view.getContext().startActivity(openRead);
+                view.getContext().startActivity(openRead);*/
             }
         });
 

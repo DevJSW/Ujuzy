@@ -44,10 +44,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".Activities.ServiceTabbedActivity"
-            android:label="@string/title_activity_service_tabbed"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Activities.RequestServiceActivity" />
         <activity android:name=".app_intro.SigninOrSkipActivity" />
         <activity

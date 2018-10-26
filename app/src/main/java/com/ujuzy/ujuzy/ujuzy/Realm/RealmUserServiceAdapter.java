@@ -1,7 +1,6 @@
 package com.ujuzy.ujuzy.ujuzy.Realm;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
@@ -18,7 +17,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.ramotion.foldingcell.FoldingCell;
-import com.ujuzy.ujuzy.ujuzy.Activities.ServiceTabbedActivity;
 import com.ujuzy.ujuzy.ujuzy.R;
 
 import java.util.ArrayList;
