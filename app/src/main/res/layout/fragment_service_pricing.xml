@@ -1,0 +1,312 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/back_toolbar"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:background="@color/grey_line"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/myServicesView">
+
+        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerBoldFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:textColor="@color/black"
+            android:layout_margin="10dp"
+            android:text="Provide an approximate cost"/>
+
+        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:textColor="@color/black"
+            android:text="Approximate cost"/>
+
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerBoldFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:text="KSH"
+                    android:textColor="@color/black" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/grey_line" />
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:textColor="@color/black"
+            android:text="Billing cycle"/>
+
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerBoldFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:textColor="@color/black"
+            android:layout_margin="10dp"
+            android:text="Provide a discounted price"/>
+
+        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:textColor="@color/black"
+            android:text="Discount"/>
+
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerBoldFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:text="KSH"
+                    android:textColor="@color/black" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="@color/grey_line" />
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerBoldFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:textColor="@color/black"
+            android:layout_margin="10dp"
+            android:text="Service Booking Setting"/>
+
+        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:textColor="@color/black"
+            android:text="Multiple workers"/>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:weightSum="5">
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:layout_weight="1">
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerBoldFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:text="1"
+                    android:textColor="@color/black" />
+
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:layout_weight="1">
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerBoldFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:text="2-5"
+                    android:textColor="@color/black" />
+
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:layout_weight="1">
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerBoldFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:text="6-10"
+                    android:textColor="@color/black" />
+
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:layout_weight="1">
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerBoldFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:text="11-15"
+                    android:textColor="@color/black" />
+
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp"
+                android:layout_weight="1">
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerBoldFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:text="more"
+                    android:textColor="@color/black" />
+
+
+            </android.support.v7.widget.CardView>
+
+
+        </LinearLayout>
+
+        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="15dp"
+            android:textColor="@color/black"
+            android:text="Additional more information about the service"/>
+
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+
+        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerButton
+            android:id="@+id/btn_login"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:textAllCaps="false"
+            android:layout_below="@+id/lin_lay"
+            android:textSize="17dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginBottom="30dp"
+            android:layout_marginRight="30dp"
+            android:background="@drawable/button_bg"
+            android:text="Add Service"
+            android:textColor="#ffff"
+            android:textStyle="bold" />
+
+
+    </LinearLayout>
+
+</LinearLayout>

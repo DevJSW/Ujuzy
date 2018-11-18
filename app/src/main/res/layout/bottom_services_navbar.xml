@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="55dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    android:layout_alignParentBottom="true"
+    android:layout_marginBottom="60dp"
+    android:layout_gravity="bottom"
+    android:gravity="bottom"
+    app:theme="@style/AppTheme.ActionBar.Transparent">
+
+    <com.yarolegovich.discretescrollview.DiscreteScrollView
+        android:id="@+id/picker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:dsv_orientation="horizontal" />
+    
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:id="@+id/botton_service_recyclerview">
+
+    </android.support.v7.widget.RecyclerView>
+
+</RelativeLayout>

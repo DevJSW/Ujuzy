@@ -22,10 +22,10 @@
             android:id="@+id/nav_create_services"
             android:icon="@drawable/if_calendar_nav"
             android:title="Create Services" />
-      <!--  <item
-            android:id="@+id/nav_jobs"
+        <item
+            android:id="@+id/nav_reqsts"
             android:icon="@drawable/if_doc_nav"
-            android:title="My Jobs" />-->
+            android:title="Requested services" />
 
         <!--<item
             android:id="@+id/nav_chats"
@@ -46,6 +46,9 @@
             android:id="@+id/nav_rate"
             android:icon="@drawable/if_fav_nav"
             android:title="Rate this app" />
-
+        <!--<item
+            android:id="@+id/nav_login"
+            android:icon="@drawable/if_calendar_nav"
+            android:title="Login" />-->
 
 </menu>

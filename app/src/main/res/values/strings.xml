@@ -24,6 +24,16 @@
         <item>Settings</item>
     </string-array>
 
+    <string name="slide_1_title">Q &amp; A PLATFORM</string>
+    <string name="slide_1_desc">Erevu, We are a question and answer platform. users gain points when there answers/question get voted up. Remember, users with high points enjoy more privileges on the platform. </string>
+
+    <string name="slide_2_title">INFORMATION SHARING</string>
+    <string name="slide_2_desc">Erevu lets you get the satisfaction of helping other people with useful information and exchanging ideas. Remember, the more questions you answer the more votes you are likely to earn</string>
+
+    <string name="slide_3_title">FEEDBACK OPINION</string>
+    <string name="slide_3_desc">Erevu discussion forums lets you get more feedback on a specific subject through group chat and push notifications in your inbox when someone answers a question you posted.</string>
+
+
     <string name="activity_title_about_us">About Us</string>
     <string name="activity_title_privacy_policy">Privacy Policy</string>
     <string name="action_clear_all">Clear All</string>
@@ -62,4 +72,8 @@
     <string name="content_to1_mock">46th Ave</string>
     <string name="content_to2_mock">Woodside, NY 11101</string>
     <string name="title_activity_main2">Main2Activity</string>
+    <string name="back"><![CDATA[<< Back]]></string>
+    <string name="skilled_prof_string">Suitable for individuals / small businesses providing a service Unlimited reviews Unlimited service posts Unlimited service requests Anaylitcs integration Advertising</string>
+    <string name="standard_user_txt">Perfect for people looking for service providers Unlimited Support Unlimited reviews Unlimited service requests</string>
+    <string name="company_txt">Suitable for large businesses with a considerably sized staff Unlimited reviews Unlimited service posts Umlimited service requests Anaylitcs integration Advertising</string>
 </resources>

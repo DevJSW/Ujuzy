@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/toolbarheight"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/grey_line"
+    android:background="@color/colorPrimaryDark"
     app:theme="@style/ThemeOverlay.AppCompat.Dark">
 
     <ImageView
@@ -12,16 +12,16 @@
         android:padding="6dp"
         android:id="@+id/backBtn"
         android:layout_marginRight="25dp"
-        android:src="@drawable/backbtn_black"
+        android:src="@drawable/backbtn_white"
         />
 
     <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
         android:layout_width="wrap_content"
-        android:textColor="@color/font_black_light"
+        android:textColor="@color/white"
         android:layout_height="wrap_content"
         android:textSize="20dp"
         android:id="@+id/toolbarTv"
-        android:text="Service"
+        android:text="Requested Services"
         />
 
 </android.support.v7.widget.Toolbar>

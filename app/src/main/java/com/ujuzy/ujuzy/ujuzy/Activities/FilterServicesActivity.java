@@ -153,7 +153,7 @@ public class FilterServicesActivity extends AppCompatActivity
         final RealmHelper helper = new RealmHelper(realm);
 
         //QUERY/FILTER REALM DATABASE
-        helper.filterRealmDatabase("category", category_title);
+        helper.filterRealmDatabase(category_title);
 
         filterCount = (TextView) findViewById(R.id.resultsCount);
         filterCount.setText("( " + helper.refreshDatabase().size() + " ) Results");

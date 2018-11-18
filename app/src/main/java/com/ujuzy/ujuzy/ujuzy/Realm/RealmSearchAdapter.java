@@ -258,7 +258,7 @@ public class RealmSearchAdapter extends RecyclerView.Adapter<RealmSearchAdapter.
             toAddress = itemView.findViewById(R.id.title_to_address);
             requestsCount = itemView.findViewById(R.id.title_requests_count);
             pledgePrice = itemView.findViewById(R.id.title_pledge);
-            contentRequestBtn = itemView.findViewById(R.id.content_request_btn);
+            contentRequestBtn = itemView.findViewById(R.id.review_btn);
 
             nameTv = itemView.findViewById(R.id.content_name_view);
             categoryTv = itemView.findViewById(R.id.categoryTv);
@@ -266,12 +266,12 @@ public class RealmSearchAdapter extends RecyclerView.Adapter<RealmSearchAdapter.
             content_time = itemView.findViewById(R.id.content_time);
             content_location = itemView.findViewById(R.id.content_location);
             content_from_address = itemView.findViewById(R.id.content_from_address_1);
-            content_to_address = itemView.findViewById(R.id.content_to_address_1);
+            content_to_address = itemView.findViewById(R.id.provider_name);
             content_to_address_2 = itemView.findViewById(R.id.content_to_address_2);
 
             content_layout = itemView.findViewById(R.id.content_layout);
             title_layout = itemView.findViewById(R.id.title_layout);
-            content_request_btn = itemView.findViewById(R.id.content_request_btn);
+            content_request_btn = itemView.findViewById(R.id.review_btn);
 
             title_serv_image = itemView.findViewById(R.id.title_service_bg);
             titleRatingBr = itemView.findViewById(R.id.titleRatingBr);

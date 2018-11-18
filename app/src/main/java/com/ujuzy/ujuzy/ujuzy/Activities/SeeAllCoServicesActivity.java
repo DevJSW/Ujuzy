@@ -175,7 +175,7 @@ public class SeeAllCoServicesActivity extends AppCompatActivity
         final RealmHelper helper = new RealmHelper(realm);
 
         //RETRIEVE
-        helper.filterRealmDatabase("user_role", "Company");
+        helper.filterRealmDatabase("Company");
         filterCount = (TextView) findViewById(R.id.resultsCount);
         filterCount.setText("( " + helper.refreshDatabase().size() + " ) Results");
 

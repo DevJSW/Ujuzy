@@ -27,6 +27,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.GravityCompat;
@@ -75,11 +76,16 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.ujuzy.ujuzy.ujuzy.Authorization.LoginActivity;
 import com.ujuzy.ujuzy.ujuzy.BottomSheetFragments.FavouritesFragments;
+import com.ujuzy.ujuzy.ujuzy.BottomSheetFragments.LegalFragment;
+import com.ujuzy.ujuzy.ujuzy.BottomSheetFragments.MessegesFragment;
 import com.ujuzy.ujuzy.ujuzy.BottomSheetFragments.MyJobsFragments;
 import com.ujuzy.ujuzy.ujuzy.BottomSheetFragments.MyServicesFragments;
 import com.ujuzy.ujuzy.ujuzy.BottomSheetFragments.ProfileFragments;
+import com.ujuzy.ujuzy.ujuzy.BottomSheetFragments.ScheduleHistoryFragment;
 import com.ujuzy.ujuzy.ujuzy.BottomSheetFragments.ServiceFragments;
+import com.ujuzy.ujuzy.ujuzy.BottomSheetFragments.SettingsFragments;
 import com.ujuzy.ujuzy.ujuzy.CustomData.CustomTypefaceSpan;
 import com.ujuzy.ujuzy.ujuzy.R;
 import com.ujuzy.ujuzy.ujuzy.Realm.RealmFavouriteHelper;
@@ -106,6 +112,7 @@ import com.ujuzy.ujuzy.ujuzy.adapters.ServiceMapMarkerAdapter;
 import com.ujuzy.ujuzy.ujuzy.app_intro.SigninOrSkipActivity;
 import com.ujuzy.ujuzy.ujuzy.model.Constants;
 import com.ujuzy.ujuzy.ujuzy.model.ServiceMarker;
+import com.yarolegovich.discretescrollview.DiscreteScrollView;
 
 import org.jboss.aerogear.android.authorization.AuthorizationManager;
 import org.jboss.aerogear.android.authorization.AuthzModule;
@@ -135,8 +142,11 @@ import io.realm.RealmChangeListener;
 import io.realm.RealmList;
 import io.realm.RealmResults;
 
+import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener {
 
+    private int pageNo = 0;
     private static final String MY_API_KEY = "AIzaSyDLhtMsy7x0mDj8a3UWU6KmDZ7jD10-vic";
     private NavigationView navigationView;
     private DrawerLayout drawer;
@@ -178,7 +188,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private RelativeLayout servicesViewRl, profileViewRl, userServicesViewRl, favViewRl, myJobsViewRl, chatsViewRl, searchRely, bottomsheetTitle, searchView, myServicesView;
 
     private RealmFavouritesAdapter serviceFavRealmAdapter;
-    private RecyclerView favouritesListRv, serviceListRv;
+    private RecyclerView favouritesListRv, serviceListRv, bottomListRv;
 
     private HashMap<Marker, ServiceMarker> mMarkersHashMap;
     private Map<Marker, ServiceMarker> mMarkersHashMap2 = new HashMap<>();
@@ -227,7 +237,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         initWindows();
         initSignIn();
         fetchServicesFromAPI();
-        initNavDrawer();
         initNavigationCustomixation();
         initCalculateDistance();
         getUserLocation(); // <-------------------------------- GET USER LOCATION
@@ -236,7 +245,37 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         initBottomNavBar();
         initBottomMapBtn();
         initPhoneNoCheck();
+        initBottomService();
 
+    }
+
+    private void initBottomService()
+    {
+        bottomListRv = (RecyclerView) findViewById(R.id.botton_service_recyclerview);
+
+        realm = Realm.getDefaultInstance();
+        final RealmHelper helper = new RealmHelper(realm);
+
+        //RETRIEVE
+        helper.retreiveFromDB();
+        // all services
+        serviceReamAdapter = new RealmServiceAdapter(getApplicationContext(), helper.refreshDatabase());
+
+        DiscreteScrollView scrollView = findViewById(R.id.picker);
+        scrollView.setAdapter(serviceReamAdapter);
+
+        //HANDLE DATA CHANGE FOR REFRESH
+        realmChangeListener = new RealmChangeListener() {
+            @Override
+            public void onChange(Object o) {
+                //REFRESH
+                serviceReamAdapter = new RealmServiceAdapter(getApplicationContext(), helper.refreshDatabase());
+                servicesListRv.setAdapter(serviceReamAdapter);
+            }
+        };
+
+        //ADD CHANGE LIST TO REALM
+        realm.addChangeListener(realmChangeListener);
     }
 
     private void initPhoneNoCheck()
@@ -245,7 +284,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         RealmUser realmUser = realm.where(RealmUser.class).findFirst();
         if (realmUser != null)
         {
-            if (realmUser.getPhone() == null)
+            if (realmUser.getPhone() == null || realmUser.getPhone() == "null")
             {
                 // show phone dialog
                 // CHECK IF USER IS LOGGED IN FAST
@@ -261,7 +300,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 inputPhoneDialog = (EditText) dialog.findViewById(R.id.editPhone);
 
                 Button ok = (Button) dialog.findViewById(R.id.okBtn);
-                ok.setOnClickListener(new View.OnClickListener() {
+                ok.setOnClickListener(new View.OnClickListener()
+                {
                     @Override
                     public void onClick(View v)
                     {
@@ -319,15 +359,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         servNav = (ImageView) findViewById(R.id.serviceNav);
         serviceRely.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
 
                 mapNav.setImageResource(R.drawable.map_nav2);
                 servNav.setImageResource(R.drawable.briefcase_nav_color);
                 profileNav.setImageResource(R.drawable.profile_nav);
                 jobNav.setImageResource(R.drawable.job_nav);
 
-                ServiceFragments servicesFragments = new ServiceFragments();
-                servicesFragments.show(getSupportFragmentManager(), servicesFragments.getTag());
+                ScheduleHistoryFragment scheduleHistoryFragment = new ScheduleHistoryFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame, scheduleHistoryFragment).commit();
 
             }
         });
@@ -336,30 +377,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         profileNav = (ImageView) findViewById(R.id.profileNav);
         profileRely.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
 
                 mapNav.setImageResource(R.drawable.map_nav2);
                 servNav.setImageResource(R.drawable.briefcase_nav);
                 profileNav.setImageResource(R.drawable.profile_nav_color);
                 jobNav.setImageResource(R.drawable.job_nav);
 
-                ProfileFragments profileFragments = new ProfileFragments();
-                profileFragments.show(getSupportFragmentManager(), profileFragments.getTag());
+                MessegesFragment messegesFragment = new MessegesFragment();
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame, messegesFragment).commit();
             }
         });
 
         jobsRely = (RelativeLayout) findViewById(R.id.jobsRely);
         jobNav = (ImageView) findViewById(R.id.jobsNav);
-        jobsRely.setOnClickListener(new View.OnClickListener() {
+        jobsRely.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
                 mapNav.setImageResource(R.drawable.map_nav2);
                 servNav.setImageResource(R.drawable.briefcase_nav);
                 profileNav.setImageResource(R.drawable.profile_nav);
                 jobNav.setImageResource(R.drawable.job_nav_color);
 
-                MyJobsFragments myJobsFragments = new MyJobsFragments();
-                myJobsFragments.show(getSupportFragmentManager(), myJobsFragments.getTag());
+                SettingsFragments settingsFragments = new SettingsFragments();
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame, settingsFragments).commit();
+
             }
         });
 
@@ -367,6 +412,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void initHideBottomSheet()
     {
+
     }
 
     @Override
@@ -382,9 +428,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void getUserLocation()
     {
 
-        if (Build.VERSION.SDK_INT >= 23) {
+        if (Build.VERSION.SDK_INT >= 23)
+        {
 
-            if (checkSelfPermission(mPermission) != PackageManager.PERMISSION_GRANTED) {
+            if (checkSelfPermission(mPermission) != PackageManager.PERMISSION_GRANTED)
+            {
                 ActivityCompat.requestPermissions(MapsActivity.this,
                         new String[]{mPermission,
                         },
@@ -402,7 +450,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     // \n is for new line
                     // Toast.makeText(getApplicationContext(), "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();
 
-                    try {
+                    try
+                    {
                         addresses = geocoder.getFromLocation(latitude, longitude, 1);
 
                         String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
@@ -429,7 +478,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     } catch (IOException e) {
                         e.printStackTrace();
 
-
                     }
 
                 } else {
@@ -443,14 +491,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    private void plotMarkers(ArrayList<ServiceMarker> markers) {
-        if (markers.size() > 0) {
+    private void plotMarkers(ArrayList<ServiceMarker> markers)
+    {
+        if (markers.size() > 0)
+        {
 
-            for (ServiceMarker myMarker : markers) {
+            for (ServiceMarker myMarker : markers)
+            {
 
                 MarkerOptions markerOption = new MarkerOptions().position(new LatLng(myMarker.getmLatitude(), myMarker.getmLongitude()));
-                Bitmap bitmap = createUserBitmap();
-                if (bitmap != null) {
+                Bitmap bitmap = createUserBitmap();  
+                if (bitmap != null)
+                {
                     //markerOption.title("Service");
                     LatLng serviceLoc = new LatLng(myMarker.getmLatitude(), myMarker.getmLongitude());
                     LatLng userLocation = new LatLng(latitude, longitude); // <--------------------- current user location
@@ -511,21 +563,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    public static Bitmap getBitmapFromURL(String src) {
-        try {
-            URL url = new URL(src);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setDoInput(true);
-            connection.connect();
-            InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            return myBitmap;
-        } catch (IOException e) {
-            // Log exception
-            return null;
-        }
-    }
-
 
     private void initServiceMarkers() {
         // Initialize the HashMap for Markers and MyMarker object
@@ -566,45 +603,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    private void initNavDrawer() {
-        mHandler = new Handler();
-
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-
-        // Navigation view header
-        navHeader = navigationView.getHeaderView(0);
-        //txtName = (TextView) navHeader.findViewById(R.id.name);
-        //txtEmail = (TextView) navHeader.findViewById(R.id.email);
-
-        // load nav menu header data
-        loadNavHeader();
-
-        // initializing navigation menu
-        //setUpNavigationView();
-
-        pullDrawer = (ImageView) findViewById(R.id.pullDrawerIv); // <------------------------- pull nav drawer when clicked
-        pullDrawer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawer.openDrawer(GravityCompat.START);
-            }
-        });
-    }
-
-    private void loadNavHeader() {
-        // name, website
-        // txtName.setText("John Webi");
-        //txtEmail.setText("johnwebi@gmail.com");
-
-        //navigationView.getMenu().getItem(3).setActionView(R.layout.menu_dot);
-    }
-
-    /***
-     * Returns respected fragment that user
-     * selected from navigation menu
-     */
-
     private void loadHomeFragment() {
         // selecting appropriate nav menu item
         //selectNavMenu();
@@ -640,30 +638,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         };
     }
 
-    @Override
-    public void onBackPressed() {
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawers();
-            return;
-        }
-
-        // This code loads home fragment when back key is pressed
-        // when user is in other fragment than home
-        if (shouldLoadHomeFragOnBackPress) {
-            // checking if user is on other navigation menu
-            // rather than home
-            if (navItemIndex != 0) {
-                navItemIndex = 0;
-                CURRENT_TAG = TAG_HOME;
-                loadHomeFragment();
-                return;
-            }
-        }
-
-        super.onBackPressed();
-    }
-
-
     private void fetchServicesFromAPI() {
         StringRequest stringRequest = new StringRequest(Request.Method.GET,
                 Constants.HTTP.SERVICES_ENDPOINT, new com.android.volley.Response.Listener<String>() {
@@ -678,7 +652,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     for (int i = 0; i < jsonArray.length(); i++) {
 
                         JSONObject serviceObj = jsonArray.getJSONObject(i);
-                        JSONObject serviceUserObj = jsonArray.getJSONObject(i).getJSONObject("user");
+                        //JSONObject serviceUserObj = jsonArray.getJSONObject(i).getJSONObject("user");
                         JSONObject serviceLocationObj = jsonArray.getJSONObject(i).getJSONObject("location");
                         JSONObject serviceDurationObj = jsonArray.getJSONObject(i).getJSONObject("duration");
 
@@ -691,7 +665,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         realmService.setServiceName(serviceObj.getString("service_name"));
                         realmService.setServiceDetails(serviceObj.getString("service_details"));
                         realmService.setCost(serviceObj.getString("cost"));
-                        realmService.setCreatedBy(serviceObj.getString("created_by"));
+                        //realmService.setCreatedBy(serviceObj.getString("created_by"));
                         realmService.setCategory(serviceObj.getString("category"));
                         realmService.setCreated_at(serviceObj.getString("created_at"));
                         realmService.setRating(serviceObj.getString("rating"));
@@ -719,11 +693,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                         }
 
-                        realmService.setUser_role(serviceUserObj.getString("user_role"));
-                        realmService.setUser_thumb(serviceUserObj.getString("profile_pic"));
-                        realmService.setFirst_name(serviceUserObj.getString("firstname"));
-                        realmService.setLast_name(serviceUserObj.getString("lastname"));
-                        realmService.setUser_id(serviceUserObj.getString("id"));
+//                        realmService.setUser_role(serviceUserObj.getString("user_role"));
+//                        realmService.setUser_thumb(serviceUserObj.getString("profile_pic"));
+//                        realmService.setFirst_name(serviceUserObj.getString("firstname"));
+//                        realmService.setLast_name(serviceUserObj.getString("lastname"));
+//                        realmService.setUser_id(serviceUserObj.getString("id"));
 
                         realmService.setCity(serviceLocationObj.getString("city"));
                         realmService.setLatitude(Double.parseDouble(serviceLocationObj.getString("lat")));
@@ -766,7 +740,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         final RealmHelper helper = new RealmHelper(realm);
 
         //RETRIEVE
-        helper.filterRealmDatabase("user_role", "Professional");
+        helper.filterRealmDatabase("Professional");
         //helper.retreiveFromDB();
 
 
@@ -794,44 +768,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //ADD CHANGE LIST TO REALM
         realm.addChangeListener(realmChangeListener);
     }
-
-   /* private void initBottomSheet() {
-        View bottomSheet = findViewById(R.id.bottom_sheet);
-        mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-        mBottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
-        mBottomSheetBehavior.setPeekHeight(110);
-        mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-
-        pullSheetIv = (ImageView) findViewById(R.id.pullSheet);
-        pullSheetIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mBottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
-                    mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                } else {
-                    mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-                }
-            }
-        });
-
-        mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-            @Override
-            public void onStateChanged(View bottomSheet, int newState) {
-                if (newState == BottomSheetBehavior.STATE_EXPANDED) {
-                    pullSheetIv.setImageResource(R.drawable.pull_down);
-                } else if (newState == BottomSheetBehavior.STATE_COLLAPSED) {
-                    pullSheetIv.setImageResource(R.drawable.pull_up);
-                } else if (newState == BottomSheetBehavior.STATE_HIDDEN) {
-
-                }
-            }
-
-            @Override
-            public void onSlide(View bottomSheet, float slideOffset) {
-            }
-        });
-
-    }*/
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP_MR1)
     private void initWindows() {
@@ -962,177 +898,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         return (int) Math.ceil(getResources().getDisplayMetrics().density * value);
     }
 
-    private void toggleDownBottomSheet() {
+    private void toggleDownBottomSheet()
+    {
         layoutBottomSheet = (LinearLayout) findViewById(R.id.location_bottom_sheet);
         sheetBehavior = BottomSheetBehavior.from(layoutBottomSheet);
         sheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-    }
-
-    private void initAuthUser() {
-
-        try {
-
-            final AuthzModule authzModule = AuthorizationManager
-                    .config("KeyCloakAuthz", OAuth2AuthorizationConfiguration.class)
-                    .setBaseURL(new URL(Constants.HTTP.AUTH_BASE_URL))
-                    .setAuthzEndpoint("/auth/realms/ujuzy/protocol/openid-connect/auth")
-                    .setAccessTokenEndpoint("/auth/realms/ujuzy/protocol/openid-connect/token")
-                    .setAccountId("account")
-                    .setClientId("account")
-                    .setRedirectURL("https://ujuzy.com")
-                    .setScopes(Arrays.asList("openid"))
-                    .addAdditionalAuthorizationParam((Pair.create("grant_type", "password")))
-                    .asModule();
-
-            authzModule.requestAccess(this, new org.jboss.aerogear.android.core.Callback<String>() {
-                @Override
-                public void onSuccess(final String data) {
-
-                    // CHECK IF USER IS LOGGED IN FAST
-                    Context context = MapsActivity.this;
-
-                    final Dialog dialog = new Dialog(context);
-                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                    dialog.setContentView(R.layout.sign_in_dialog);
-                    dialog.setCancelable(true);
-                    //dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-                    dialog.show();
-
-                    TextView sign_in = (TextView) dialog.findViewById(R.id.btn_signin);
-                    sign_in.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            // initUserProfileSheet(); // <------------------- open user profile bottom sheet
-                            initAeroGearSignIn();
-                            dialog.dismiss();
-                        }
-                    });
-
-                    TextView cancel = (TextView) dialog.findViewById(R.id.cancel);
-                    cancel.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            dialog.dismiss();
-                        }
-                    });
-
-                }
-
-                @Override
-                public void onFailure(Exception e) {
-                    //Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                    authzModule.deleteAccount();
-                }
-            });
-
-
-        } catch (MalformedURLException e) {
-            // e.printStackTrace();
-        }
-
-    }
-
-    private void initAeroGearSignIn() {
-        try {
-
-            final AuthzModule authzModule = AuthorizationManager
-                    .config("KeyCloakAuthz", OAuth2AuthorizationConfiguration.class)
-                    .setBaseURL(new URL(Constants.HTTP.AUTH_BASE_URL))
-                    .setAuthzEndpoint("/auth/realms/ujuzy/protocol/openid-connect/auth")
-                    .setAccessTokenEndpoint("/auth/realms/ujuzy/protocol/openid-connect/token")
-                    .setAccountId("account")
-                    .setClientId("account")
-                    .setRedirectURL("https://ujuzy.com")
-                    .setScopes(Arrays.asList("openid"))
-                    .addAdditionalAuthorizationParam((Pair.create("grant_type", "password")))
-                    .asModule();
-
-            authzModule.requestAccess(this, new org.jboss.aerogear.android.core.Callback<String>() {
-                @Override
-                public void onSuccess(final String data) {
-
-                    //SAVE TOKEN TO REALM DATABASE
-                    RealmToken token = new RealmToken();
-                    token.setToken(data);
-
-                    StringRequest stringRequest = new StringRequest(Request.Method.GET, Constants.HTTP.USER_PROFILE_JSON_URL,
-                            new com.android.volley.Response.Listener<String>() {
-                                @Override
-                                public void onResponse(String response) {
-
-                                    try {
-
-                                        JSONObject jsonObject = new JSONObject(response);
-
-                                        RealmUser realmService = new RealmUser();
-                                        realmService.setId(jsonObject.getString("id"));
-                                        realmService.setFirstname(jsonObject.getString("firstname"));
-                                        realmService.setLastname(jsonObject.getString("lastname"));
-                                        realmService.setGender(jsonObject.getString("gender"));
-                                        realmService.setEmail(jsonObject.getString("email"));
-                                        realmService.setCreated_at(jsonObject.getString("created_at"));
-                                        realmService.setPhone(jsonObject.getString("phone_number"));
-                                        //realmService.setVerified(jsonObject.getString("phone_number"));
-
-                                        JSONObject jsonUserRole = new JSONObject(response).getJSONObject("user_role");
-                                        realmService.setUserRole(jsonUserRole.getString("role_name"));
-                                        //JSONObject jsonUserProfilePic = new JSONObject(response).getJSONObject("profile_pic");
-                                        //realmService.setProfilePic(jsonUserProfilePic.getString("thumb"));
-
-                                        //SAVE
-                                        realm = Realm.getDefaultInstance();
-                                        RealmUserHelper helper = new RealmUserHelper(realm);
-                                        helper.save(realmService);
-
-
-
-                                    } catch (JSONException e) {
-                                        //e.printStackTrace();
-                                    }
-
-                                }
-                            }, new com.android.volley.Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-
-                            authzModule.deleteAccount();
-
-                        }
-                    }) {
-
-                        @Override
-                        public Map<String, String> getHeaders() throws AuthFailureError {
-                            Map<String, String> params = new HashMap<String, String>();
-                            params.put("Authorization", "Bearer " + data);
-                            params.put("Content-Type", "application/json");
-                            params.put("Accept", "application/json");
-                            return params;
-                        }
-                    };
-
-                    requestQueue = Volley.newRequestQueue(MapsActivity.this);
-                    requestQueue.add(stringRequest);
-
-                    realm = Realm.getDefaultInstance();
-                    RealmTokenHelper helper = new RealmTokenHelper(realm);
-                    helper.save(token);
-
-
-                }
-
-                @Override
-                public void onFailure(Exception e) {
-                    //Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
-                    authzModule.deleteAccount();
-                }
-            });
-
-
-        } catch (MalformedURLException e) {
-            // e.printStackTrace();
-        }
-        // startActivity(new Intent(UserProfileActivity.this, LoginActivity.class));
-
     }
 
 
@@ -1140,20 +910,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private String getDirectionsUrl(LatLng origin, LatLng dest) {
 
         String str_origin = "origin=" + origin.latitude + "," + origin.longitude; // <--------------------- value of the origin
-
-
         String str_dest = "destination=" + dest.latitude + "," + dest.longitude; // <------------------------ value of destination
-
-
         String sensor = "sensor=false";
-
         String mode = "mode=driving"; // <---------------------------- set mode for finding direction
-
-
         String parameters = str_origin + "&" + str_dest + "&" + sensor + "&" + mode;   // <--------------------------- set the full param
-
         String output = "json";
-
 
         return "https://maps.googleapis.com/maps/api/directions/" + output + "?" + parameters + "&key=" + MY_API_KEY;
     }
@@ -1171,7 +932,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         urlConnection.connect();
 
         // Reading data from url
-        try (InputStream iStream = urlConnection.getInputStream()) {
+        try (InputStream iStream = urlConnection.getInputStream())
+        {
             BufferedReader br = new BufferedReader(new InputStreamReader(iStream));
 
             StringBuilder sb = new StringBuilder();
@@ -1209,6 +971,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             MyServicesFragments myServicesFragments = new MyServicesFragments();
             myServicesFragments.show(getSupportFragmentManager(), myServicesFragments.getTag());
 
+//            MyServicesFragments myServicesFragments = new MyServicesFragments();
+//            getSupportFragmentManager().beginTransaction().replace(R.id.frame, myServicesFragments).commit();
+
         } else if (id == R.id.nav_create_services)
         {
 
@@ -1222,7 +987,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Intent myIntent = new Intent(Intent.ACTION_SEND);
             myIntent.setType("text/plain");
             String shareBody ="Ujuzy App";
-            String shareSub = "Hi, this is an invitation to download Ujuzy app  https://play.google.com/store/apps/details?id=com.ujuzy.ujuzy";
+            String shareSub = "Hi, this is an invitation to download Ujuzy app  https://play.google.com/store/apps/details?id=com.ujuzy.www";
             myIntent.putExtra(Intent.EXTRA_SUBJECT,shareBody);
             myIntent.putExtra(Intent.EXTRA_TEXT,shareSub);
             startActivity(Intent.createChooser(myIntent,"Share this app"));
@@ -1231,8 +996,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } else if (id == R.id.nav_rate)
         {
             toggleDownBottomSheet();
-            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.ujuzy.ujuzy"));
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.ujuzy.www"));
             startActivity(browserIntent);
+
+        } else if (id == R.id.nav_reqsts)
+        {
+
+            toggleDownBottomSheet();
+            startActivity(new Intent(MapsActivity.this, UserRequestServiceActivity.class)); // <----------------- opening login activity
 
         }
 
@@ -1304,8 +1075,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         protected void onPostExecute(List<List<HashMap<String, String>>> result)
         {
             ArrayList<LatLng> points = new ArrayList<>();
+
             PolylineOptions lineOptions = new PolylineOptions();
-            for (int i = 0; i < result.size(); i++) {
+            for (int i = 0; i < result.size(); i++)
+            {
                 List<HashMap<String, String>> path = result.get(i);
                 for (int j = 0; j < path.size(); j++) {
                     HashMap<String, String> point = path.get(j);
@@ -1367,45 +1140,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    private void applyFontToMenuItem(MenuItem item) {
+    private void applyFontToMenuItem(MenuItem item)
+    {
         Typeface font = Typeface.createFromAsset(getAssets(), "fonts/Aller_Rg.ttf");
         SpannableString mNewTitle = new SpannableString(item.getTitle());
         mNewTitle.setSpan(new CustomTypefaceSpan("" , font), 0 , mNewTitle.length(),  Spannable.SPAN_INCLUSIVE_INCLUSIVE);
         item.setTitle(mNewTitle);
     }
-
-    /*private void initUserInfo()
-    {
-
-        userName = (TextView) findViewById(R.id.tv_user_name);
-        userEmail = (TextView) findViewById(R.id.tv_user_email);
-        userPhone = (TextView) findViewById(R.id.tv_user_phone);
-        createdAt = (TextView) findViewById(R.id.tv_created_at);
-        userRole = (TextView) findViewById(R.id.tv_user_role);
-        userFirstName = (TextView) findViewById(R.id.tv_user_firstname);
-        userLastName = (TextView) findViewById(R.id.tv_user_lastname);
-
-        realm = Realm.getDefaultInstance();
-        RealmUser realmUser = realm.where(RealmUser.class).findFirst();
-        if (realmUser != null) {
-            if (realmUser.getFirstname() != null)
-                userName.setText(realmUser.getFirstname() + " " + realmUser.getLastname());
-            if (realmUser.getEmail() != null)
-                userEmail.setText(realmUser.getEmail());
-            if (realmUser.getPhone() != null)
-                userPhone.setText(realmUser.getPhone());
-            if (realmUser.getCreated_at() != null)
-                createdAt.setText(realmUser.getCreated_at());
-            if (realmUser.getUserRole() != null)
-                userRole.setText(realmUser.getUserRole());
-            if (realmUser.getFirstname() != null)
-                userFirstName.setText(realmUser.getFirstname());
-            if (realmUser.getLastname() != null)
-                userLastName.setText(realmUser.getLastname());
-
-        }
-
-    }*/
 
     @Override
     public void onDestroy()

@@ -1,6 +1,8 @@
 package com.ujuzy.ujuzy.ujuzy.Realm;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -59,9 +61,9 @@ public class RealmHelper
     }
 
     //FILTER DATABASE
-    public void filterRealmDatabase(String category, String category_title)
+    public void filterRealmDatabase(String category_title)
     {
-        services = realm.where(RealmService.class).equalTo(category, category_title).findAll();
+        services = realm.where(RealmService.class).equalTo("user_role", category_title).findAll();
     }
 
     //SEARCH FILTER DATABASE

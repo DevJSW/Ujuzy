@@ -1,0 +1,464 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/cancel_toolbar"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey_line"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"/>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerBoldFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:layout_margin="20dp"
+                    android:textSize="17dp"
+                    android:text="How was the service ?"/>
+
+                <HorizontalScrollView
+                    android:id="@+id/hsv"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginBottom="20dp"
+                    android:fillViewport="true"
+                    android:measureAllChildren="false"
+                    android:scrollbars="none" >
+
+                    <LinearLayout
+                        android:id="@+id/innerLay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fitsSystemWindows="true"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal" >
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/lin_lay_tasks"
+                            android:layout_marginRight="20dp"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="8dp"
+                                android:id="@+id/paintingScrollLl"
+                                android:background="@drawable/slider_button_bg2">
+
+                                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/black"
+                                    android:textSize="15dp"
+                                    android:layout_marginLeft="11dp"
+                                    android:layout_marginRight="11dp"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginBottom="8dp"
+                                    android:text="Worse"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="9dp"
+                                android:id="@+id/beautyLiny"
+                                android:background="@drawable/slider_button_bg2">
+
+                                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/black"
+                                    android:textSize="15dp"
+                                    android:layout_marginLeft="11dp"
+                                    android:layout_marginRight="11dp"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginBottom="8dp"
+                                    android:text="Bad"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="9dp"
+                                android:id="@+id/weldersScrollLl"
+                                android:background="@drawable/slider_button_bg2">
+
+                                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/black"
+                                    android:textSize="15dp"
+                                    android:layout_marginLeft="11dp"
+                                    android:layout_marginRight="11dp"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginBottom="8dp"
+                                    android:text="Good"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="9dp"
+                                android:id="@+id/securityScrollLl"
+                                android:background="@drawable/slider_button_bg2">
+
+                                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/black"
+                                    android:textSize="15dp"
+                                    android:layout_marginLeft="11dp"
+                                    android:layout_marginRight="11dp"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginBottom="8dp"
+                                    android:text="Better"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="9dp"
+                                android:id="@+id/accountingScrollLl"
+                                android:background="@drawable/slider_button_bg2">
+
+                                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/black"
+                                    android:textSize="15dp"
+                                    android:layout_marginLeft="11dp"
+                                    android:layout_marginRight="11dp"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginBottom="8dp"
+                                    android:text="Excellent"/>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+                </HorizontalScrollView>
+
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerBoldFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:layout_margin="20dp"
+                    android:textSize="17dp"
+                    android:text="How can you rate service provider's honesty ?"/>
+
+                <HorizontalScrollView
+                    android:id="@+id/hsv3"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginBottom="15dp"
+                    android:fillViewport="true"
+                    android:measureAllChildren="false"
+                    android:scrollbars="none" >
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fitsSystemWindows="true"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal" >
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="20dp"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="8dp"
+                                android:background="@drawable/slider_button_bg2">
+
+                                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/black"
+                                    android:textSize="15dp"
+                                    android:layout_marginLeft="11dp"
+                                    android:layout_marginRight="11dp"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginBottom="8dp"
+                                    android:text="Worse"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="9dp"
+                                android:background="@drawable/slider_button_bg2">
+
+                                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/black"
+                                    android:textSize="15dp"
+                                    android:layout_marginLeft="11dp"
+                                    android:layout_marginRight="11dp"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginBottom="8dp"
+                                    android:text="Bad"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="9dp"
+                                android:background="@drawable/slider_button_bg2">
+
+                                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/black"
+                                    android:textSize="15dp"
+                                    android:layout_marginLeft="11dp"
+                                    android:layout_marginRight="11dp"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginBottom="8dp"
+                                    android:text="Good"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="9dp"
+                                android:background="@drawable/slider_button_bg2">
+
+                                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/black"
+                                    android:textSize="15dp"
+                                    android:layout_marginLeft="11dp"
+                                    android:layout_marginRight="11dp"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginBottom="8dp"
+                                    android:text="Better"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="9dp"
+                                android:background="@drawable/slider_button_bg2">
+
+                                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/black"
+                                    android:textSize="15dp"
+                                    android:layout_marginLeft="11dp"
+                                    android:layout_marginRight="11dp"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginBottom="8dp"
+                                    android:text="Excellent"/>
+
+                            </LinearLayout>
+
+                     </LinearLayout>
+                    </LinearLayout>
+                </HorizontalScrollView>
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerBoldFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:layout_margin="20dp"
+                    android:textSize="17dp"
+                    android:text="How was the service providers eloquence ?"/>
+
+                <HorizontalScrollView
+                    android:id="@+id/hsv2"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginLeft="10dp"
+                    android:fillViewport="true"
+                    android:measureAllChildren="false"
+                    android:scrollbars="none" >
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fitsSystemWindows="true"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal" >
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="20dp"
+                            android:orientation="horizontal">
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="8dp"
+                                android:background="@drawable/slider_button_bg2">
+
+                                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/black"
+                                    android:textSize="15dp"
+                                    android:layout_marginLeft="11dp"
+                                    android:layout_marginRight="11dp"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginBottom="8dp"
+                                    android:text="Worse"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="9dp"
+                                android:background="@drawable/slider_button_bg2">
+
+                                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/black"
+                                    android:textSize="15dp"
+                                    android:layout_marginLeft="11dp"
+                                    android:layout_marginRight="11dp"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginBottom="8dp"
+                                    android:text="Bad"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="9dp"
+                                android:background="@drawable/slider_button_bg2">
+
+                                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/black"
+                                    android:textSize="15dp"
+                                    android:layout_marginLeft="11dp"
+                                    android:layout_marginRight="11dp"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginBottom="8dp"
+                                    android:text="Good"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="9dp"
+                                android:background="@drawable/slider_button_bg2">
+
+                                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/black"
+                                    android:textSize="15dp"
+                                    android:layout_marginLeft="11dp"
+                                    android:layout_marginRight="11dp"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginBottom="8dp"
+                                    android:text="Better"/>
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="9dp"
+                                android:background="@drawable/slider_button_bg2">
+
+                                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="@color/black"
+                                    android:textSize="15dp"
+                                    android:layout_marginLeft="11dp"
+                                    android:layout_marginRight="11dp"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginBottom="8dp"
+                                    android:text="Excellent"/>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+                    </LinearLayout>
+                </HorizontalScrollView>
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerButton
+                    android:id="@+id/btn_login"
+                    style="?android:textAppearanceSmall"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_alignParentBottom="true"
+                    android:textAllCaps="false"
+                    android:layout_below="@+id/lin_lay"
+                    android:textSize="17dp"
+                    android:layout_marginTop="40dp"
+                    android:layout_marginLeft="30dp"
+                    android:layout_marginBottom="30dp"
+                    android:layout_marginRight="30dp"
+                    android:background="@drawable/button_bg"
+                    android:text="Next"
+                    android:textColor="#ffff"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+    </ScrollView>
+
+
+</LinearLayout>

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.ujuzy.ujuzy.ujuzy.Authorization.SignUpActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="75dp"
+                android:id="@+id/logo"
+                android:layout_margin="10dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/ujuzy"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/lin_lay"
+                android:layout_below="@+id/logo"
+                android:layout_centerVertical="true"
+                android:layout_margin="10dp"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerBoldFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/black"
+                    android:text="First Name"/>
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerEditText
+                    android:id="@+id/inputFirstName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/edittext_bg_white"
+                    android:outlineProvider="bounds"
+                    android:hint="First Name"
+                    android:elevation="5dp"
+                    android:padding="13dp"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="#121111" />
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerBoldFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/black"
+                    android:text="Last Name"/>
+
+
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerEditText
+                    android:id="@+id/inputLastName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusableInTouchMode="true"
+                    android:outlineProvider="bounds"
+                    android:background="@drawable/edittext_bg_white"
+                    android:hint="Last Name"
+                    android:padding="13dp"
+                    android:elevation="10dp"
+                    android:imeOptions="actionUnspecified"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="#121111" />
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerBoldFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/black"
+                    android:text="Email Address"/>
+
+
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerEditText
+                    android:id="@+id/inputEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusableInTouchMode="true"
+                    android:outlineProvider="bounds"
+                    android:background="@drawable/edittext_bg_white"
+                    android:hint="Email Address"
+                    android:padding="13dp"
+                    android:elevation="10dp"
+                    android:imeOptions="actionUnspecified"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="#121111" />
+
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerBoldFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/black"
+                    android:text="Password"/>
+
+
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerEditText
+                    android:id="@+id/inputPass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusableInTouchMode="true"
+                    android:outlineProvider="bounds"
+                    android:background="@drawable/edittext_bg_white"
+                    android:hint="Password"
+                    android:padding="13dp"
+                    android:elevation="10dp"
+                    android:imeOptions="actionUnspecified"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="#121111" />
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerBoldFont
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="@color/black"
+                    android:text="Confirm Password"/>
+
+
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerEditText
+                    android:id="@+id/inputConfirmPass"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusableInTouchMode="true"
+                    android:outlineProvider="bounds"
+                    android:background="@drawable/edittext_bg_white"
+                    android:hint="Confirm Password"
+                    android:padding="13dp"
+                    android:elevation="10dp"
+                    android:imeOptions="actionUnspecified"
+                    android:inputType="text"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="#121111" />
+
+
+            </LinearLayout>
+
+
+            <com.ujuzy.ujuzy.ujuzy.CustomData.AllerButton
+                android:id="@+id/btn_login"
+                style="?android:textAppearanceSmall"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:textAllCaps="false"
+                android:layout_below="@+id/lin_lay"
+                android:textSize="17dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginBottom="30dp"
+                android:layout_marginRight="30dp"
+                android:background="@drawable/button_bg"
+                android:text="Sign Up"
+                android:textColor="#ffff"
+                android:textStyle="bold" />
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="20dp"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+    </ScrollView>
+
+
+</RelativeLayout>

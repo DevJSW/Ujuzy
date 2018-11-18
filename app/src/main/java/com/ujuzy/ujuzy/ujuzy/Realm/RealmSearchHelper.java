@@ -58,12 +58,6 @@ public class RealmSearchHelper
         services = realm.where(RealmSearch.class).findAll();
     }
 
-    //FILTER DATABASE
-    public void filterRealmDatabase(String category, String category_title)
-    {
-        services = realm.where(RealmSearch.class).equalTo(category, category_title).findAll();
-    }
-
     //SEARCH FILTER DATABASE
     public void searchRealmDatabase(String searchInput, String searchText)
     {

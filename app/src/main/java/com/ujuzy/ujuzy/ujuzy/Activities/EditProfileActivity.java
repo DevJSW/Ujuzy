@@ -51,7 +51,7 @@ public class EditProfileActivity extends AppCompatActivity {
     private ImageView editPhoto, back;
     private Uri resultUri = null;
     private Uri mImageUri = null;
-    private static int GALLERY_REQUEST =1;
+    private static int GALLERY_REQUEST = 1;
     private EditText phoneInput, firstNameInput, lastNameInput, bioInput;
     private Button saveBtn;
     private RequestQueue requestQueue;
@@ -63,6 +63,20 @@ public class EditProfileActivity extends AppCompatActivity {
 
         initEdit();
         initEditInputs();
+        initBack();
+    }
+
+    private void initBack()
+    {
+        back = (ImageView) findViewById(R.id.backBtn);
+        back.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                finish();
+            }
+        });
     }
 
     private void initSaveEdit()
@@ -83,7 +97,8 @@ public class EditProfileActivity extends AppCompatActivity {
             realm = Realm.getDefaultInstance();
             final RealmTokenHelper helper = new RealmTokenHelper(realm);
 
-            try {
+            try
+            {
 
                 final AuthzModule authzModule = AuthorizationManager
                         .config("KeyCloakAuthz", OAuth2AuthorizationConfiguration.class)

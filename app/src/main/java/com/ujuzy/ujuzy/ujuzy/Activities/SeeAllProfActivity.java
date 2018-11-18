@@ -166,7 +166,7 @@ public class SeeAllProfActivity extends AppCompatActivity
 
 
         //RETRIEVE
-        helper.filterRealmDatabase("user_role", "Professional");
+        helper.filterRealmDatabase("Professional");
 
         filterCount = (TextView) findViewById(R.id.resultsCount);
         filterCount.setText("( " + helper.refreshDatabase().size() + " ) Results");

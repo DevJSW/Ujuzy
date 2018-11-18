@@ -40,45 +40,11 @@ public class RealmRequestedUserService extends RealmObject
     private String user_thumb;
     private int no_of_personnel;
     private String created_at;
+    private String provider_firstname;
+    private String provider_lastname;
+    private String provider_id;
+    private String provider_user_thumb;
 
-
-    public RealmRequestedUserService(String id, String serviceName, String serviceDetails, String serviceId, String name, String phone, String request_name, String request_time, String seen_status, String updated_by, String skill_request, String specal_request, String service_id, String request_date, String special_date, String cost, String category, Boolean travel, String image, String additional_info, String created_by, String user_role, String first_name, String last_name, String service_duration_days, String service_duration_hours, String user_id, double latitude, double longitude, String city, String user_thumb, int no_of_personnel, String createdBy, String created_at) {
-        this.id = id;
-        this.serviceName = serviceName;
-        this.serviceDetails = serviceDetails;
-        this.serviceId = serviceId;
-        this.name = name;
-        this.phone = phone;
-        this.request_name = request_name;
-        this.request_time = request_time;
-        this.seen_status = seen_status;
-        this.updated_by = updated_by;
-        this.skill_request = skill_request;
-        this.specal_request = specal_request;
-        this.service_id = service_id;
-        this.request_date = request_date;
-        this.special_date = special_date;
-        this.cost = cost;
-        this.category = category;
-        this.travel = travel;
-        this.image = image;
-        this.additional_info = additional_info;
-        this.created_by = created_by;
-        this.user_role = user_role;
-        this.first_name = first_name;
-        this.last_name = last_name;
-        this.service_duration_days = service_duration_days;
-        this.service_duration_hours = service_duration_hours;
-        this.user_id = user_id;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.city = city;
-        this.user_thumb = user_thumb;
-        this.no_of_personnel = no_of_personnel;
-        this.createdBy = createdBy;
-        this.created_at = created_at;
-
-    }
 
 
     public RealmRequestedUserService() {
@@ -357,5 +323,37 @@ public class RealmRequestedUserService extends RealmObject
 
     public void setSpecial_date(String special_date) {
         this.special_date = special_date;
+    }
+
+    public String getProvider_firstname() {
+        return provider_firstname;
+    }
+
+    public void setProvider_firstname(String provider_firstname) {
+        this.provider_firstname = provider_firstname;
+    }
+
+    public String getProvider_lastname() {
+        return provider_lastname;
+    }
+
+    public void setProvider_lastname(String provider_lastname) {
+        this.provider_lastname = provider_lastname;
+    }
+
+    public String getProvider_id() {
+        return provider_id;
+    }
+
+    public void setProvider_id(String provider_id) {
+        this.provider_id = provider_id;
+    }
+
+    public String getProvider_user_thumb() {
+        return provider_user_thumb;
+    }
+
+    public void setProvider_user_thumb(String provider_user_thumb) {
+        this.provider_user_thumb = provider_user_thumb;
     }
 }

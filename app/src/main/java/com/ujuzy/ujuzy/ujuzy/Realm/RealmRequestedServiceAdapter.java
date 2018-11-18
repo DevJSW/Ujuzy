@@ -1,7 +1,6 @@
 package com.ujuzy.ujuzy.ujuzy.Realm;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
@@ -9,7 +8,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
@@ -19,7 +17,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.ramotion.foldingcell.FoldingCell;
-import com.ujuzy.ujuzy.ujuzy.Activities.RequestServiceActivity;
 import com.ujuzy.ujuzy.ujuzy.R;
 
 import java.util.ArrayList;
@@ -215,7 +212,7 @@ public class RealmRequestedServiceAdapter extends RecyclerView.Adapter<RealmRequ
             toAddress = itemView.findViewById(R.id.title_to_address);
             requestsCount = itemView.findViewById(R.id.title_requests_count);
             pledgePrice = itemView.findViewById(R.id.title_pledge);
-            contentRequestBtn = itemView.findViewById(R.id.content_request_btn);
+            contentRequestBtn = itemView.findViewById(R.id.review_btn);
 
             nameTv = itemView.findViewById(R.id.content_name_view);
             categoryTv = itemView.findViewById(R.id.categoryTv);
@@ -223,12 +220,12 @@ public class RealmRequestedServiceAdapter extends RecyclerView.Adapter<RealmRequ
             content_time = itemView.findViewById(R.id.content_time);
             content_location = itemView.findViewById(R.id.content_location);
             content_from_address = itemView.findViewById(R.id.content_from_address_1);
-            content_to_address = itemView.findViewById(R.id.content_to_address_1);
+            content_to_address = itemView.findViewById(R.id.provider_name);
             content_to_address_2 = itemView.findViewById(R.id.content_to_address_2);
 
             content_layout = itemView.findViewById(R.id.content_layout);
             title_layout = itemView.findViewById(R.id.title_layout);
-            content_request_btn = itemView.findViewById(R.id.content_request_btn);
+            content_request_btn = itemView.findViewById(R.id.review_btn);
 
         }
     }

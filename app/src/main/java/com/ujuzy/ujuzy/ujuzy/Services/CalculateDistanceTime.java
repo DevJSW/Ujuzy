@@ -40,7 +40,6 @@ public class CalculateDistanceTime
         // Destination of route
         String str_dest = "destination=" + dest.latitude + "," + dest.longitude;
 
-
         // Sensor enabled
         String sensor = "sensor=false";
 

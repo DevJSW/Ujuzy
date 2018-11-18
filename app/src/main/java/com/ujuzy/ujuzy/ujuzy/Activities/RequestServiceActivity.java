@@ -10,7 +10,6 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.view.Window;
@@ -30,21 +29,16 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.ServerError;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.ujuzy.ujuzy.ujuzy.R;
 import com.ujuzy.ujuzy.ujuzy.Realm.RealmToken;
 import com.ujuzy.ujuzy.ujuzy.Realm.RealmTokenHelper;
-import com.ujuzy.ujuzy.ujuzy.Services.Api;
 import com.ujuzy.ujuzy.ujuzy.model.Constants;
 
 import org.jboss.aerogear.android.authorization.AuthorizationManager;
@@ -53,12 +47,10 @@ import org.jboss.aerogear.android.authorization.oauth2.OAuth2AuthorizationConfig
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -66,13 +58,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import io.realm.Realm;
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
-import okhttp3.Response;
-import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RequestServiceActivity extends AppCompatActivity {
 
@@ -95,10 +81,8 @@ public class RequestServiceActivity extends AppCompatActivity {
     private EditText inputDateEt, inputRequestEt, inputPhone, inputName, inputTimeEt;
     private Button confirmBtn;
     private RelativeLayout mDateRl, mTimeRl;
-
     private Realm realm;
     private Retrofit retrofit;
-
     Calendar myCalender;
     Calendar myTime;
 
@@ -135,14 +119,16 @@ public class RequestServiceActivity extends AppCompatActivity {
     {
         // Launch Time Picker Dialog
         TimePickerDialog timePickerDialog = new TimePickerDialog(this,
-                new TimePickerDialog.OnTimeSetListener() {
+                new TimePickerDialog.OnTimeSetListener()
+                {
 
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay,
-                                          int minute) {
-
-                        inputTimeEt.setText(hourOfDay + ":" + minute);
+                                          int minute)
+                    {
+                        inputTimeEt.setText(String.format("%02d:%02d", hourOfDay, minute));
                     }
+
                 }, mHour, mMinute, false);
 
         inputTimeEt.setOnClickListener(new View.OnClickListener()
@@ -198,11 +184,14 @@ public class RequestServiceActivity extends AppCompatActivity {
         inputDateEt.setText(sdf.format(myCalender.getTime()));
     }
 
-    private void initConfirmBtn() {
+    private void initConfirmBtn()
+    {
 
-        confirmBtn.setOnClickListener(new View.OnClickListener() {
+        confirmBtn.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
                 startRequest();
 
             }
@@ -254,9 +243,8 @@ public class RequestServiceActivity extends AppCompatActivity {
                         Map<String, String> params= new HashMap<String, String>();
                         params.put("contact_name",name);
                         params.put("phone_number",phone);
-                        params.put("date", date);
                         params.put("service_id",serviceId);
-                        params.put("time", time);
+                        params.put("date", time + " " + date+".00");
                         params.put("request_info", request_input);
 
                         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.POST,
@@ -273,6 +261,24 @@ public class RequestServiceActivity extends AppCompatActivity {
                             @Override
                             public void onErrorResponse(VolleyError error)
                             {
+                                NetworkResponse response = error.networkResponse;
+                                if (error instanceof ServerError && response != null)
+                                {
+                                    try
+                                    {
+                                        String res = new String(response.data,
+                                                HttpHeaderParser.parseCharset(response.headers, "utf-8"));
+                                        // Now you can use any deserializer to make sense of data
+                                        JSONObject obj = new JSONObject(res);
+                                    } catch (UnsupportedEncodingException e1)
+                                    {
+                                        // Couldn't properly decode data to string
+                                        e1.printStackTrace();
+                                    } catch (JSONException e2) {
+                                        // returned data is not JSONObject?
+                                        e2.printStackTrace();
+                                    }
+                                }
                                 Toast.makeText(RequestServiceActivity.this, error.toString(), Toast.LENGTH_LONG).show();
                             }
 

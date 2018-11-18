@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_margin="5dp"
+    app:cardElevation="4dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/title_from_address"
+        android:textSize="16dp"
+        android:text="3.South of cloud barbershop"
+        android:layout_margin="10dp"
+        android:textColor="@color/black"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RatingBar
+            android:id="@+id/serviceRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/content_name_view"
+            android:layout_alignStart="@id/content_name_view"
+            android:layout_below="@id/content_name_view"
+            android:numStars="5"
+            android:layout_marginLeft="10dp"
+            android:stepSize="0.1"
+            android:theme="@style/RatingBar"
+            style="?android:attr/ratingBarStyleSmall"
+            android:isIndicator="true" />
+
+        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="14dp"
+            android:layout_marginLeft="5dp"
+            android:text="(1200) KES"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_margin="10dp"
+        android:background="@color/grey_line"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="15dp"
+        android:weightSum="2">
+
+        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/title_to_address"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            android:textSize="12dp"
+            android:text="206 Chiromo Rd, Nairobi"/>
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/grey_line"/>
+
+        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/categoryTv"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            android:layout_gravity="right"
+            android:gravity="right"
+            android:textSize="12dp"
+            android:text="Hair and Beauty"/>
+
+    </LinearLayout>
+
+</LinearLayout>
+

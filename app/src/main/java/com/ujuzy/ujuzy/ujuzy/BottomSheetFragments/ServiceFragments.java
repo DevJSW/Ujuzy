@@ -4,6 +4,7 @@ package com.ujuzy.ujuzy.ujuzy.BottomSheetFragments;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -53,6 +55,7 @@ import static io.realm.internal.SyncObjectServerFacade.getApplicationContext;
  */
 public class ServiceFragments extends BottomSheetDialogFragment {
 
+    private int pageNo = 1;
     private Realm realm;
     private RealmChangeListener realmChangeListener;
     private RealmServiceAdapter serviceReamAdapter;
@@ -60,7 +63,7 @@ public class ServiceFragments extends BottomSheetDialogFragment {
     private RequestQueue requestQueue;
     RealmList<RealmServiceImage> serviceImages;
     String category_title = "";
-    private TextView noService;
+    private TextView noService, filterCount;
     View v;
 
     public ServiceFragments() {
@@ -81,8 +84,20 @@ public class ServiceFragments extends BottomSheetDialogFragment {
         servicesListRv = (RecyclerView) v.findViewById(R.id.service_list);
         
         initHorizScrollMenu();
-        getProfServicesFromDatabase();
+        delay(); // <------------------ for the fragment to stop slagging.
         return v;
+    }
+
+    private void delay()
+    {
+        new Handler().postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                getProfServicesFromDatabase();
+            }
+        },100);
     }
 
 
@@ -277,18 +292,6 @@ public class ServiceFragments extends BottomSheetDialogFragment {
             }
         });
 
-        /*LinearLayout seeallScrollLl = (LinearLayout) findViewById(R.id.seeallScrollLl);
-        seeallScrollLl.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String electricitan_type = "";
-
-                Intent filterPlumbers = new Intent(MapsActivity.this, ServiceTabbedActivity.class);
-                filterPlumbers.putExtra("category_type", electricitan_type);
-                startActivity(filterPlumbers);
-
-            }
-        });*/
     }
 
     private void getProfServicesFromDatabase() {
@@ -296,19 +299,33 @@ public class ServiceFragments extends BottomSheetDialogFragment {
         final RealmHelper helper = new RealmHelper(realm);
 
         //RETRIEVE
-        helper.filterRealmDatabase("user_role", "Professional");
-        //helper.retreiveFromDB();
-
-
+        //helper.filterRealmDatabase("Professional");
+        helper.retreiveFromDB();
         // all services
         serviceReamAdapter = new RealmServiceAdapter(getApplicationContext(), helper.refreshDatabase());
 
         //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
         final LinearLayoutManager serviceLayoutManager = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false);
-        serviceLayoutManager.setReverseLayout(true);
-        serviceLayoutManager.setStackFromEnd(true);
+       /* serviceLayoutManager.setReverseLayout(true);
+        serviceLayoutManager.setStackFromEnd(true);*/
         servicesListRv.setLayoutManager(serviceLayoutManager); // <------------------- change layout to list in recyclerview
         servicesListRv.setAdapter(serviceReamAdapter);
+
+        servicesListRv.addOnScrollListener(new RecyclerView.OnScrollListener() {  // <----------------- check if recycleview has reached the bottom then load new services
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {  // getApplication to come up with linearLayout Manager i
+                super.onScrolled(recyclerView, dx, dy);
+                if (!recyclerView.canScrollVertically(1)) {
+
+                    Toast.makeText(getActivity(), "Reached bottom" , Toast.LENGTH_LONG).show();
+
+                    loadNextPage();
+
+                } else {
+
+                }
+            }
+        });
 
         //HANDLE DATA CHANGE FOR REFRESH
         realmChangeListener = new RealmChangeListener() {
@@ -324,15 +341,115 @@ public class ServiceFragments extends BottomSheetDialogFragment {
         realm.addChangeListener(realmChangeListener);
     }
 
+    private void loadNextPage()
+    {
+
+        pageNo++;
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                Constants.HTTP.SERVICES_ENDPOINT + pageNo, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+
+                        JSONObject serviceObj = jsonArray.getJSONObject(i);
+                        //JSONObject serviceUserObj = jsonArray.getJSONObject(i).getJSONObject("user");
+                        JSONObject serviceLocationObj = jsonArray.getJSONObject(i).getJSONObject("location");
+                        JSONObject serviceDurationObj = jsonArray.getJSONObject(i).getJSONObject("duration");
+
+                        JSONArray skillList = serviceObj.getJSONArray("skill_list");  // it will come up with all of the above in th
+
+                        // ASSIGN DATA TO REALM DATABASE SERVICE
+
+                        RealmService realmService = new RealmService();
+                        realmService.setId(serviceObj.getString("id"));
+                        realmService.setServiceName(serviceObj.getString("service_name"));
+                        realmService.setServiceDetails(serviceObj.getString("service_details"));
+                        realmService.setCost(serviceObj.getString("cost"));
+                        //realmService.setCreatedBy(serviceObj.getString("created_by"));
+                        realmService.setCategory(serviceObj.getString("category"));
+                        realmService.setCreated_at(serviceObj.getString("created_at"));
+                        realmService.setRating(serviceObj.getString("rating"));
+
+                        String img = serviceObj.getString("images");
+
+                        Object json = new JSONTokener(img).nextValue();
+
+                        if (json instanceof JSONObject)
+                        {
+
+                            JSONObject serviceImgObj = jsonArray.getJSONObject(i).getJSONObject("images");
+                            realmService.setImage(serviceImgObj.getString("thumb"));
+
+                        } else if (json instanceof JSONArray)
+                        {
+
+                            JSONArray arrayImages = serviceObj.getJSONArray("images");
+                            for (int j = 0; j < arrayImages.length(); j++)
+                            {
+                                JSONObject imagesObj = arrayImages.getJSONObject(j);
+                                realmService.setImage(imagesObj.getString("thumb"));
+                                realmService.setImageArray(serviceImages);
+                            }
+
+                        }
+
+//                        realmService.setUser_role(serviceUserObj.getString("user_role"));
+//                        realmService.setUser_thumb(serviceUserObj.getString("profile_pic"));
+//                        realmService.setFirst_name(serviceUserObj.getString("firstname"));
+//                        realmService.setLast_name(serviceUserObj.getString("lastname"));
+//                        realmService.setUser_id(serviceUserObj.getString("id"));
+
+                        realmService.setCity(serviceLocationObj.getString("city"));
+                        realmService.setLatitude(Double.parseDouble(serviceLocationObj.getString("lat")));
+                        realmService.setLongitude(Double.parseDouble(serviceLocationObj.getString("lng")));
+
+                        realmService.setService_duration_days(serviceDurationObj.getString("days"));
+                        realmService.setService_duration_hours(serviceDurationObj.getString("hours"));
+
+                        for (int s = 0; s < skillList.length(); s++) {
+                        }
+
+                        //SAVE
+                        realm = Realm.getDefaultInstance();
+                        RealmHelper helper = new RealmHelper(realm);
+                        helper.save(realmService);
+
+                        /************************************************** END *************************************************************/
+
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        requestQueue = Volley.newRequestQueue(getActivity());
+        requestQueue.add(stringRequest);
+    }
+
     private void initFilterServices() {
+
+        filterService();
+
         realm = Realm.getDefaultInstance();
         final RealmHelper helper = new RealmHelper(realm);
 
         //QUERY/FILTER REALM DATABASE
-        helper.filterRealmDatabase("category", category_title);
-
-       /* filterCount = (TextView) findViewById(R.id.resultsCount);
-        filterCount.setText("( " + helper.refreshDatabase().size() + " ) Results");*/
+        helper.retreiveFromDB();
 
         //CHECK IF DATABASE IS EMPTY
         if (helper.refreshDatabase().size() < 1 || helper.refreshDatabase().size() == 0) {
@@ -358,9 +475,11 @@ public class ServiceFragments extends BottomSheetDialogFragment {
         servicesListRv.setAdapter(serviceReamAdapter);
 
         //HANDLE DATA CHANGE FOR REFRESH
-        realmChangeListener = new RealmChangeListener() {
+        realmChangeListener = new RealmChangeListener()
+        {
             @Override
-            public void onChange(Object o) {
+            public void onChange(Object o)
+            {
                 //REFRESH
                 serviceReamAdapter = new RealmServiceAdapter(getApplicationContext(), helper.refreshDatabase());
                 servicesListRv.setAdapter(serviceReamAdapter);
@@ -373,11 +492,14 @@ public class ServiceFragments extends BottomSheetDialogFragment {
 
     private void getCompServices() {
 
+        category_title = "Company";
+        filterService();
+
         realm = Realm.getDefaultInstance();
         final RealmHelper helper = new RealmHelper(realm);
 
         //RETRIEVE
-        helper.filterRealmDatabase("user_role", "Company");
+        helper.retreiveFromDB();
 
         servicesListRv = (RecyclerView) v.findViewById(R.id.service_list);
         serviceReamAdapter = new RealmServiceAdapter(getApplicationContext(), helper.refreshDatabase());
@@ -403,6 +525,107 @@ public class ServiceFragments extends BottomSheetDialogFragment {
         realm.addChangeListener(realmChangeListener);
     }
 
+    private void filterService()
+    {
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                Constants.HTTP.SEARCH_ENDPOINT + category_title, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+                try
+                {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+
+                    for (int i = 0; i < jsonArray.length(); i++)
+                    {
+
+                        JSONObject serviceObj = jsonArray.getJSONObject(i);
+                        JSONObject serviceUserObj = jsonArray.getJSONObject(i).getJSONObject("user");
+                        JSONObject serviceLocationObj = jsonArray.getJSONObject(i).getJSONObject("location");
+                        JSONObject serviceDurationObj = jsonArray.getJSONObject(i).getJSONObject("duration");
+
+                        JSONArray skillList = serviceObj.getJSONArray("skill_list");  // it will come up with all of the above in th
+
+                        // ASSIGN DATA TO REALM DATABASE SERVICE
+
+                        RealmService realmService = new RealmService();
+                        realmService.setId(serviceObj.getString("id"));
+                        realmService.setServiceName(serviceObj.getString("service_name"));
+                        realmService.setServiceDetails(serviceObj.getString("service_details"));
+                        realmService.setCost(serviceObj.getString("cost"));
+                        realmService.setCreatedBy(serviceObj.getString("created_by"));
+                        realmService.setCategory(serviceObj.getString("category"));
+                        realmService.setCreated_at(serviceObj.getString("created_at"));
+                        realmService.setRating(serviceObj.getString("rating"));
+
+                        String img = serviceObj.getString("images");
+
+                        Object json = new JSONTokener(img).nextValue();
+
+                        if (json instanceof JSONObject)
+                        {
+
+                            JSONObject serviceImgObj = jsonArray.getJSONObject(i).getJSONObject("images");
+                            realmService.setImage(serviceImgObj.getString("thumb"));
+
+                        } else if (json instanceof JSONArray)
+                        {
+
+                            JSONArray arrayImages = serviceObj.getJSONArray("images");
+                            for (int j = 0; j < arrayImages.length(); j++)
+                            {
+                                JSONObject imagesObj = arrayImages.getJSONObject(j);
+                                realmService.setImage(imagesObj.getString("thumb"));
+                                realmService.setImageArray(serviceImages);
+                            }
+
+                        }
+
+                        realmService.setUser_role(serviceUserObj.getString("user_role"));
+                        realmService.setUser_thumb(serviceUserObj.getString("profile_pic"));
+                        realmService.setFirst_name(serviceUserObj.getString("firstname"));
+                        realmService.setLast_name(serviceUserObj.getString("lastname"));
+                        realmService.setUser_id(serviceUserObj.getString("id"));
+
+                        realmService.setCity(serviceLocationObj.getString("city"));
+                        realmService.setLatitude(Double.parseDouble(serviceLocationObj.getString("lat")));
+                        realmService.setLongitude(Double.parseDouble(serviceLocationObj.getString("lng")));
+
+                        realmService.setService_duration_days(serviceDurationObj.getString("days"));
+                        realmService.setService_duration_hours(serviceDurationObj.getString("hours"));
+
+                        for (int s = 0; s < skillList.length(); s++) {
+                        }
+
+                        //SAVE
+                        realm = Realm.getDefaultInstance();
+                        RealmHelper helper = new RealmHelper(realm);
+                        helper.save(realmService);
+
+                        /************************************************** END *************************************************************/
+
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error)
+            {
+
+            }
+        });
+
+        requestQueue = Volley.newRequestQueue(getActivity());
+        requestQueue.add(stringRequest);
+    }
+
     @Override
     public void onDestroy()
     {
@@ -410,6 +633,8 @@ public class ServiceFragments extends BottomSheetDialogFragment {
         realm = Realm.getDefaultInstance();
         if (realmChangeListener != null)
             realm.removeChangeListener(realmChangeListener);
+
+        // CLEAR DATABASE
     }
 
 }

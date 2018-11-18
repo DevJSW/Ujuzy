@@ -66,7 +66,7 @@ public class Splashscreen extends Activity
                 {
                     int waited = 0;
                     // Splash screen pause time
-                    while (waited < 3500)
+                    while (waited < 2000)
                     {
                         sleep(200);
                         waited += 100;
@@ -79,12 +79,14 @@ public class Splashscreen extends Activity
                 } catch (InterruptedException e)
                 {
                     // do nothing
-                } finally {
+                } finally
+                {
                     Splashscreen.this.finish();
                 }
 
             }
         };
+
         splashTread.start();
 
     }

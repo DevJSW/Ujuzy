@@ -9,33 +9,23 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.ujuzy.ujuzy.ujuzy.R;
-import com.ujuzy.ujuzy.ujuzy.Realm.RealmHelper;
 import com.ujuzy.ujuzy.ujuzy.Realm.RealmSearch;
 import com.ujuzy.ujuzy.ujuzy.Realm.RealmSearchAdapter;
 import com.ujuzy.ujuzy.ujuzy.Realm.RealmSearchHelper;
-import com.ujuzy.ujuzy.ujuzy.Realm.RealmService;
-import com.ujuzy.ujuzy.ujuzy.Realm.RealmServiceAdapter;
 import com.ujuzy.ujuzy.ujuzy.Realm.RealmServiceImage;
-import com.ujuzy.ujuzy.ujuzy.Services.Send_http_post_request;
 import com.ujuzy.ujuzy.ujuzy.model.Constants;
 import com.ujuzy.ujuzy.ujuzy.model.Service;
 
@@ -44,25 +34,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.net.ssl.HttpsURLConnection;
 
 import io.realm.Realm;
 import io.realm.RealmChangeListener;
 import io.realm.RealmList;
+import io.realm.RealmResults;
 
 public class SearchActivity extends AppCompatActivity
 {
@@ -93,70 +71,105 @@ public class SearchActivity extends AppCompatActivity
         initSearch();
     }
 
-    private static void sendGET() throws IOException {
-
-        URL url = new URL(GET_URL + searchText);
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-        con.setRequestMethod("GET");
-        int responseCode = con.getResponseCode();
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(con.getInputStream()));
-        String inputLine;
-        StringBuffer response = new StringBuffer();
-
-        while ((inputLine = in.readLine()) != null) {
-            response.append(inputLine);
-        }
-        in.close();
-       /* if (responseCode == HttpURLConnection.HTTP_OK) { // success
-            BufferedReader in = new BufferedReader(new InputStreamReader(
-                    con.getInputStream()));
-            String inputLine;
-            StringBuffer response = new StringBuffer();
-
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
-
-            // print result
-            System.out.println(response.toString());
-        } else {
-            System.out.println("GET request not worked");
-        }
-*/
-    }
-
-   /* public void initSearchUrl() throws Exception
+    public void initSearchUrl()
     {
-        URL url = new URL("https://ujuzy.com/services/search?q="+searchText);
 
-        StringBuilder postData = new StringBuilder();
+        StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                Constants.HTTP.SEARCH_ENDPOINT + searchText, new com.android.volley.Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
 
-        byte[] postDataBytes = postData.toString().getBytes("UTF-8");
-        HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-        conn.setRequestMethod("GET");
-        conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-        conn.setRequestProperty("Content-Length", String.valueOf(postDataBytes.length));
-        conn.setDoOutput(true);
-//        conn.getOutputStream().write(postDataBytes);
-        Reader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
-        StringBuilder sb = new StringBuilder();
-        for (int c; (c = in.read()) >= 0;)
-            sb.append((char)c);
-        String response = sb.toString();
-        System.out.println(response);
-        JSONObject myResponse = new JSONObject(response.toString());
-        System.out.println("result after Reading JSON Response");
-        System.out.println("origin- "+myResponse.getString("origin"));
-        System.out.println("url- "+myResponse.getString("url"));
-        JSONObject form_data = myResponse.getJSONObject("form");
-        System.out.println("CODE- "+form_data.getString("CODE"));
-        System.out.println("email- "+form_data.getString("email"));
-        System.out.println("message- "+form_data.getString("message"));
-        System.out.println("name"+form_data.getString("name"));
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+
+                    JSONArray jsonArray = jsonObject.getJSONArray("data");
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+
+                        JSONObject serviceObj = jsonArray.getJSONObject(i);
+                       // JSONObject serviceUserObj = jsonArray.getJSONObject(i).getJSONObject("user");
+                       // JSONObject serviceLocationObj = jsonArray.getJSONObject(i).getJSONObject("location");
+                        JSONObject serviceDurationObj = jsonArray.getJSONObject(i).getJSONObject("duration");
+
+                       // JSONArray skillList = serviceObj.getJSONArray("skill_list");
+
+                        // ASSIGN DATA TO REALM DATABASE SERVICE
+
+                        RealmSearch realmService = new RealmSearch();
+                        realmService.setId(serviceObj.getString("id"));
+                        realmService.setServiceName(serviceObj.getString("service_name"));
+                        realmService.setServiceDetails(serviceObj.getString("service_details"));
+                        realmService.setCost(serviceObj.getString("cost"));
+                        realmService.setCreatedBy(serviceObj.getString("created_by"));
+                        realmService.setCategory(serviceObj.getString("category"));
+                        realmService.setCreated_at(serviceObj.getString("created_at"));
+                        realmService.setRating(serviceObj.getString("rating"));
+
+                        String img = serviceObj.getString("images");
+
+                        Object json = new JSONTokener(img).nextValue();
+
+                        if (json instanceof JSONObject)
+                        {
+
+                            JSONObject serviceImgObj = jsonArray.getJSONObject(i).getJSONObject("images");
+                            realmService.setImage(serviceImgObj.getString("thumb"));
+
+                        } else if (json instanceof JSONArray)
+                        {
+
+                            JSONArray arrayImages = serviceObj.getJSONArray("images");
+                            for (int j = 0; j < arrayImages.length(); j++)
+                            {
+                                JSONObject imagesObj = arrayImages.getJSONObject(j);
+                                realmService.setImage(imagesObj.getString("thumb"));
+                                realmService.setImageArray(serviceImages);
+                            }
+
+                        }
+
+                       /* realmService.setUser_role(serviceUserObj.getString("user_role"));
+                        realmService.setUser_thumb(serviceUserObj.getString("profile_pic"));
+                        realmService.setFirst_name(serviceUserObj.getString("firstname"));
+                        realmService.setLast_name(serviceUserObj.getString("lastname"));
+                        realmService.setUser_id(serviceUserObj.getString("id"));*/
+
+                        /*realmService.setCity(serviceLocationObj.getString("city"));
+                        realmService.setLatitude(Double.parseDouble(serviceLocationObj.getString("lat")));
+                        realmService.setLongitude(Double.parseDouble(serviceLocationObj.getString("lng")));*/
+
+                        realmService.setService_duration_days(serviceDurationObj.getString("days"));
+                        realmService.setService_duration_hours(serviceDurationObj.getString("hours"));
+
+
+                        //SAVE
+                        realm = Realm.getDefaultInstance();
+                        RealmSearchHelper helper = new RealmSearchHelper(realm);
+                        helper.save(realmService);
+
+
+                        /************************************************** END *************************************************************/
+
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+        }, new com.android.volley.Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+
+        requestQueue = Volley.newRequestQueue(SearchActivity.this);
+        requestQueue.add(stringRequest);
+
     }
-*/
+
     private void initSearch()
     {
 
@@ -176,10 +189,12 @@ public class SearchActivity extends AppCompatActivity
             @Override
             public void afterTextChanged(Editable editable) {
                 searchText = searchInput.getText().toString();
-                if (searchText.length() > 0) {
+                if (searchText.length() > 1) {
                     //search();
                     try {
-                        sendGET();
+                        deleteSearchFromRealm();
+                        initSearchUrl();
+                        search();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -194,24 +209,30 @@ public class SearchActivity extends AppCompatActivity
 
     }
 
+    private void deleteSearchFromRealm()
+    {
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                RealmResults<RealmSearch> result = realm.where(RealmSearch.class).findAll();
+                result.deleteAllFromRealm();
+            }
+        });
+    }
+
     private void search()
     {
         final RealmSearchHelper helper = new RealmSearchHelper(realm);
 
-        //QUERY/FILTER REALM DATABASE
-        helper.searchRealmDatabase("serviceName", searchText);
+        helper.retreiveFromDB();
 
         //CHECK IF DATABASE IS EMPTY
         if (helper.refreshDatabase().size() < 1 || helper.refreshDatabase().size() == 0)
         {
             noService = (TextView) findViewById(R.id.noService);
-            noService.setVisibility(View.VISIBLE);
-            noService.setText("Sorry, we cant find what you are looking for 😎!");
         } else {
             noService = (TextView) findViewById(R.id.noService);
-            noService.setVisibility(View.GONE);
         }
-
 
         searchListRv = (RecyclerView) findViewById(R.id.service_list);
         serviceRealmAdapter = new RealmSearchAdapter(getApplicationContext(), helper.refreshDatabase());
@@ -263,89 +284,12 @@ public class SearchActivity extends AppCompatActivity
 
     }
 
-    /*private void sendGet() throws Exception {
-
-            // Create URL
-            String url = "https://api.ujuzy.com/services/search?q=" + searchText;
-            URL obj = new URL(url);
-
-            // Next, we create a new JsonArrayRequest. This will use Volley to make a HTTP request
-            // that expects a JSON Array Response.
-            // To fully understand this, I'd recommend readng the office docs: https://developer.android.com/training/volley/index.html
-            JsonArrayRequest arrReq = new JsonArrayRequest(Request.Method.GET, obj,
-                    new Response.Listener<JSONArray>() {
-                        @Override
-                        public void onResponse(JSONArray response) {
-                            // Check the length of our response
-                            if (response.length() > 0) {
-                                for (int i = 0; i < response.length(); i++) {
-                                    try {
-                                        JSONObject jsonObj = response.getJSONObject(i);
-                                        String repoName = jsonObj.get("name").toString();
-                                        String lastUpdated = jsonObj.get("updated_at").toString();
-                                    } catch (JSONException e) {
-                                        // If there is an error then output this to the logs.
-                                        Log.e("Volley", "Invalid JSON Object.");
-
-
-                                }
-                            } else {
-                            }
-
-                        }
-                    },
-
-                    new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            // If there a HTTP error then add a note to our repo list.
-                            Log.e("Volley", error.toString());
-                        }
-                    }
-            );
-            // Add the request we just defined to our request queue.
-            // The request queue will automatically handle the request as soon as it can.
-            requestQueue.add(arrReq);
-            // Simulate network access.
-            Thread.sleep(2000);
-
-    }
-*/    // HTTP GET request
-    private void sendingGetRequest() throws Exception {
-
-        String urlString = GET_URL + searchText;
-
-        URL url = new URL(urlString);
-        HttpURLConnection con = (HttpURLConnection) url.openConnection();
-
-        // By default it is GET request
-        con.setRequestMethod("GET");
-
-        int responseCode = con.getResponseCode();
-        System.out.println("Sending get request : "+ url);
-        System.out.println("Response code : "+ responseCode);
-
-        // Reading response from input Stream
-        BufferedReader in = new BufferedReader(
-                new InputStreamReader(con.getInputStream()));
-        String output;
-        StringBuffer response = new StringBuffer();
-
-        while ((output = in.readLine()) != null) {
-            response.append(output);
-        }
-        in.close();
-
-        //printing result from response
-        System.out.println(response.toString());
-
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         if (realmChangeListener != null)
             realm.removeChangeListener(realmChangeListener);
+        deleteSearchFromRealm();
         realm.close();
     }
 }

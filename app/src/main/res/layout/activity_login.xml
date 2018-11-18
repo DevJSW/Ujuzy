@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.ujuzy.ujuzy.ujuzy.Authorization.LoginActivity">
+
+    <include layout="@layout/login_toolbar"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:visibility="gone"
+        android:background="@color/colorPrimary"
+        app:layout_scrollFlags="scroll|enterAlways"
+        />
+
+    <ImageView
+        android:layout_width="160dp"
+        android:layout_height="85dp"
+        android:layout_above="@+id/lin_lay"
+        android:layout_margin="30dp"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/ujuzy"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lin_lay"
+        android:layout_centerVertical="true"
+        android:layout_margin="10dp"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerBoldFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/black"
+            android:text="Email Address"/>
+
+        <android.support.v7.widget.CardView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            card_view:cardUseCompatPadding="true"
+            card_view:cardElevation="4dp"
+            card_view:cardCornerRadius="13dp">
+
+            <com.ujuzy.ujuzy.ujuzy.CustomData.AllerEditText
+                android:id="@+id/inputEmailEt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edittext_bg_white"
+                android:outlineProvider="bounds"
+                android:hint="Email"
+                android:elevation="5dp"
+                android:padding="13dp"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="#121111" />
+
+        </android.support.v7.widget.CardView>
+
+
+        <com.ujuzy.ujuzy.ujuzy.CustomData.AllerBoldFont
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="5dp"
+            android:textColor="@color/black"
+            android:text="Password"/>
+
+
+        <android.support.v7.widget.CardView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            card_view:cardUseCompatPadding="true"
+            card_view:cardElevation="4dp"
+            card_view:cardCornerRadius="13dp">
+
+            <com.ujuzy.ujuzy.ujuzy.CustomData.AllerEditText
+                android:id="@+id/inputPassEt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusableInTouchMode="true"
+                android:outlineProvider="bounds"
+                android:background="@drawable/edittext_bg_white"
+                android:hint="Password"
+                android:padding="13dp"
+                android:elevation="10dp"
+                android:imeOptions="actionUnspecified"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="#121111" />
+
+        </android.support.v7.widget.CardView>
+
+
+    </LinearLayout>
+
+
+    <com.ujuzy.ujuzy.ujuzy.CustomData.AllerButton
+        android:id="@+id/btn_login"
+        style="?android:textAppearanceSmall"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:textAllCaps="false"
+        android:layout_below="@+id/lin_lay"
+        android:textSize="17dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/button_bg"
+        android:text="Login"
+        android:textColor="#ffff"
+        android:textStyle="bold" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:visibility="gone" />
+
+
+</RelativeLayout>

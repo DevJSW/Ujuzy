@@ -9,31 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="25dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="20dp">
-
-            <ImageView
-                android:layout_width="27dp"
-                android:layout_height="27dp"
-                android:layout_centerVertical="true"
-                android:id="@+id/pullDrawerIv"
-                android:layout_marginRight="10dp"
-                android:src="@drawable/if_menu"/>
-
-            <ImageView
-                android:layout_width="34dp"
-                android:layout_height="23dp"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true"
-                android:src="@drawable/ujuzy"/>
-
-
-        </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -43,34 +18,27 @@
             android:id="@+id/searchRely"
             android:background="@drawable/menu_layout"
             android:layout_marginBottom="5dp"
+            android:layout_marginTop="20dp"
             android:layout_marginRight="20dp">
 
-           <!-- <ImageView
-                android:layout_width="28dp"
-                android:layout_height="27dp"
-                android:layout_centerVertical="true"
-                android:id="@+id/pullDrawerIv"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="10dp"
-                android:src="@drawable/if_menu"/>-->
 
             <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/filterIcon"
                 android:layout_centerVertical="true"
                 android:textSize="17dp"
-                android:text="Search for service..."/>
+                android:text="Searching..."/>
 
 
             <ImageView
-                android:layout_width="25dp"
+                android:layout_width="28dp"
                 android:layout_height="25dp"
                 android:scaleType="fitXY"
                 android:layout_margin="10dp"
                 android:id="@+id/filterIcon"
                 android:src="@drawable/search_icon_grey"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"/>
 
         </RelativeLayout>

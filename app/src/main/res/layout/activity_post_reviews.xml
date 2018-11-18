@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+
+    <include layout="@layout/booking_toolbar"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:background="@color/colorPrimary"
+        app:layout_scrollFlags="scroll|enterAlways"
+        />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                android:layout_width="match_parent"
+                android:id="@+id/ratingTv"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_margin="30dp"
+                android:textSize="25dp"
+                android:text="Rate this service"/>
+
+            <RatingBar
+                android:id="@+id/serviceRatingBr"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:numStars="5"
+                android:stepSize="0.1"
+                android:theme="@style/RatingBar"
+                android:transformPivotX="0dp"
+                android:transformPivotY="0dp"
+                android:isIndicator="true" />
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/grey_line"
+                android:layout_marginRight="40dp"
+                android:layout_marginLeft="40dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
+               />
+
+            <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_margin="30dp"
+                android:textSize="20dp"
+                android:text="What could be improved?"/>
+
+            <HorizontalScrollView
+                android:id="@+id/hsv"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_centerVertical="true"
+                android:fillViewport="true"
+                android:measureAllChildren="false"
+                android:scrollbars="none" >
+
+                <LinearLayout
+                    android:id="@+id/innerLay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fitsSystemWindows="true"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal" >
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/lin_lay_tasks"
+                        android:layout_marginRight="20dp"
+                        android:orientation="horizontal">
+
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="9dp"
+                            android:id="@+id/elecScrollLl"
+                            android:background="@drawable/slider_button_bg2">
+
+                            <ImageView
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="10dp"
+                                android:src="@drawable/location"/>
+
+                            <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="15dp"
+                                android:textColor="@color/white"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginRight="11dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:text="Location"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="9dp"
+                            android:id="@+id/profScrollLl"
+                            android:background="@drawable/slider_button_bg2">
+
+                            <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="15dp"
+                                android:textColor="@color/white"
+                                android:layout_marginLeft="8dp"
+                                android:layout_marginRight="11dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:text="Service"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="9dp"
+                            android:id="@+id/companyScrollLl"
+                            android:background="@drawable/slider_button_bg2">
+
+                            <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textSize="15dp"
+                                android:textColor="@color/white"
+                                android:layout_marginLeft="11dp"
+                                android:layout_marginRight="11dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:text="Cleanliness"/>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="9dp"
+                            android:id="@+id/mediaScrollLl"
+                            android:background="@drawable/slider_button_bg2">
+
+                            <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/white"
+                                android:textSize="15dp"
+                                android:layout_marginLeft="11dp"
+                                android:layout_marginRight="11dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:text="Payments"/>
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="9dp"
+                            android:id="@+id/tailorScrollLl"
+                            android:background="@drawable/slider_button_bg2">
+
+                            <com.ujuzy.ujuzy.ujuzy.CustomData.AllerFont
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/white"
+                                android:textSize="15dp"
+                                android:layout_marginLeft="11dp"
+                                android:layout_marginRight="11dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginBottom="8dp"
+                                android:text="Others"/>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="25dp"
+                android:layout_weight="1"
+                >
+
+                <com.ujuzy.ujuzy.ujuzy.CustomData.AllerEditText
+                    android:id="@+id/inputFeedback"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusableInTouchMode="true"
+                    android:hint="Enter your feedback here"
+                    android:imeOptions="actionUnspecified"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColorHint="#121111"
+                    android:textColor="#121111" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <com.ujuzy.ujuzy.ujuzy.CustomData.AllerButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/button_bg"
+                android:textColor="@color/white"
+                android:id="@+id/submitFeedbackBtn"
+                android:textAllCaps="false"
+                android:textSize="16dp"
+                android:layout_margin="40dp"
+                android:text="Submit feedback"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

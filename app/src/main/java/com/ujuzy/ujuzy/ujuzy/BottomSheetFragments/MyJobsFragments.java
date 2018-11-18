@@ -26,6 +26,8 @@ import com.android.volley.toolbox.Volley;
 import com.ujuzy.ujuzy.ujuzy.R;
 import com.ujuzy.ujuzy.ujuzy.Realm.RealmAllServiceAdapter;
 import com.ujuzy.ujuzy.ujuzy.Realm.RealmHelper;
+import com.ujuzy.ujuzy.ujuzy.Realm.RealmJobServiceAdapter;
+import com.ujuzy.ujuzy.ujuzy.Realm.RealmJobsHelper;
 import com.ujuzy.ujuzy.ujuzy.Realm.RealmRequestedServiceAdapter;
 import com.ujuzy.ujuzy.ujuzy.Realm.RealmRequestedServicesHelper;
 import com.ujuzy.ujuzy.ujuzy.Realm.RealmRequestedUserService;
@@ -64,7 +66,7 @@ public class MyJobsFragments extends BottomSheetDialogFragment {
 
     private Realm realm;
     private RealmChangeListener realmChangeListener;
-    private RealmRequestedServiceAdapter serviceRealmAdapter;
+    private RealmJobServiceAdapter serviceRealmAdapter;
     private RecyclerView serviceListRv;
     private RequestQueue requestQueue;
     RealmList<RealmServiceImage> serviceImages;
@@ -99,7 +101,7 @@ public class MyJobsFragments extends BottomSheetDialogFragment {
     private void getUserReqServices()
     {
         realm = Realm.getDefaultInstance();
-        final RealmRequestedServicesHelper helper = new RealmRequestedServicesHelper(realm);
+        final RealmJobsHelper helper = new RealmJobsHelper(realm);
 
         //RETRIEVE
         helper.retreiveFromDB();
@@ -115,7 +117,7 @@ public class MyJobsFragments extends BottomSheetDialogFragment {
             noService.setVisibility(View.GONE);
         }
 
-        serviceRealmAdapter = new RealmRequestedServiceAdapter(getActivity(), helper.refreshDatabase());
+        serviceRealmAdapter = new RealmJobServiceAdapter(getActivity(), helper.refreshDatabase());
 
         //RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
         final LinearLayoutManager serviceLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
@@ -128,7 +130,7 @@ public class MyJobsFragments extends BottomSheetDialogFragment {
             @Override
             public void onChange(Object o) {
                 //REFRESH
-                serviceRealmAdapter = new RealmRequestedServiceAdapter(getActivity(), helper.refreshDatabase());
+                serviceRealmAdapter = new RealmJobServiceAdapter(getActivity(), helper.refreshDatabase());
                 serviceListRv.setAdapter(serviceRealmAdapter);
             }
         };
@@ -159,7 +161,7 @@ public class MyJobsFragments extends BottomSheetDialogFragment {
                 public void onSuccess(final String data) {
 
                     JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
-                            Constants.HTTP.USER_REQUESTS_SERVICES_JSON_URL, new JSONObject(),
+                            Constants.HTTP.USER_JOB_REQUESTS_SERVICES_JSON_URL, new JSONObject(),
                             new com.android.volley.Response.Listener<JSONObject>() {
                                 @Override
                                 public void onResponse(JSONObject response) {
@@ -172,6 +174,8 @@ public class MyJobsFragments extends BottomSheetDialogFragment {
 
                                             JSONObject requestObj = serviceData.getJSONObject(i);
                                             JSONObject serviceObj = serviceData.getJSONObject(i).getJSONObject("service");
+                                            JSONObject providerObj = serviceData.getJSONObject(i).getJSONObject("created_by");
+                                            JSONObject serviceDateObj = serviceData.getJSONObject(i).getJSONObject("date");
 
                                             RealmRequestedUserService realmService = new RealmRequestedUserService();
                                             realmService.setId(requestObj.getString("id"));
@@ -181,14 +185,26 @@ public class MyJobsFragments extends BottomSheetDialogFragment {
                                             realmService.setRequest_time(requestObj.getString("time"));
                                             realmService.setSeen_status(requestObj.getString("seen_status"));
                                             realmService.setCreated_at(requestObj.getString("created_at"));
-                                            realmService.setCreated_by(requestObj.getString("created_by"));
                                             realmService.setUpdated_by(requestObj.getString("updated_by"));
-                                            realmService.setSkill_request(requestObj.getString("skill_request"));
-                                            realmService.setSpecal_request(requestObj.getString("special_request"));
 
-                                            realmService.setImage(serviceObj.getString("thumb"));
-                                            realmService.setServiceName(serviceObj.getString("service_name"));
-                                            realmService.setServiceId(serviceObj.getString("service_id"));
+                                            // created by object
+                                            realmService.setFirst_name(providerObj.getString("firstname"));
+                                            realmService.setLast_name(providerObj.getString("lastname"));
+                                            realmService.setUser_thumb(providerObj.getString("thumb"));
+                                            realmService.setId(providerObj.getString("id"));
+
+                                            // service provider object
+                                            realmService.setProvider_firstname(providerObj.getString("firstname"));
+                                            realmService.setProvider_lastname(providerObj.getString("lastname"));
+                                            realmService.setProvider_user_thumb(providerObj.getString("thumb"));
+                                            realmService.setProvider_id(providerObj.getString("id"));
+
+                                            // service object
+                                            realmService.setServiceName(serviceObj.getString("requestable_name"));
+                                            realmService.setServiceId(serviceObj.getString("requestable_id"));
+
+                                            //date object
+                                            realmService.setRequest_date(serviceDateObj.getString("requestable_id"));
 
                                             //SAVE
                                             realm = Realm.getDefaultInstance();
